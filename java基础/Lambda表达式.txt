@@ -1,0 +1,37 @@
+Lambda表达式
+
+	基本作用:		简化匿名内部类书写
+	使用前提:		Lambda表达式只能简化函数式接口的匿名内部类的写法
+			
+			函数式接口:	有且只有一个抽象方法的接口叫函数式接口,
+						接口上方可以加@FunctionalInterface注解
+	好处:		匿名函数,简洁灵活
+
+	函数式编程:	一种思想特点,忽略面向对象的复杂语法,强调做什么,而不是谁去做
+	
+	Lambda格式:	()->{}	
+		()	:方法的形式参数
+		->	:固定格式
+		{}	:对应的方法体
+
+
+	简化匿名内部类书写举例
+	Arrays.sort(arr, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1-o2;
+            }
+        });
+
+	Arrays.sort(arr, (o1, o2)->o1-o2);
+	
+
+	省略的核心思想:		可推导,可省略.
+
+		参数类型可省略.
+		如果参数只有一个,()可以省略
+		Lambda表达式的方法体只有一行,大括号,分号,return可以省略,要同时省略
+		
+		
+		
+

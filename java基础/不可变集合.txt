@@ -1,0 +1,23 @@
+不可变集合	注意:	不可变集合是 jdk9 后才出现的
+	
+	特点:	不能修改 , 添加 , 删除
+	
+	集合内容不可变 , 都是静态方法
+	static <E> list<E> of (E...elements)	创建一个具有指定元素的List集合对象
+	static <E> Set<E> of (E...elements)	创建一个具有指定元素的Set集合对象
+	static <K,V> Map<K,V> of (E...Elements)	创建一个具有指定元素的Map集合对象
+	
+	这个集合不能添加,不能删除,不能修改.
+	
+	例:	List <String> list=List.of("1","2");
+	
+	注意:	Map集合的of方法是有限的,最多只能存20个参数,10个键值对
+		键不能重复
+		如果要传递多个键值对对象,数量大于10个,在Map接口中还有一个方法ofEntrys
+	
+	static <K,V> Map<K,V> ofEntries(Entry<? extends K,?extends V>...entrys)
+	
+        HashMap<String, String> hm = new HashMap<>();
+        Map<Object, Object> map = Map.ofEntries(hm.entrySet().toArray(new Map.Entry[0])); 
+	
+	

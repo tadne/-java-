@@ -1,0 +1,45 @@
+File
+	File表示什么?
+		File对象表示一个路径,可以是文件的路径,也可以是文件夹的路径
+		这个路径可以存在,也可以不存在
+
+	绝对路径和相对路径区别?
+		绝对路径是带盘符
+		相对路径不带,默认为从当前项目开始
+
+	构造方法
+		File(String pathname)			根据文件路径创建文件对象
+		File(String parent,String child)	根据父路径和子路径名字符创建对象
+		File(File parent,String child)		根据父路径对象和子路径字符创建对象
+
+	
+	常见方法
+		static File[] listRoots()		列出可用的文件系统根
+		String[] list()				获取当前路径下所有内容
+		String[] list(FilenameFilter filter)	利用文件名过滤器获取当前路径下所有内容
+	     ***File[] listFiles()			获取当前该路径下所有内容
+			如果是路径不存在,路径是文件,返回null.  空文件夹时,返回长度为0的数组
+			路径是有内容的文件夹,将文件夹中的文件后文件夹放数组中(包含隐藏文件)
+			如果文件夹访问需要权限,返回null
+		File[] listFiles(FileFilter filter)	用文件过滤器获取当前该路径所有内容
+	        File[] listFiles(FilenameFilter filter)	用文件名过滤器获取当路径下所有内容
+
+		判断获取
+		boolean isDirectory()			判断是否为文件夹
+		boolean isFile()			是否是文件
+		boolean exists()			是否存在
+		long 	length()			返回文件大小	
+		String 	getAbsolutePath()		返回文件绝对路径
+		String 	getPath()			返回定义文件时使用的路径
+		String 	getName()			返回文件名
+		long	lastModified()			返回文件最后修改时间(毫秒值)
+
+		创建删除
+		boolean createNewFile()			创建一个新的空的文件
+		boolean mkdir()				创建一个单级文件夹
+		boolean mkdirs()				创建多级文件夹
+		boolean delete()			删除文件,空文件夹
+
+		
+
+

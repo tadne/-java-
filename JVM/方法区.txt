@@ -1,0 +1,51 @@
+方法区
+	所有虚拟机线程共享的区域
+
+	存储了和类的结构相同的信息:  
+			成员变量,方法数据,成员方法和构造器方法的代码和一些特殊方法(类构造器)
+			运行时常量池
+
+	方法区在虚拟机启动时被创建	
+
+	
+	理论上方法区应该在堆中,但是不同虚拟机对此有不同实现.(元空间jdk8后,永久代jdk1.6)
+
+	如果内存不够,也会抛出OutOfMemoryError,内存溢出异常
+
+	jdk1.6:	MethodArea 方法区	:永久代	(堆内存)
+			常量池:	StringTable串池
+			Class,	ClassLoader
+
+	jdk1.8:	MethodArea 方法区	:Metaspace 元空间(本地内存)
+			Class,ClassLoader,常量池
+			(jdk8 StringTable串池转移到堆中)
+	
+
+
+方法区内存溢出
+	jdk8前永久代内存溢出
+		设置永久代大小:	-XX:MaxPermSize=8m
+	jdk8后元空间内存溢出
+		例:	创建一个类继承ClassLoader,创建1万个类,导致内存溢出
+			ClassWriter cw=new ClassWriter(0);
+			//定义类	:	版本号,public,类名,包名,父类,接口
+			cw.visit(Opcodes.V1_8,Opcodes.ACC_PUBLIC,ClassName,						PackegName,FutherClassName,interface);
+			//二进制字节码文件
+			byte[]code=cw.toByteArray;
+			//类加载
+			test.defineClass("className",code,0,code.length)
+
+
+	
+	元空间是系统内存,大小方面更充裕,并且其垃圾回收机制由元空间自行管理,效率更好
+
+
+
+
+
+
+
+
+
+
+

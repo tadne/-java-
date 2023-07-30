@@ -1,0 +1,145 @@
+网络编程三要素
+
+
+	IP:		设备在网络中的地址,唯一标识
+	端口号:		应用程序在设备中的唯一标识
+	协议:		数据在网络中传输的规则,常见的协议有UDP,TCP,Http,Ftp
+
+
+	
+	IP:		Internet Protocol ,互联网协议地址,也叫ip地址
+			是分配给上网设备的数字标签
+		常见分为	IPv4,IPv6
+	
+		IPv4:		互联网通信协议第四版	目前主流
+			32位地址长度,分为4组,点分十进制
+			每一组0~255
+			
+			弊端:	ip数量不够,目前已经用完
+
+
+			192.168开头的就是私有地址,为组织机构内部使用,以此节约ip
+			
+			特殊ip:	127.0.0.1	本机ip
+
+
+			
+		IPv6:		互联网通信协议第六版	
+			128位地址长度,分8组,冒分十六进制
+				如果IPv6中有很多连续的0,可以使用0位压缩表示法
+				FF01:0:0:0:0:0:0:1101  ===>  FF01::1101
+
+
+
+		常用cmd命令:		ipconfig	查看本机ip地址
+					ping		检查网络是否连通
+
+	
+
+	端口号:	由两个字节表示的整数,取值:		0!65535
+			0~1023	间的端口号是用于一些知名网络服务或应用
+
+			一个端口号只能被一个应用程序使用
+
+	协议:	计算机网络中,连接和通信的规则叫做网络通信协议
+		
+		OSI参考模型:	世界互联协议标准,全球通信模型,但是单模型太理想化,没有被广泛推广
+			应用层,表示层,会话层	:应用程序
+			传输层			:传输协议(TCP,UDP等)
+			网络层			:封装自己的ip,对方的ip等信息
+			网络层,数据链路层,物理层	:转换为二进制利用物理设备传输
+
+	
+		TCP/IP参考模型(或TCP/IP协议):	国际标准
+					
+						对应协议			面向的对象
+			应用层:			HTTP,FTP,TeInet..	应用程序
+			传输层:			TCP,UDP..		选择协议(TCP,UDP等)
+			网络层:			IP,ICMP...		封装ip等信息
+			物理+数据链路层:		硬件设备		     转为二进制用物理设备传输
+		
+			
+	UDP协议:		面向无连接的通信协议,只管发送数据,不管接受数据
+			速度快,有大小限制一次最多64k,数据不安全,容易丢失数据
+
+		UDP发送数据:	
+			创建DatagramSocket对象(端口)
+				//绑定端口
+				//空参:随机一个端口
+				//有参:绑定指定端口
+				DatagramSocket ds=new DatagramSocket();
+			数据打包
+				//byte[] 数据
+				//InetAddress address=InetAddress.getByName("127.0.0.1");
+				//int length=
+				//int port=
+				DatagramPacket dp=new DatagramPacket();
+			发送数据
+				ds.send(dp);
+			释放资源
+				ds.close();
+		UDP接受数据:
+			创建DatagramSocket对象(端口)
+				//绑定端口
+				//空参:随机一个端口
+				//有参:绑定指定端口
+				DatagramSocket ds=new DatagramSocket();
+			数据打包
+				DatagramPacket dp=new DatagramPacket(bytes,bytes,length);
+			接受数据
+				ds.receive(dp);
+			解析数据包
+				dp.getData();dp.getLength();dp.getAdress();dp.getPort();
+
+
+		UDP的三种通信方式
+			单播:	
+			组播:	组播地址:224.0.0.0!239.255.255.255
+				其中224.0.0.0~224.0.0.255
+			广播:	广播地址:255.255.255.255
+
+	
+	TCP协议:		传输控制协议TCP
+			TCP协议是面向连接的通信协议
+			速度慢,没有大小限制,数据安全
+
+
+		在通信的两端各建立了一个Socket对象
+		通信前保证连接已经建立
+		通过Socket产生IO流来传输数据
+		
+		客户端:		创建Socket对象
+				Socket(String host,int port)
+				获取输出流,写数据
+				OutputStream getOutputStream()
+				释放资源
+				void close()
+	
+		服务器:		创建服务器端的Socket对象(ServerSocket)
+				ServerSocket(int port);
+				监听客户端连接,返回一个Socket对象
+				Socket accept();
+				获取输入流,读数据
+				InputStream getInputStream();
+				释放资源
+				void close()
+
+
+		TCP的中文乱码问题:	用字符流来读取中文即可,也可以用缓冲流加速
+		
+	
+		三次握手:	确保连接的建立
+			客户端发出连接请求
+			服务器返回一个响应
+			客户端向服务器发出确认信息
+
+
+		四次挥手:	确保连接端口,且数据处理完毕	
+			客户端取消连接请求
+			服务器返回响应
+			服务器发出确认取消信息
+			客户端发出确认信息
+				
+
+
+

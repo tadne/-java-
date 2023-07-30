@@ -1,0 +1,32 @@
+生产者和消费者
+	消费者处理数据
+	生产者生产数据
+
+	void wait()
+	void notify()
+	void notifyAll()
+
+
+	消费者:		判断平台是否有数据,没有就等待,有就处理数据,处理完唤醒生产者
+	生产者:		判断平台是否有数据,有就等待,没有就生产,并将数据放平台上,唤醒消费者
+	平台:		
+	
+
+	阻塞队列实现
+		static String take();		从阻塞队列中获取数据		
+		static void   put(String str);	将数据存在队列中
+		这两个方法底层有锁和wait方法,天然就是用来实现等待唤醒机制的
+
+		顶层接口Iterable,Collection,Queue,BlockingQueue
+		实现类:	ArrayBlockingQueue	LinkedBlockingQueue
+		ArrayBlockingQueue:	底层数组,有界
+		LinkedBlockingQueue:	=底层是链表,无界,最大值是int最大值
+
+		ArrayBlockingQueue queue=new ArrayBlockingQueue<>(1);
+		其中参数是队列中能存放的最大值,
+
+		如果放在等待唤醒机制中,那就是要求平台只能放一个数据
+		
+		阻塞队列在测试类,线程run方法实现类中,写构造方法,创建对象传入参数ArrayBlockingQueue
+
+		

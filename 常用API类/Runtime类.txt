@@ -1,0 +1,18 @@
+Runtime		当前虚拟机的运行环境
+
+类中方法不是静态的
+
+不能创建对象，要用一个静态方法，getRuntime()来获取
+
+
+Rutime getRuntime() 		获取当前系统的运行环境对象
+
+
+void 	exit(int status)		止虚拟机
+int  	availableProcessors()		取cpu的线程数
+long  	maxMemory()			vm能从系统中获取的总内存大小（byte）
+long 	totalMemory()			vm已经从系统中获取的总内存大小（byte）
+long 	freeMemory()			vm剩余内存大小（byte）
+Process exec(String commond)		行cmd命令
+
+

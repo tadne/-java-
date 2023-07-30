@@ -1,0 +1,13 @@
+public final class Math		不能创建子类
+
+以下都是static方法
+
+abs(int a)		获取参数绝对值
+ceil(double a)		向上取整
+floor(double a) 	向下取整
+round(float a)		四舍五入
+max(int a,int b)	获取两个int值中较大值
+min(int a,int b)	获取两个int值中较小值
+pow(double a,double b)	返回a的b次幂的值
+random()		返回值为double的随机值，范围（0.0，1.0）
+

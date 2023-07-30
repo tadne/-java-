@@ -1,0 +1,76 @@
+Date			Java已经写好的一个javaBean类，用来描述时间，精确到毫秒
+
+
+时间起点：		1970:1:1 0.0.0		中国东八区	1970:1:1  8.0.0
+		
+
+创建：		空参构造创建：	默认表示系统当前时间
+		public Date(){this.time=System.curremyTimeMillis;}
+
+		有参构造创建：	表示指定时间
+		public Date(long time){this.time=time;}
+		
+		有getTime和setTime方法来设置和修改时间
+
+
+
+SimpleDateFormat类
+	作用：
+		格式化：		将时间变成设定的格式
+		解析：		将字符串表示的时间转换为Date对象
+	
+	创建：		空参，默认格式创建一个SimpleDateFormat
+			有参，public SimpleDateFormat(String oattern)
+				用指定格式创建
+
+	常用方法
+			public final String format(Date date)	格式化(时间对象->字符串)
+			public  Date  parse(String source)	解析(字符串->日期对象)
+
+
+
+	常用模式		yyyy-MM-dd HH:mm:ss	可以在api帮助文档看
+
+	
+	注意：		parse方法解析字符串的时候，要求格式和字符串格式一样，不然会报错
+
+
+
+
+Calendar类		日历类可以很方便的修改时间的年月日...
+
+
+	Calendar类是一个抽象类，不能直接创建对象，要用静态方法才能获取对象
+	
+
+	创建：		public static Calendar getInstance() 	获取当前时间的日历对象
+
+
+	方法：		public final  Date getTime()		获取日期对象
+			public finel setTime(Date date)		给日历设置日期对象
+
+			public long getTimeInMills()		拿到时间毫秒值
+			public  void  setTimeInMillis(long mills)	设置时间毫秒值
+
+			public int get(int field)		获取某一个字段信息
+			public int set(int field,int value)	修改日历的某个字段信息
+			public void add(int field,int amount)	为某个字段增加或减少指定值	
+	
+
+			get和add方法的field参数就是，对应字段的索引
+			同时也将这些参数定义为了常量，可以直接获取常量，如 Calendar.DAY_OF_MONTH
+
+
+	
+	底层：		底层会根据系统的不同时区来获取不同的日历对象，默认当前时间
+			将时间中的纪元，年，月，日，时，分，秒，星期，等等的都放到一个数组中
+	
+
+	细节：		月份：如果获取的时月份，那么范围时0~11,如果获取的是0，那么实际是1月
+			星期：没有星期天，1(星期天),2(星期一),...,7(星期六)
+
+			
+
+	
+
+

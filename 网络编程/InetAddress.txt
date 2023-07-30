@@ -1,0 +1,8 @@
+InetAddress
+
+	通过static getByName(String host)获取对象
+
+	
+	static InetAddress getByName(String host)	确定主机名称的ip地址,(可以是机器名称)
+	String getHostName()				获取此ip地址的主机名
+	String getHostAddress()				返回文本显示中的IP地址字符串

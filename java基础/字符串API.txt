@@ -1,0 +1,95 @@
+StringBuilder	
+	因为字符串是不可变的，每一个改变都要再创建一个字符串空间
+	这样是会消耗内存资源和效率的
+
+	所以可以用StringBuilder
+	
+	StringBuilder可以看成一个容器，创建之后，里面的内容是可以改变的
+
+	构造方法
+		public StringBuilder()			无参构造
+		public StringBuilder(String str) 	有参构造
+
+	成员方法
+		append（任意类型）		添加拼接数据‘
+		reverse（）			反转容器中内容
+		length（）			返回长度
+		toString（）			将StringBuilder转换，返回一个字符串
+
+	打印StringBuilder得到的是属性值，不是地址值
+
+	链式编程，在调用方法的时候不用用变量接受它的结果，还能继续调用其他方法
+
+	
+
+StringJoiner	//jdk8后出现
+
+	在将数组按照指定的格式拼接成字符串的时候，StringBuilder就有些麻烦了
+
+	StringJoiner就能很好解决这个问题
+
+	如	int[] arr={1,2,3};
+		 StringJoiner sj = new StringJoiner(",","[",""]);
+		fori{
+			sj.add(arr[i]+"");
+		}
+		sout(sj);		//[1,2,3]
+
+	
+	构造方法：	public StringJoiner(间隔符号)	
+			public StringJoiner(间隔符号，开始符号，结束符号)
+
+	
+	成员方法		add（添加的内容）		添加数据，返回对象本身
+			length（）		返回长度（字符出现的个数）
+			toString（）		返回一个字符串（字符拼接后的结果）
+
+
+
+底层：	字符串储存的内存原理：	直接赋值会复用字符串常量池中的
+				new不会复用，而是重新开辟新空间
+	
+	==号比较的到底是什么？	引用数据类型的地址值
+				基本数据类型用数据值
+	
+	字符串拼接的底层：		
+	拼接时没有变量，都是字符串
+		那么会触发优化机制，编译的时候会检查拼接有没有变量参与
+		没有就会在编译的时候直接将字符串拼接了
+		在编译的时候就已经时最终的结果了
+		即String s="a"+"b"+"c";和String s="abc";
+		在运行的时候没有什么区别
+
+
+	拼接的时候有变量参与
+		jdk8之前底层就会会使用StringBuilder来append拼接，
+			再用toString方法变会字符串，优化内存
+					
+		jdk8之后，为了避免多次拼接字符串变量，
+		导致创建多个StringBuilder对象，而导致降低效率
+				
+		底层会预估字符串长度，一个数组来装字符串变量，然后直接创建对象
+		
+		但是，预估也是要消耗性能的，最好是再拼接的时候就用STringBuilder
+
+			
+		
+	StringBuilder的长度，扩容机制
+		默认长度为16
+		但是一次性添加元素比较多，会扩容，为老容量*2+2=36.
+		如果一次性添加更多，那就会以实际为准，按照实际长度创建
+			
+				
+				
+
+
+			
+					
+		
+
+
+
+
+
+
+		

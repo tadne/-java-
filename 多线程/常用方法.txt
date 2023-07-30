@@ -1,0 +1,118 @@
+currentThread()方法
+
+	Thread.currentThread()		获取当前线程
+
+
+	java中任意一段代码都是执行在某个线程中的,执行当前代码的线程就是当前线程
+
+	同一段代码可能被不同的线程执行,因此当前线程是相对的,Thread.currentThread()
+	方法的返回值是代码实际运行时候的线程
+	
+
+
+setName()/getName()方法
+
+
+	thread.setName()	设置线程名称
+	thread.getName()	获取线程名称
+
+	通过设置线程名称,有助于程序调试,提供可读性
+
+
+
+
+isAlive()方法
+	
+	thread.isAlive()	判断当前线程是否处于活动状态,活动状态就是线程已经启动并且尚未终止
+
+		细节:	举例:	sout(thread.isAlive());//false
+				thread.start();
+				sout(thread.isAlive());//可能是true可能是false
+				
+			原因:	因为线程执行的很快,如果执行在打印的时候,
+				线程执行完毕,那就会返回false
+				
+
+
+sleep()方法
+
+	Thread.sleep(millis) 		让当前线程休眠指定毫秒数
+	
+	当前线程是currentThread获取的线程
+
+	sleep方法有异常要处理,但是run方法中不能抛出异常
+
+
+	可以利用sleep方法来设计一个计时器
+
+
+
+
+getId()方法
+	
+	Thread.getId()			获取线程的唯一标识,java中每一个线程都有一个唯一编号
+
+	某个编号线程在使用完毕之后,可能会将线程的编号分配给其他线程
+
+	在同一时间,编号对应的线程唯一
+
+
+yield()方法
+	
+	Thread.yield()			放弃当前cpu资源
+
+		线程的执行首先要获得cpu资源才能执行
+
+	yield可以将调用方法的线程出让执行权给别的线程
+
+
+join()方法	
+	
+	Thread.join()			合并线程,让当前线程执行完后,其他线程再执行
+
+	了解就好,少用,会让其他线程阻塞
+
+
+setPriority(int num)方法
+
+	thread.setPriority(int num)		设置线程的优先级
+
+	javaxianc 的优先级取值范围是1-10,如果超出范围,会抛异常
+	设置的值越大,抢到cpu执行权的  概率越大
+	
+	优先级本质只是给线程调度器一个提示信息,方便调度器决定调度哪些线程,
+		但是到底使用不使用,由调度器决定
+
+	如果线程设置不当,会导致一些线程无法获得执行权,导致线程饥饿,并且线程资源浪费
+
+	线程的优先级不是越高越好,一般都是使用默认值,默认值为5,很少修改
+	线程的优先级别有继承性,在a线程中创建了b线程,那么b线程的优先级别和a一样
+
+
+
+interrupt()方法
+	
+	Thread.interrupt()		中断线程
+
+	调用interrupt方法只是让线程打一个停止标记,不是真的停止线程
+
+	如果想要调用这个方法就结束线程,
+		可以利用isInterrupt()方法,这个方法如果返回值是boolean类型
+		如果线程调用interrupt方法了,就返回true,否则返回false
+
+
+
+setDaemon(Boolean b)
+
+	Thread.setDaemon(Boolean b)		将线程设置为守护线程
+
+	thread.setDaemon(true)		将线程设置为守护线程	
+	java中线程分为用户线程和守护线程
+
+	守护线程:	为其他线程提供服务的线程,如垃圾回收器GC
+			守护线程不能单独运行,
+				当jvm中没有其他用户线程时,守护线程会自动销毁,jvm会自动退出
+
+	细节:	主线程结束之后,守护线程时陆续结束,不是瞬间结束
+	
+	

@@ -1,0 +1,46 @@
+异常
+	常用方法
+	String getMessage()		返回此throwable的详细消息字符串
+	String toString()		返回此可抛出的简短描述
+	void   printStackTrace()	把异常的错误消息输出在控制台
+
+
+	jvm默认处理
+		把异常信息以红色字体打印在控制台,并结束程序
+
+
+	自己处理
+	try(){
+		sout(进行错误测试的代码);
+	}catch(){
+		sout(发生错误时执行的代码);
+	}finally(){
+		sout(无论方法是否报错都执行);
+	}
+
+	
+	抛出处理
+	throws
+		使用方式:	写在方法定义处,表示声明一个异常,告诉调用者,用方法可能出的异常
+
+		编译时异常:	要写
+		运行时异常:	可以不写
+
+		public void method()throws exception1,exception2...{}
+
+
+
+	throw	
+		使用方式:	写在方法内,结束方法
+				手动抛出异常对象,交给调用者
+				方法中下面的代码不再执行了
+
+		public void method(){ throw new NullPointerException();}
+
+
+
+
+
+
+
+		

@@ -1,0 +1,61 @@
+BigInteger类
+	
+	java中整数有：	byte,short,int,long
+
+	但是有时候8字节可能也不够用了
+
+	
+	这个时候可以用BigInteger
+
+
+构造方法
+BigInteger(int num,Random rnd) 		获取随机大整数，范围是[0~2的num次方-1]
+BigInteger(Stirng val)			获取指定大整数
+BigInteger(String val,int radix)	获取指定进制的大整数
+
+以上方法的Stirng要符号对应规则，比如一定要是整数，符合进制要求等
+
+
+static BigInteger valueOf(long val)	获取BigInteger的对象，内部有优化，对象一旦创建就不能修改
+细节：	只能取long的范围
+	对常用数字，-16~16优化，内部已经创建了这些数字的BigInteger对象
+	再创建的时候，就不会重新创建对象了，而是直接使用系统创建的对象
+	//即创建两个-16~16中的BigInteger对象，那他们的地址值一样
+	
+
+	有静态代码块，加载一些常量，比如-16~16的BigInteger对象，0对象
+
+	BigInteger一旦创建就不会修改，如果要改动，那么就会创建一个新的对象
+
+
+如果要创建的BigInteger对象超出了long范围，就只能用构造方法获取对象了
+
+
+
+BigInteger	add(BigInteger val)			加
+BigInteger	subtract(BigInteger val)		减
+BigInteger 	multiply(BigInteger val)		乘
+BigInteger 	divide(BigInteger val)			除	获取商
+BigInteger[] 	divideAndRemainder(BigInteger val)	除	获取商和余数
+boolean 	equals(object obj)			比较是否相同
+BigInteger	pow(int exponent)			次幂
+BigInteger 	max/min(BigInteger val)			返回较大值/较小值
+int 		intValue(BigInteger val)		转为int类型，超出范围就报错
+
+
+
+
+底层：
+	用数组分段存储，符号位一组，然后每32位为一组
+	数组的最大长度是21个亿左右
+	数组中每一位可以存42亿多
+	所以BigInteger最多可以存....很多
+	
+	
+
+
+
+
+
+
+

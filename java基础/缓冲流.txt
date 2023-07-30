@@ -1,0 +1,49 @@
+字节缓冲流
+	BufferedInputStream		字节缓冲输入流
+
+	BUfferedOutputStream		字节缓冲输出流
+
+	BufferedReader			字节缓冲输入流
+	
+	BufferedWriter			字节缓冲输出流
+
+	底层自带长度为8192的缓冲区提高性能,也可以自定义缓冲区大小
+
+	创建对象就是传入字节基本流或字符基本流就可以了
+
+	//创建对象
+	BufferedInputStream bis=new BufferedInputStream(new FileInputStream("IO\\a.txt"));
+        BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream("IO\\a.txt"));
+        //拷贝
+	byte[] bytes=new byte[1024];
+	int len;
+	while((len=bis.read(bytes))!=-1){bos.write(bytes,0,len);}
+	//释放资源
+	bis.close();
+	bos.close();
+
+	底层:
+		数据源通过缓冲输入流到缓冲区,用bytes数组来将输入流的数据传到缓冲输出流的缓冲区
+		进行不断读取,当输出流的缓冲区填满,就自动刷新写出.当输入流的缓冲区没有数据,
+		输入流就去读取数据
+
+
+字符缓冲流
+	创建对象
+		BufferedReader(Reader r)  	
+		BudderedWriter(Writer w)
+
+		**特有方法**:	readLine	读取一行数据,如果没有数据可读了,就返回null	
+				newLine		跨平台换行
+
+	其他的和字节缓冲流一样
+
+
+	缓冲流有几种?		4种,字节输入输出,字符输入输出
+	为什么提高性能?		缓冲流自带8kb缓冲区,显著提高字节流性能,但是对字符流提升不明显
+				因为字符流本身自带了缓冲流
+	两个特有方法?		字符缓冲流有两个特有方法readLine,newLine
+	
+		
+
+

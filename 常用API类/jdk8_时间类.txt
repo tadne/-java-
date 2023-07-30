@@ -1,0 +1,99 @@
+	jdk7的时间代码有些复杂		并且多线程下可能数据不安全
+
+Date
+	ZoneId:		时区
+		static Set<String> getAvailableZoneIds() 	获取java锁支持的所有时区
+		static ZoneId systemDefult()		 	获取系统默认时区
+		static  ZoneId   of(String zoneId)			获取一个指定时区
+
+
+
+	Instant：	时间戳
+		static Instant now()			获取当前时间的Instant对象
+		static Instant ofxxx()			根据(秒/毫秒/纳秒)获取instant对象
+			ofEpochSeconds，ofEpochMills
+		ZoneDateTime atZone(ZoneId zone)	指定时区
+		boolean isXXX(Instant otherInstant)	判断系列的方法
+			isbefore，isafter
+		Instant minusXxx(long millisToSubtract)	减少时间系列的方法
+			
+		Instant plusXxx(long millisToSubtract)	增加时间系列的方法
+
+		
+	ZoneDateTime：	带时区的时间
+		static ZoneDateTime now()		获取当前时间的ZoneDateTime对象
+		static ZoneDateTime ofXxx()		获取指定时间的ZoneDateTime对象
+		ZoneDateTime withXxx(时间)		修改时间
+		ZoneDateTime minusXxx(时间)		减少时间
+		ZoneDateTime plusXxx(时间)		增加时间		
+
+
+
+
+
+
+
+
+SimpleDAteFormat
+
+	DateTimeFormatter	用于时间的格式化和解析
+
+		static DateTimeFormatter ofPattern(”格式“)	获取格式对象
+		String format(时间对象(zoneDateTime))		按照指定方式格式化
+
+
+
+Calendar
+	LocalDate：	年月日
+	LocalTime：	时分秒
+	LocalDateTime	年月日时分秒
+		static Xxx now()			当前时间对象
+		static xxx of(int 年，int月，int 日 ...)	获取指定对象
+		getXxx()				获取日历中的年月日时分秒等信息
+			getMonth(),getDate,getYear
+		isXxx()					判断时间前后	
+			isBefore、isAfter
+		withXxx()				修改时间
+			withYear,withMonth
+		plusXxx()				增加时间
+			...
+
+	LocalDateTime转换为localTime和localDate
+	LocalDate toLocalDate()
+	LOcalTime toLocalTime()
+
+
+		
+
+
+工具类		计算时间间隔
+	
+	Period：		时间间隔（年月日）
+	
+
+		static Period between(Date1,Date2);
+		 int getXxx();
+			getYear,getMonth
+
+		例:	Period.between(date1,date2);
+		
+	
+
+	Duration：	时间间隔（秒，纳秒）
+		static Duration between(Date1,Date2);
+		toXxx()
+			toDate,toYear...
+	
+		Duration.between(date1,date2);
+
+
+
+	ChronnoUnit:	时间间隔（所有单位）
+		
+		chronnoUnit.XXX.between
+			YEARS,MONTHS,DAYS...
+			
+		
+
+
+	

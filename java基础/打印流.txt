@@ -1,0 +1,39 @@
+打印流
+	分类:	一般指:PrintStream和PrintWriter两个类
+
+	特点:	打印流不能读,只能写出
+		特有的写出方法可以实现数据的原样写出		
+		特有的写出方法可以实现自动刷新,自动换行		写出换行刷新
+
+	
+字节打印流	
+	构造方法
+		PrintStream(OutputStream/File/String)		关联字节输出流/文件/文件路径
+		PrintStream(String fileName,Charset charset)	指定字符编码
+		PrintStream(OutputStream out,boolean autpFlush)	自动刷新
+		PrintStream(OutputStream out,boolean autoFlush,String encoding)
+								指定字符编码且自动刷新
+
+		字节打印流底层没有缓冲区,开不开无所谓
+
+	成员方法
+		write(int b)
+		println(XXX xx)				打印任意数据,自动刷新,换行
+		print(XXX xx)				打印任意数据,不换行
+		printf(String format,Object...args)	带有占位符的打印语句,不换行
+
+	
+字符打印流		细节:字符打印流自动刷新是需要手动开启的
+	构造方法
+		PrintWriter(OutputStream/File/String)		关联字节输出流/文件/文件路径
+		PrintWriter(String fileName,Charset charset)	指定字符编码
+		PrintWriter(OutputStream out,boolean autpFlush)	自动刷新
+		PrintWriter(OutputStream out,boolean autoFlush,String encoding)
+								指定字符编码且自动刷新
+
+
+		成员方法
+		write(int b)
+		println(XXX xx)				打印任意数据,换行
+		print(XXX xx)				打印任意数据,不换行
+		printf(String format,Object...args)	带有占位符的打印语句,不换行

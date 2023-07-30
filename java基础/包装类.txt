@@ -1,0 +1,35 @@
+包装类	基本数据类型对应的引用类型
+	
+	包装类就是在堆中创建了一个空间,将数据类型new出来
+
+	Byte,Short,Integer,Long,Float,Double,Character,Boolean
+
+
+	Integer.valueOf(127);		创建127的对象
+	Integer i=new Integer(127);
+
+	这两种构造方法的区别,
+		在开发中,-128~127用的比较多,如果用到了,就不会创建对象,而是直接使用这个对象
+		所以,valueOf方法在创建两次-128~127之间的数字的时候,其实是同一个对象
+
+		而new出来的Integer就是在堆中的新对象了
+	
+	jdk5之前要独立获取,用构造方法或者静态方法,如果要操作,就要先转换为int再操作,再转换回去
+	
+	jdk5之后,可以自动装箱和拆箱了,
+		自动装箱:	把基本数据类型自动变成对应的包装类
+		自动拆箱:	把包装类自动变成对应的基本数据类型
+	
+		Integer i=1;	
+		Integer i1=new Integer(1);
+		int i2=i1;
+
+
+	成员方法
+
+		static String toBinaryString()		二进制
+		static String toOctalString()		八进制
+		static String toHexString()		十六进制
+			为什么返回String?	因为进制的长度不确定,可能很长,超过int范围
+
+		static int parseXxx(String s)		将字符串转换为int类型

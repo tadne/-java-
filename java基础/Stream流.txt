@@ -1,0 +1,127 @@
+Stream流
+
+	结合Lambda表达式,简化集合,数组操作
+	
+	获取Stream流的方法
+	
+		单列集合		default Stream<E> stream()		Collection中的默认方法
+		双列集合		无					无法直接使用stream流
+		数组		static<T> Stream<T> stream(T[] array)	Arrays工具类中静态方法
+		零散数据		static<T> Stream<T> of(T...values)	Stream接口中静态方法
+			零散数据要求是同种类型的
+			Stream.of(...)
+			细节:	这个方法是可以传递数组,但是数组内不能是基本数据类型,						不然就会把数组当做一个元素
+
+	
+	中间方法        
+		注意:	中间方法,返回新的stream流,只能用一次,使用链式编程
+			修改其中数据不会影响原来集合或数组中数据		
+
+		filter(Predicate接口):		过滤
+
+		例	list.stream().filter(new Predicate<String>() {
+            			@Override
+            			public boolean test(String s) {
+                			return s.length()==1;
+           		 	}
+        		});
+
+		lambda简化
+			list.stream().filter(s->s.length()==1);
+
+		
+
+
+		limit(long maxSize):		获取前几个元素
+		
+		例:	list.stream().limit(3).forEach(System.out::println);
+			//输出前三个元素
+			
+
+
+		skip(long n):			跳过前几个元素
+		
+		例:	  list.stream().limit(2).skip(1);
+			//获取第二个元素
+
+
+
+		distinct():		元素去重,依赖
+					底层:	用HashSet,HashSet重写了equals和hashCode
+		
+
+
+		concat(Stream a,Stream b):	合并两个流
+			
+			注意:	尽量让两个流的数据类型一样,因为如果不一样,
+				那么合并后的流的数据类型是之前两个的父类
+				
+
+		map:				元素映射
+			就是可以将流中元素的元素类型映射为其他类型
+			//第一个类型,就是流中原本的数据类型
+            		//第二个类型,就是转换后的类型
+            		//返回值为转换后的类型
+			list.stream().map(new Function<String, Integer>() {
+                		@Override
+                		public Integer apply(String s) {
+                    		return   Integer.parseInt(s);
+                		}
+            		});
+		
+			list.stream().map(s->Integer.parseInt(s));
+	
+
+
+	终结方法
+		void forEach(Consumer action)		遍历
+			list.stream().forEach(System.out::println);
+		long  count()				统计
+			long count = list.stream().count();	
+		toArray()				收集流中的数据,放数组中	
+			//泛型:具体类型的数组
+        		//apply的形参:流中数据的个数,要跟数组的长度一致
+        		//apply的返回值:具体类型的数组
+
+        		//参数的作用,创建一个指定类型的数组
+        		//底层,会依次得到流里面的每一个数据,并把数据放数组中
+        		//返回值,一个装着流里面数据的数组
+        	例	String[] arr = list.stream().toArray(new IntFunction<String[]>() {
+            			@Override
+           		 	public String[] apply(int value) {
+                		return new String[value];
+            			}
+        		});
+			Lambda简化
+			list.stream().toArray(s->new String[s]);
+
+		collect(Collector collector)		收集流中的数据,放集合中(List Set Map)
+			
+		例	List<String> collect = list.stream().collect(Collectors.toList());
+
+		//第一个参数是键的规则
+		//第二个参数是值的规则
+		list.stream().collect(Collectors.toMap(new Function<String, String>() {
+        	    	@Override
+        	    	public String apply(String s) {
+        	      	  return s;
+        	    	}
+        		}, new Function<String, Integer>() {
+        	    	@Override
+        	    	public Integer apply(String s) {
+        	    	    return Integer.parseInt(s);
+        	    	}
+        	}));
+		
+		list.stream().collect(Collectors.toMap(s -> s, s -> Integer.parseInt(s)));
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	

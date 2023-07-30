@@ -1,0 +1,37 @@
+Object		
+
+
+
+object是java中的顶级父类，所有的类都直接或者简间接的继承于object类
+object类中的方法可以被所有子类访问
+
+
+构造方法		只有空参构造
+			原因：没有一个属性可以是所有类的共性，所以没有带参数的构造方法
+
+		
+
+成员方法
+
+
+String 	toString()		返回对象的字符串表示形式
+boolean equals(Object obj)	比较两个对象是否相等
+Object 	clone(int a)		对象克隆	
+boolean isNull(Object obj)	判断空		空就true
+boolean nonNull(Object obj)	判断非空		非空就true
+
+
+
+其中toStirng方法是system.out.println()方法的底层
+如果打印一个对象，想要看到属性值，就要重写equals方法和hashCode方法就好了
+
+如果没有重写equals和hashCode方法，那么equals方法默认比较的是对象的地址值
+重写之后，比较的就是对象内部的属性值
+
+
+equals方法在String类中，已经被重写了	底层是先判断比较的对象是不是字符串，如果是再比较内部属性
+其中，哪个对象调用equals，就会调用哪个对象重写的equals方法
+如：	StringBuilder sb=new StringBuilder()；
+	sb.equals(str)和str.equals(sb)是完全不同的
+	因为String类重写了equals方法，StringBuilder类没有重写equals方法
+

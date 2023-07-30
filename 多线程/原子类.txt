@@ -1,0 +1,55 @@
+JDK5后提供了java.util.concurrent.atomic包(简称Atomic包)
+	
+	这个包中的原子操作类提供了一种用法简单，性能高效，线程安全地更新一个变量的方式。
+	变量的类型有很多种，在Atomic包里一共提供了13个类，4种类型的原子更新方式，
+	分别是原子更新基本类型、原子更新数组、原子更新引用和原子更新属性(字段)。
+
+这里只介绍更新基本类型
+	使用原子的方式更新基本类型Atomic包提供了以下3个类：
+
+	AtomicBoolean： 原子更新布尔类型
+
+	AtomicInteger： 原子更新整型
+	
+	AtomicLong： 原子更新长整型
+
+	构造方法
+		public AtomicInteger()	   			默认值为0的原子型Integer
+		public AtomicInteger(int initialValue) 		指定值的原子型Integer
+	成员方法(都是原子方式操作)
+		int get():   			 		获取值
+		int getAndIncrement():      			将当前值加1,返回自增前的值。
+		int incrementAndGet():     			将当前值加1,返回自增后的值。
+		int addAndGet(int data):			与输入值相加，返回结果。
+		int getAndSet(int value):   			设置值，并返回旧值。
+
+	
+
+	AtomicInteger的本质：自旋锁 + CAS算法
+
+	CAS的全称： Compare And Swap(比较再交换); 
+		是现代CPU广泛支持的一种对内存中的共享数据进行操作的一种特殊指令。
+		CAS可以将read-modify-write转换为原子操作，这个原子操作直接由处理器保证。
+		CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。
+			当且仅当旧预期值A和内存值V相同时，将内存值V修改为B并返回true，
+			否则什么都不做，并返回false。\
+
+
+
+	CAS和Synchronized都可以保证多线程环境下共享数据的安全性。那么他们两者有什么区别？
+
+	Synchronized是从悲观的角度出发：
+		总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，
+		所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁
+		（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程）。
+		因此Synchronized我们也将其称之为悲观锁。jdk中的ReentrantLock也是一种悲观锁。
+
+	CAS是从乐观的角度出发:
+		总是假设最好的情况，每次去拿数据的时候都认为别人不会修改，所以不会上锁，
+		但是在更新的时候会判断一下在此期间别人有没有去更新这个数据。
+		CAS这种机制我们也可以将其称之为乐观锁。
+
+		自旋
+			就是CAS判断后,预期值和当前值不匹配,根据实际值重新计算预期值的操作
+
+

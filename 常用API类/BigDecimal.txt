@@ -1,0 +1,60 @@
+BigDecimal
+
+	计算机中的小数
+		整数部分
+	 		底数乘以基数的全次幂，
+			100	1*2^2+0*2^1+0**2^0
+		小数部分
+			底数乘以基数的负的全次幂
+			111	1*2^(-1)+1*2^(-2)+1*2^(-3)
+
+		这样就会出现1/2的幂是很难全部表示所有数字的
+		所以需要表示精确小数的话，需要一个新的类来表示
+		所以才需要BigDecimal
+		
+
+
+
+	作用：
+		用于小数的精确计算
+		用来表示一个很大的数
+		
+
+	
+	构造方法：	
+		BigDecimal b=new BigDecimal(String str);
+		BigDecimal b=new BigDecimal(double d);
+		
+	静态方法		BigDecimal.valueOf(double d)
+
+
+
+	如果要表示的数字不大，没超出double的范围，建议使用静态方法获取对象
+	如果数字比较大，超出double范围，建议使用构造方法获取对象
+	如果传递的是0~10中的整数，就不会重新创建，而是再底层提前创建好了，直接调用即可
+
+
+
+static BigInteger valueOf(double val)			获取对象
+
+BigDecimal	add(BigDecimal val)				加
+BigDecimal	subtract(BigDecimal val)			减
+BigDecimal 	multiply(BigDecimal val)			乘
+BigDecimal 	divide(BigDecimal val)				除	获取商
+
+BigDecimal 	divide(BigDecimal val,int 精确位数，舍入模式)	除
+
+舍入模式：	RoundingModel.HALF_UP	四舍五入
+
+
+
+底层：
+	字符数组存储
+	但是存的是字符，如“0.11”,那么存的就是byte[] bytes={'0','1','1'};
+	数组的长度是21个亿，所以BigDecimal最多可以存....
+
+	
+	
+
+
+		

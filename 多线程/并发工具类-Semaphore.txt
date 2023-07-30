@@ -1,0 +1,42 @@
+Semaphore
+
+	Semaphore字面意思是信号量
+
+	作用:		控制访问特定资源的线程数目。
+		类似synchronized,只不过synchronized值能一个线程,Semaphore可以两个线程
+
+
+	常用方法
+		Semaphore(int permits)			permits 表示许可线程的数量
+ 		void acquire() 					表示获取许可
+ 		void release()					表示释放许可
+	
+	例:	
+		private Semaphore semaphore = new Semaphore(2) ;
+
+    	@Override
+    	public void run() {                         // 这个run只允许2个线程同时执行
+        try {
+            // 获取许可证
+            semaphore.acquire();
+            System.out.println(Thread.currentThread().getName() + "----->>正在经过十字路口");
+            // 模拟车辆经过十字路口所需要的时间
+            Random random = new Random();
+            int nextInt = random.nextInt(7);
+            TimeUnit.SECONDS.sleep(nextInt);
+            System.out.println(Thread.currentThread().getName() + "----->>驶出十字路口");
+            // 释放许可证
+            semaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    	}
+	public static void main(String[] args) {
+        // 创建线程任务类对象
+        CarThreadRunnable carThreadRunnable = new CarThreadRunnable() ;
+       	 	// 创建5个线程对象，并启动。
+       	 	for(int x = 0 ; x < 5 ; x++) {
+        	    new Thread(carThreadRunnable).start();
+        	}
+
+   	 }

@@ -1,0 +1,60 @@
+List系列集合:		有序,可重复,有索引
+
+			有序:	存和取得顺序一致
+			可重复:	集合中不同元素,值可相同
+			有索引:	能用fori便利
+
+
+	常用方法:	boolean add(E e)		添加元素
+			void clear()			清空所有元素
+			boolean remove(E e)		把给定对象在当前集合中删除
+			boolean contains(Object o)	判断当前集合中是否包含给定对象
+				如果是引用数据类型,那要重写equals和hash方法
+			boolean isEmpty()		判断当前集合是否为空
+			int size()			返回当前集合中元素的个数
+
+
+
+	有序,有索引,可重复
+
+	
+	List特有方法:	void add(int index,E e)		在指定索引添加元素
+			E remove(int index)		删除指定索引处元素
+			E set(int index,E e)		修改指定索引处元素(返回被修改的元素)
+			E get(int index)		获取指定索引处元素
+		
+
+	遍历方式
+		迭代器
+		增强for
+		Lambda表达式
+		普通for
+		列表迭代器
+			额外有一个方法,可以在遍历的过程中添加元素
+			ListIterator<Integer> it1 = list.listIterator();//获取列表迭代器对象
+       			 while (it1.hasNext()){
+           		 System.out.println(it1.next());
+        		}
+
+		遍历删除元素:		迭代器
+		遍历添加元素:		列表迭代器
+		增强for,Lambda:		只想遍历
+		普通for:			操作索引
+
+
+	ArrayList:		
+		底层是数组结构
+
+		用空参构造创建的集合,底层会创建一个默认长为0的数组
+		添加第一个元素的时候,底层会创建一个新的长度为10的数组
+		存满后就会扩充1.5倍
+		如果一次性添加多个元素,1.5倍放不下,那新数组长度以实际为准
+
+			
+	LinkedList:
+		底层是双向链表
+		
+		特有方法
+		addFirst 	在开头插入元素		addLast		在结尾插入元素
+		getFirst	获取第一个元素		getLast		获取最后一个元素
+		removeFirst	删除第一个元素		removeLast	删除最后一个元素

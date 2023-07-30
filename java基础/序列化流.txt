@@ -1,0 +1,42 @@
+序列化流
+
+	可以将java中对象写入本地文件中
+	
+	创建对象			ObjectOutputStream(OutputStream out)		
+	
+		方法:		writeObject(Object obj)		把对象序列化写到文件中
+	
+	
+		如果要将对象序列化写入本地文件,需要让对象实现Serializable接口
+		是一个标记型接口,实现了之后,当前类才可以被序列化
+
+
+反序列化流
+	
+	创建对象			ObjectInputStraem(InpuStream out)
+		
+		方法:		Object readObject()	把序列化到本地文件中的对象,读取到程序中
+
+
+
+	细节:
+	    如果将对象序列化到本地后,在java中修改了对象,再次读取会报错
+		原因:	实现serializable接口后,java底层会根据变量方法计算出应该序列号
+			作为版本号.如果修改了对象,那就会重新计算版本号,导致和文件中的版本号冲突
+
+		解决:	固定版本号,在定义对象的时候,就提前定义号版本号
+			private static final long serialVersionUID=1L;
+			私有,被类的所有对象共享,不能被修改
+
+
+
+	     如果要序列化的对象中有不想序列化的属性,
+			那么可以给这个属性加transient瞬态关键字,这样就不会被序列化本地文件了
+
+
+	     序列化流写到我文件中的数据不能被修改,一旦修改无法再读取
+
+		
+
+
+

@@ -1,0 +1,18 @@
+转换流
+
+	字节流和字符流间的桥梁
+
+	InputStreamReader	OutPutStreamWriter
+
+	作用:	指定字符集读写
+		字节流想要使用字符流中的方法
+
+
+	InputStreamReader isr=new InputStreamReader(new FileInputStream("path"),"GBK");
+	int len;
+	while((len=isr.read())!=-1){sout((char)ch);}
+	isr.close;
+
+	但是jdk11后,就可以有
+		FileReader fr=new FileReader("path",Charset.forName("GBK"));
+	在构造的时候直接加字符集
