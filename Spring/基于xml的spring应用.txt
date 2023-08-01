@@ -1,0 +1,92 @@
+SpringBean的配置详情
+	id="" class=""		Bean的id和全限定名
+	name=""			通过name设置bean的别名,可以通过别名获取bean实例
+	scope			bean的作用范围,BeanFactory作为容器取值singleton和prototype
+	lazy-init=""		延迟加载/懒加载,默认容器创建就加载,但当BeanFactory作为容器时无效
+					启用后调用getBean方法的时候加载
+	init-method=""		实例化后自动执行初始化方法,method指定方法名
+	destory-method=""	销毁后自动执行初始化方法,method指定方法名
+	autowire="byType"	设置自动注入模式,常用是按照类型byType,按照名字byName
+	factory-bean="factory-method"	
+				指定Bean的创建方法
+			
+
+	id		id是bean的配置文件中bean的唯一标识,
+			如果不设置,底层会提供一个id,就是当前实现类的全限定名
+			例:	com.service.impl.UserServiceImpl
+
+	name		bean的别名,可以起多个别名
+			例:	name="aaa,bbb,ccc"
+			底层是用map集合 ,使用别名映射id来获取bean对象
+
+	scope		bean的作用范围:	Singleton和Prototype
+			Singleton: 单例,spring创建的时候,进行Bean实例化,储存到单例池中,每次
+					getBean都是从单例池中获取相同Baen
+			Prototype: 原型,多例.
+					spring初始化的时候不会创建Bean实例,只有调用getBean的时					候,才会实例化Bean,每次都会创建一个新的Bean实例
+
+	lazy-init	设置为true为延迟加载
+			默认是在启动容器的时候,将所有的singletonbean提前创建
+			设置了懒加载后,启用后调用getBean方法的时候加载
+
+			提升系统的启动速度，按需要加载  Bean 节约了内存
+			但若系统已经启动完成，后期用时如果加载 Bean 异常情况如内存不够，
+				会对系统后期使用造成影响
+			
+	init-method	构造方法完成后,就执行初始化方法
+			要在实现类中写一个初始化方法,然后在xml中指定
+			也可以实现InitalizingBean,重写afterPropertiesSet方法实现
+
+	
+Bean的实例化配置
+	Bean的实例化方式主要有:	构造方法实例化	工厂方式实例化
+	
+	构造方法实例化
+		默认情况下:	使用无参构造
+		也可以用<constructor-arg name="" value=""></constructor-arg>来指定
+		
+	工厂方式实例化
+		静态工厂实例化		用constructor-arg来传递参数
+			在实现类中写一个静态构造方法,用factory-method来指定这个方法即可
+			作用:	bean创建前后不会操作,如果bean创建前/后想要操作可以用它
+		实例工厂实例化		用constructor-arg来传递参数
+			先配置工厂对象
+		<bean id="factory" class="com.factory.beanFactory"></bean>
+			在factory类中写一个实例构造方法,用factory-method来指定这个方法即可
+		<bean id="userDao" factory-bean="factory" factory-method="userDao"></bean>
+			在实现类中写一个实例构造方法,用factory-method来指定这个方法即可
+			作用:	bean创建前后不会操作,如果bean创建前/后要实现一些代码可以用它
+				第三方的一些bean需要方法来构建
+		实现FactoryBean规范延迟实例化
+			工厂类实现FactoryBean<UserService>接口
+			实现方法getObject方法,返回需要创建的对象
+			然后和实例创建方式一样就行,其中不用指定
+
+
+
+Bean的注入方式
+	通过Bean的set方法注入		<property name="useDao" ref="useDao"/>
+					<property name="useDao" value="haohao"/>
+	通过构造Bean的方法注入		<constructor-arg name="" value="">
+					<constructor-arg name="" ref="">
+
+Bean的依赖注入配置
+	普通数据类型		String,int..		用value属性指定
+	引用数据类型		UserDaoImpl,DataSource	用ref属性指定
+	集合数据类型		List,Map		用property的list子标签即可
+	
+
+Spring的get方法
+	
+Spring配置非自定义Bean
+	
+Bean实例化的基本流程
+	
+Spring的后处理器
+	
+SpringBean的生命周期
+	
+Spring IOC整体流程总结
+	
+Spring xml方式整合第三方框架
+	

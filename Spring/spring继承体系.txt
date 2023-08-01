@@ -1,0 +1,14 @@
+BeanFactory继承体系
+
+	BeanFactory是一个核心接口,项目运行过程中有具体实现参与,
+		它的具体实现是DefaultListableBeanFactory
+		ApplicationContext内部维护的BeanFactory的实现类也是它
+
+
+ApplicationContex继承体系
+	在spring基础环境下常用的ApplicationContext
+	ClassXmlApplicationContext		加载类路径下的xml配置spring
+	FileSystemXmlApplicationContext		加载磁盘路径下xml配置的ApplicationContext
+	AnnotationConfigApplicationContext	加载注解配置类的ApplicationContext
+
+	

@@ -1,0 +1,106 @@
+Spring概述和入门
+	spring是一个开源的轻量级框架,简化企业级应用开发.解决了开发者在javaEE开发中遇到的常见问题.
+		提供了IOC,AOP,WebMVC等功能.生态完善
+
+	历史:	
+		jsp开发
+		MVC+三层架构
+		EJB重量级框架
+		SPring,SSH
+		Spring,SSM
+		SpringBoot	
+		SpringCloud	
+
+
+BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
+	导入spring的jar包,maven
+	定义接口和实现类
+	创建beans.xml配置文件,将实现类信息配置到xml中
+	编写测试类,创建beanFactory,加载配置文件,获取实例对象
+
+	测试类代码:
+	//创建工厂对象
+       	DefaultListableBeanFactory beanFactory=new DefaultListableBeanFactory();
+       	//创建读取器
+       	XmlBeanDefinitionReader reader=new XmlBeanDefinitionReader(beanFactory);
+       	//读取器读取配置文件给工厂
+       	reader.loadBeanDefinitions("beans.xml");
+       	//根据id获取bean实例
+       	userService userService= (org.example.userService) 					beanFactory.getBean("userService");
+
+	DI:	bean间调用
+		再创建一个bean:	比如叫empDao
+		在userServiceImpl中写方法
+			private empDao empDao;
+			public void setEmpDao(empDaoImpl empDao) {
+		  System.out.println("BeanFactory调用方法获取userDao设置到此:"+empDao);
+			this.empDao=empDao;
+			}
+		//this.empDao=empDao;
+		//这一行是为了给private的这个局部变量赋值,方便以后其他方法调用
+
+		在beans.xml中配置该bean
+			<bean id="userService" class="org.example.userServiceImpl">
+        			<property name="empDao" ref="empDao"></property>
+    			</bean>
+			//ref是引用的意思,这里就是你引用的bean的id
+			//name就是set方法后面的Xxx,和参数名相同,注意这个方法的名字不能改,
+					改了就会找不到这个方法了
+		
+		这样就实现了DI依赖注入,底层会在获取userService的时候,执行好setEmpDao方法
+			一次提供好需要的bean
+
+
+
+
+	IOC:	控制翻转:	反转的是什么?反转的是Bean的创建权,将bean的创建交给BeanFActory
+	DI:	依赖注入:	注入的是什么?注入的是bean,实现不同bean之间的调用
+				目标是在service层就实现业务逻辑
+
+	
+	总结流程:	定义接口和实现类
+			修改实现类代码,添加setXxx(Xxx xxx)用于接收注入的对象
+			修改Beans.xml文件,在要被注入的实现类bean中嵌入<propreity>
+			创建测试代码,获取实现类对象
+				这时,在获取对象时,setXxx方法就被执行了
+
+
+		虽然开发中不怎么使用BeanFactory,但是BeanFactory是底层
+
+			
+
+	
+ApplicationContext快速入门
+	ApplicationContext称为Spring容器,内部封装BeanFActory,比BeanFactory更强大
+	用Spring容器开发,配置文件习惯写成:	applicationContext.xml
+
+	Service代码
+	ApplicationContext applicationContext=
+		new ClassPathXmlApplicationContext("applicationContext.xml");
+
+	userService userService= 
+		(com.userService) applicationContext.getBean("userService");
+        
+	System.out.println(userService);
+		//其他代码不变,业务中创建对象代码一下子少了很多,简化开发
+
+
+	BeanFactory和ApplicationContext关系
+		1:BeanFactory是Spring的早期接口,称为Spring的Bean工厂,
+			ApplicationContext是后期更高级接口,称为Spring容器	
+		2:ApplicationContext在Beanfactory基础上对功能进行了扩展,如监听功能,国际化功能等
+			BeanFactory的API更底层,ApplicationContext的API多是堆想这些底层API封装
+		3:Bean创建主要逻辑和功能被封装在BeanFactory中,不仅基础了BeanFactory,而且内部还
+			维护着BeanFactory的引用,所以既有继承关系,还有融合关系
+		4:Bean初始化时机不同,BeanFactory是在首次调用getBean的时候创建Bean,					而ApplicationCOntext是配置文件加载,容器已创建就将Bean实例化并初始化了	
+	
+
+	
+		
+
+
+		
+
+		
+
+		

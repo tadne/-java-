@@ -1,0 +1,28 @@
+程序代码获取对象的时候,不直接new,而是找第三方来控制
+
+
+IOC:	Inversion of Controller		控制翻转	
+	强调的是原来在程序中创建bean的权利反转给第三方
+	
+DI:	Dependency Injection		依赖注入
+	作用:	强调Bean之间的关系,这种关系第三方负责设置
+	
+	例:	就是说bean1如果要调用bean2,那么原来可能会需要在代码中注入bean1和bean2
+		然后将bean2设置给bean1.
+		但是DI就可以在第三方就将bean2设置给bean1,实现间接引用
+
+aop:	Aspect Or iented Programming	面向切面编程
+	功能的横向抽取,实现方式是Proxy代理模式
+	作用:	对bean功能增强
+
+
+
+框架的基本特点:
+	框架是基于基础技术上,从众多业务中抽取出的通用解决方案
+	是一个半成品,使用框架可以提供开发效率,实现复杂逻辑
+	内部使用大量设计模式,算法,底层代码操作技术,如反射,内省,xml解析,注解解析等
+	具备扩展性
+	
+	基础框架:	基本业务逻辑框架:	MyBatis,Spring,SpringMVC,Stuts2,Hibernate等
+	服务框架:	特定领域:MQ,ES,Nacos
+	
