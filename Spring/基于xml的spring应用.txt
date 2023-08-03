@@ -8,7 +8,7 @@ SpringBean的配置详情
 	destory-method=""	销毁后自动执行初始化方法,method指定方法名
 	autowire="byType"	设置自动注入模式,常用是按照类型byType,按照名字byName
 	factory-bean="factory-method"	
-				指定Bean的创建方法
+				指定Bean的创建方法工厂
 			
 
 	id		id是bean的配置文件中bean的唯一标识,
@@ -41,11 +41,11 @@ SpringBean的配置详情
 Bean的实例化配置
 	Bean的实例化方式主要有:	构造方法实例化	工厂方式实例化
 	
-	构造方法实例化
+	构造方法实例化constructor-arg
 		默认情况下:	使用无参构造
 		也可以用<constructor-arg name="" value=""></constructor-arg>来指定
 		
-	工厂方式实例化
+	工厂方式实例化factory-bean
 		静态工厂实例化		用constructor-arg来传递参数
 			在实现类中写一个静态构造方法,用factory-method来指定这个方法即可
 			作用:	bean创建前后不会操作,如果bean创建前/后想要操作可以用它
@@ -63,30 +63,45 @@ Bean的实例化配置
 			然后和实例创建方式一样就行,其中不用指定
 
 
+	Bean的注入方式
+		通过Bean的set方法注入		<property name="useDao" ref="useDao"/>
+						<property name="useDao" value="haohao"/>
+		通过构造Bean的方法注入		<constructor-arg name="" value="">
+						<constructor-arg name="" ref="">
 
-Bean的注入方式
-	通过Bean的set方法注入		<property name="useDao" ref="useDao"/>
-					<property name="useDao" value="haohao"/>
-	通过构造Bean的方法注入		<constructor-arg name="" value="">
-					<constructor-arg name="" ref="">
-
-Bean的依赖注入配置
-	普通数据类型		String,int..		用value属性指定
-	引用数据类型		UserDaoImpl,DataSource	用ref属性指定
-	集合数据类型		List,Map		用property的list子标签即可
+	Bean的依赖注入配置property
+		普通数据类型		String,int..		用value属性指定
+		引用数据类型		UserDaoImpl,DataSource	用ref属性指定
+		集合数据类型		List,Map	用property的list/map子标签即可
+							其中还有value/entry子标签注入数据
 	
 
-Spring的get方法
+	自动装配autowire
+		就是在xml创建bean的时候,<bean>标签中有一个属性叫autowire
+			一般用的值为byType和byName
+		byName:		要求set方法名字得和bean的name属性一致
+		byType:		要求class唯一,不能有相同class的bean
 	
-Spring配置非自定义Bean
-	
-Bean实例化的基本流程
-	
-Spring的后处理器
-	
-SpringBean的生命周期
-	
-Spring IOC整体流程总结
-	
-Spring xml方式整合第三方框架
+		可以通过自动装配来省去Bean的依赖注入配置,少写了些property
+
+
+
+	其他配置标签	
+		spring的xml标签大体有两类,默认标签和自定义标签
+		默认标签:	不用额外导入其他命名空间的标签,如<bean>
+			也可以用<import>去导入外部资源,其他标签类什么的
+			<alias>给bean指定别名
+			<beans>除了作为根标签外,还可以配合profile切换开发环境
+
+		自定义标签:	要额外导入其他命名空间约束,通过前缀引用的标签,
+				如<context:property-placeholder>
+
+			先导入jar包
+			beans中的xmlns属性,可以导入第三方命名空间,
+				xmlns:mvc="http://www.springframework.org/schema/mvc"
+				再在其中有schemaLocation属性
+				 http://www.springframework.org/schema/mvc
+				具体内容直接查查官网什么的就可
+
+
 	
