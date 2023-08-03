@@ -1,0 +1,20 @@
+Bean实例化的基本流程
+
+
+1.	加载xml文件,spring容器进行初始化,解析并将xml配置的bean的信息封装成一个BeanDefinition对象
+		BeanDefinition:只对填入Bean标签中的信息封装,默认信息还没有填入
+
+2.	所有BeanDefinitionMap对象储存到一个叫做beanDefinitionMap集合中
+		BeanDefinitionMap:用来储存BeanDefinition
+
+3.	ApplicationContext对该Map遍历,用反射创建Bean实例对象
+		
+4.	创建好的Bean对象存到一个叫singletonObjectis(单例池)的Map集合中
+		singletonObjectis:储存创建好的Bean对象
+		而singletonObjectis,BeanDefinitionMap都会被存在一个叫beanFactory的集合中
+		
+5.	调用getBean方法时,最终从singletonObjectis集合中取出实例对象返回
+
+	
+
+	

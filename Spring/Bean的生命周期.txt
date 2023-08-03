@@ -1,0 +1,112 @@
+SpringBean的生命周期
+
+	bean的生命周期是从Bean实例化之后,即通过反射创建出对象之后,
+		到Bean成为一个完整对象,最终存在单例池中,这个过程叫Bean的生命周期
+
+
+     三个阶段:
+	Bean的实例化阶段:	Spring框架会取出BeanDefinition的信息进行判断当前Bean是否是singleton的,
+			是否是延迟加载的,是否是FactoryBean等,最终将一个普通singleton的Bean通过
+			反射创建对象实例化
+
+	Bean的初始化阶段:	Bean创建后还只是一个半成品,对Bean接口的初始化方法,执行自定义init方法等
+			该阶段是Spring最有技术含量和复杂的阶段,AOP增强功能,Spring注解功能等
+		
+	Bean的完成阶段:	经过初始化阶段,Bean就成为了一个完整的SpringBean,
+			被存到单例池SingletonObjects中,完成生命周期
+		
+	
+
+
+Bean的初始化阶段:
+	Bean的初始化阶段比较复杂,着重研究
+
+	初始化阶段涉及的过程:
+		Bean实例的属性填充					
+		Aware接口属性注入
+		BeanPostProcessor后处理器的before()方法回调	
+		InitializingBean接口的初始化方法回调
+		自定义初始化方法init回调
+		BeanPostProcessor后处理器的after()方法回调	
+
+
+
+由于前几节已经写过Processor处理器和初始化方法了,所以这里只讲  Bean实例的属性填充  和  Aware接口
+
+Bean实例的属性填充
+	BeanDefinition中有实例Bean的注入信息,通过属性propertyValues储存
+
+    属性注入的三种情况:
+	注入普通属性String,int...,直接通过反射调用set方法注入
+
+	(单向就是,a的创建需要b的注入,b的创建不需要a的注入)
+	注入单向对象引用属性时,从容器中getBean获取后用反射调set方法注入
+		如果容器中没有,在注入对象Bean实例后(完成其生命周期后),再进行注入本对象	
+
+	注入双向对象引用属性时,涉及循环依赖
+	循环依赖:	多个实例之间要相互注入,引用
+			
+	初始化操作:实例化==>属性填充==>判断容器是否被注入
+		==>被注入就去创建要注入对象/没有被注入就直接赋值
+		这样如果有两个对象相互注入,那么显然会出现死循环
+	
+	解决思路:	在实例化的阶段,会创建一个Map来储存还没有完成全部初始化的Bean
+		这样在判断容器是否被注入的时候,先去遍历单例池,如果单例池中没有就去遍历这个			Map集合,将这个未完成的Bean先注入完成实力化,再将二者都创建出来
+	
+		
+	实际解决方案:
+		Spring提供了三级缓冲储存 完整的Bean实例和半成品Bean实例,用于解决循环引用问题
+
+		在DefaultListableBeanFactory的上四级父类DefaultSingletonBeanRegister中,
+		提供了三个Map:	
+		singletonObjects		单例池,
+			用来储存已经实例化和初始化完成的Bean成品对象,叫一级缓存
+
+		earlySingletonObjects		早期Bean单例池
+			缓存半成品对象,且当前对象已经被其他对象引用,	叫二级缓存
+
+		singletonFactories		单例Bean的工厂池
+			缓存半成品对象,对象没有被引用,使用时在通过工厂创建Bean,叫三级缓冲
+
+
+		判断是否被注入或者说引用时,如果被引用,就是在二级缓存中,没有被引用就是三级缓冲中
+			当需要
+
+
+	A引用B,B也引用A
+	循环依赖的过程结合三级缓存:
+		
+		A实例化对象,但是尚未初始化,将A存在三级缓存
+		A属性注入,需要B,从缓存中获取,没有B
+		B实例化对象,但是尚未初始化,将B存入三级缓冲
+		B属性注入,需要A,从三级缓存中获取到A,A从三级缓冲移到二级缓存
+		B执行其他生命周期过程,最终成为完全Bean,存到一级缓存中,删除对应二三级缓存
+		A再次属性注入B,需要B,从一级缓存中获取B
+		A执行其他生命周期过程,成为完全Bean,存到一级缓存,删除二三级缓存
+
+
+
+	
+Aware接口属性注入
+	Aware接口是一种框架辅助属性注入的一种思想,其他框架中也可以看的类似的接口.
+	框架有高度封装性,但不是说永远用不到这些对象,如果用到,可以用Aware接口
+	
+	常用的Aware接口
+	
+	ServletContextAware	setServletContext(ServletContext sc)  
+						注入ServletContext对象,web环境下生效
+
+	BeanFactoryAware	setBeanfactory(BeanFactory factory)
+						注入BeanFactory对象
+	
+	BeanNameAware		setBeanName(String beanName)
+						注入当前Bean在容器中的beanName
+	
+	ApplicationContextAware	setApplicationContext(ApplicationContext app)
+						注入ApplicationContext对象
+
+	就是可以自动注入一些麻烦的bean
+
+
+
+

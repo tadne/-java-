@@ -1,0 +1,11 @@
+Spring的get方法
+	Object getBean(String beanName) 	根据beanName从容器中获取Bean实例,
+						要求bean唯一,返回值为Object,要强转
+
+	T getBean(Class type)			根据class类型来获取bean对象
+					要求bean类型唯一,返回值为class类型实例,不用强转
+
+	T getBEan(String beanName,Class type)	根据beanName获取Bean实例
+						返回值为Class类型实例,无需强转
+
+

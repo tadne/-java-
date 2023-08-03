@@ -1,0 +1,41 @@
+Spring配置非自定义Bean
+
+	如:	UserDaoImpl等,都是自己定义的Bean
+
+	实际开发中,会有一些功能类不是自己定义的,而是用的第三方jar包
+	要让Bean要想让Spring进行管理,也要配置
+
+	
+	考虑:
+		实例化方式是什么?无参,有参,静态工厂,实例工厂
+
+		被配置的bean要注入哪些属性
+	
+
+
+例:	注入数据库
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        	<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        	<property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+        	<property name="username" value="root"/>
+        	<property name="password" value="iPad2021"/>
+    	</bean>
+
+	        Object dataSource = applicationContext.getBean("dataSource");
+
+
+	注入java的方法
+    	<bean id="simpleDateFormat" class="java.text.SimpleDateFormat">
+    	    <constructor-arg name="pattern" value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
+    	</bean>
+	 <bean id="date" factory-bean="simpleDateFormat" factory-method="parse">
+        	<constructor-arg name="source" value="2023-08-02 12:00:00"/>
+    	</bean>
+
+
+
+
+
+
+
+	
