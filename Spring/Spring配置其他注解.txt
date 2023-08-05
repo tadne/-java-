@@ -1,0 +1,11 @@
+Spring配置其他注解
+
+	@Primary	标注用于提供相同类型bean的优先级别
+			与@Component或@Bean一起使用,标注该bean优先级别高
+			在通过类型获取Bean时或@Autowired注入时,优先注入
+
+
+	@Profile	标注在类或方法上,指定当前bean环境,
+			只有激活了当前环境,才能被注入,不指定则为任意环境
+		
+

@@ -1,0 +1,16 @@
+Spring注解的解析原理
+	
+	
+	xml方式,配置<context:component-scan base-package="...">
+		这种方式就是通过扫描文件获取对应bean信息
+		通过命名空间,有对应命名空间处理器
+		命名空间处理器中有标签对应解析器
+		对应解析器中有registerBeanDefinition方法
+		创建对应BeanDefinition加入BeanDefinitionMap中参与Bean的生命周期
+
+
+	注解方式,配置类
+		创建了BeanDefinitionReader读取器读取注解
+		在BeanFactoryProcessor工厂后处理器中注册BeanDefinition
+			解析时,和xml方式一样,都是通过命名空间处理器里的方法创建的BeanDefinition
+

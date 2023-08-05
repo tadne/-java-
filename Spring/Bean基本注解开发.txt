@@ -1,0 +1,33 @@
+Spring提供的注解有三个版本:
+		2.0时代		Spring开始有注解
+		2.5时代		spring的Bean配置可以用注解完成
+		3.0时代		Spring其他配置也可以使用注解
+
+
+Bean基本注解开发
+	基于Bean注解,主要使用注解方式代替原有xml的<bean>标签机器标签属性的配置
+	
+	使用@component注解替代<bean>标签
+
+	
+	@Component			设置当前类为组件
+	@Lazy(true)			懒加载
+	@Scope("singleton")		单例/多例
+
+
+	@PostConstruct		设置初始化方法
+	@PreDestroy		设置销毁方法
+	
+	
+	
+	由于J2ee开发时分层的，为了每层的Bean表示的注解予以更准确，@Component有三个衍生注解
+	@Component		其他组件
+	@Repository		dao层
+	@Service		service层
+	@Controller		web层
+	
+
+	
+
+
+

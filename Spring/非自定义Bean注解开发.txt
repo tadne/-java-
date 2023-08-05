@@ -1,0 +1,21 @@
+非自定义Bean注解开发
+	非自定义bean不能像自定义bean一样使用@Component进行管理
+	非自定义bean要通过工厂的方式进行实例化
+	使用@Bean标注方法，@Bean属性为beanName，不指定那么默认是方法名
+
+	
+	先写一个方法，加上@Bean注解
+	方法名就是想要注入的bean的名字
+
+	@Bean就能将方法返回值注册为bean
+	方法体就是对该bean的封装
+	
+	
+	@Autowired 根据类型自动进行Bean的匹配，可以省略
+	@Qualifier 根据名称进行Bean的匹配
+	@Value	   根据名称进行普通数据类型匹配
+
+
+
+
+

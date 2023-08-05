@@ -1,0 +1,15 @@
+Bean配置类的注解开发
+	
+	
+	作用：	用配置类来替代配置文件
+
+
+	创建配置类
+	加注解@Configuration:		标注当前类为配置类(替代配置文件)
+	注解@ComponentScan:		包扫描
+	注解@PropertySource("classpath:jdbc.properties"):
+					扫描properties文件	
+	注解@Import(xxx.class)		加载其他配置类
+
+
+
