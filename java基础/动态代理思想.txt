@@ -1,0 +1,55 @@
+程序为什么要代理?
+	
+	对象如果代码太多,就可以用代理转移部分职责(代码)
+
+
+
+什么是动态代理?
+	
+	直接修改原代码叫做侵入式修改,可能会对代码造成破坏
+	
+	动态代理就是无侵入式的给代码增加额外的功能
+	
+
+代理长什么样子?
+
+	代理和对象差不多,对象有什么方法,代理就要有对应的方法
+
+	代理通过接口实现,定义一个接口,将想要代理的方法放入其中
+
+	代理类和被代理类实现这个接口
+
+
+如何在java中创建一个代理对象
+
+	java.lang.reflect.Proxy类:	提供了为对象产生代理对象的方法
+		
+public static Object newProxyInstance
+			(ClassLoader loader,Class<?>[] interf	aces,InvocationHandler h)
+
+	参数一:	指定哪个类加载器,去加载生成的代理类
+			自定义类的加载器一般都是Application loader，写自定义类都行
+
+	参数二:	指定接口,接口指定生成 的代理有哪些方法
+	参数三:	指定生成的代理对象要干什么
+			一个内部类
+	new InvocationHandler() {
+              @Override
+         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable 		{
+                        return null;
+        	}    
+	}
+
+		invoke方法就是代表着之后代理对象调用被代理方法的实现
+		参数一:		代理的对象
+		参数二:		要运行的方法
+		参数三:		调用方法时要传递的参数
+
+		根据参数写被代理方法前后要实现的逻辑即可
+
+
+
+
+
+
+
