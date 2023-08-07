@@ -1,0 +1,72 @@
+注解实现aop
+	
+
+	给目标类和通知类加@Component注解
+	在通知类加@aspect注解
+	在对应切入点上加@Before等指定通知类型的注解,并加参数,参数是切面表达式指定目标方法
+	在Spring的xml文件中加组件扫描标签<context:component-scan base-package="">
+	在Spring的xml文件中加<aop:aspectj-autoproxy>开启aop的组件扫描
+
+	
+	指定通知类型的注解:@Before,@After,@After-returing,@Throwing,@After-throwing
+
+
+	注解方式下切点表达式的抽取和引用
+
+		抽取:	就是写一个空方法,加注解@Pointcut
+			@Pointcut("切点表达式")
+			public void myPointcut(){}
+	
+		引用:	@Before("当前类名.myPonitcut()")
+
+
+
+注解解决配置文件的扫描,采用全注解开发
+	
+	创建一个配置类,替代xml文件
+	加@Configuration注解,替代xml的Bean文件扫描
+	加@EnableAspectJAutoProxy注解,替代aop组件扫描
+	
+
+
+注解代理生成原理:
+	如果使用xml来配置组件扫描
+	
+		就是先加载配置文件,命名空间处理器解析各种标签,扫描组件
+		解析方法会创建RootBeanDefinition对象
+		给RootBeanDefinition注入属性
+		Register.registerBeanDefinition("*..*.internalAutoProxyCreat"),
+			将RootBeanDefinition注入BeanDefinitionMap集合
+		其中internalAutoProxyCreat的实现是AnnotationAwareAspectJAutoProxyCreator
+		变成了一个注解专用的注册类来实现注册BeanDefinition
+		和xml实现aop几乎一样,也实现了Bean后处理器,注册BeanDefinition来实现代理类Bean注入
+
+
+	如果使用注解来配置组件扫描
+
+		@EnableAspectJAutoProxy注解底层使用了@Import(AspectJAutoProxyRegistrar.class)
+		AspectJAutoProxyRegistrar就是实现了ImportBeanDefinitionRegistrar
+		最终再次注册了AnnotationAwareAspectJAutoProxyCreator
+		
+
+
+总结:
+	
+		xml方式配置aop
+		xml+注解方式
+		全注解方式
+		
+	这三种方式最终都是在底层实现了AspectJAwareAvisorAutoProxyCreator来注入Proxy对象
+
+
+
+
+
+
+
+
+
+
+
+	
+	

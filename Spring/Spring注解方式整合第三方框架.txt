@@ -1,0 +1,18 @@
+Spring注解方式整合第三方框架
+	
+	第三方框架与Spring整合xml方式很多用自定义标签完成
+	
+	第三方框架与Spring整合注解方式很多用@Import完成
+	@Import可以导入:
+		普通配置类
+		实现ImportSelector接口的类
+			重写selectImports方法
+			返回需要被注册到spring容器中的bean的全限定名的数组
+
+		实现ImportBeanDefinitionRedistrar接口的类		
+			重写registerBeanDefinitions方法
+			创建一个BeanDefinition,调用setBeanClassName方法
+			用registey参数调用registerBeanDefinition方法
+			传入参数(String "beanName",BeanDefinition beanDefinition)
+
+		

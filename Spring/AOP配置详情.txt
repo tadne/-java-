@@ -1,0 +1,66 @@
+XML中AOP配置详情:
+	切点表达式的配置方式:	
+		可以用<aop:pointcut>标签配置切点表达式,然后在<aop:aspect>标签中引入
+		也可以在<aop:aspect>标签中直接引入
+	切点表达式语法:		
+		execution(访问修饰符 返回值类型 包名.类名.方法名(参数))
+		
+		其中
+			访问修饰符可以省略
+			返回值类型,某一级包名,类名,方法名可以用   * 表示
+			参数列表可以用两个点  ..  表示任意参数
+		
+		例子:	execution(public void com.ltt.aop.TargetImpl.show())
+			execution(* com.ltt.aop.TargetImpl.show())
+			任意返回值的aop包下任意二级包的参数方法
+			execution(* com.ltt.aop.*.*(..))
+			任意返回值的aop包下的任意级的任意参数方法
+			execution(* com.ltt.aop..*.*(..))
+			任意包下的任意参数方法
+			execution(* *..*.*(..))
+
+		
+	通知的类型:
+		前置通知	<aop:before>		目标方法执行前
+		后置通知	<aop:after-returing>	目标方法执行后,方法异常不执行
+		环绕通知	<aop:around>		目标方法执行前后,方法异常则环绕后方法不执行
+		异常通知	<aop:after-throwing>	抛出异常执行
+		最终通知	<aop:after>		无论是否异常都执行
+		
+	
+	通知方法被调用时,Spring可以传递的参数
+		JoinPoint:	连接点对象,任意通知都能使用,可以获取当前目标对象方法等信息
+		ProceedingJoinPoint:
+				JointPoint子类,在环绕通知中执行proceed(),进而执行目标方法
+
+		添加方式:	就是直接在通知方法中添加即可,在被调用时,可以直接使用
+
+		Throwle:	异常对象,在异常通知中,在配置文件中指出异常对象名称
+						
+		添加方式:	在通知方法中传入参数的同时,在通知配置处配置throwing参数
+		
+
+	XML中AOP的配置的两种方式:
+		<advice>配置切面		
+				:通过接口方式确认通知类型
+				:一个advicor只能配置一个固定通知和一个切点表达式
+				:如果通知单一,切面单一可以使用advisor配置
+				:通知类型固定情况,不人为指定通知类型时,可以用advisor配置
+		<aspect>配置切面		
+				:通过配置确认通知的类型,更灵活
+				:一个aspect可以配置多个通知和多个切点表达式任意组合
+				:运行随意搭配下使用aspect配置
+				
+
+		
+
+
+
+
+
+
+
+
+
+
+		
