@@ -1,0 +1,24 @@
+基于注解实现声明式事务
+
+半注解形式:
+	在要实现事务的方法或类上加@Transactional注解即可实现事务
+	但是要开启事务的注解驱动,就是在xml中配置<tx:annptation-driven/>和平台事务管理器
+
+
+全注解:	
+	在要实现事务的方法或类上加@Transactional注解即可实现事务
+	@Configuration					//配置类
+	@ComponentScan("ltt")				//文件扫描
+	@MapperScan("ltt.mapper")			//mapper扫描
+	@PropertySource("classpath:jdbc.properties")	//数据库配置文件
+	@EnableTransactionManagement			//开启注解驱动
+
+
+	@Bean
+        public DataSource dataSource//数据库
+
+	@Bean
+        public SqlSessionFactoryBean sqlSessionFactoryBean//数据库工厂
+
+	 @Bean
+        public DataSourceTransactionManager dataSourceTransactionManager//平台事务管理器

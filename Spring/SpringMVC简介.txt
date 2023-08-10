@@ -1,0 +1,74 @@
+概述:
+	基于Spring开发的mvc轻量级框架,SPring3后发布的组件,与Spring整合,用DispatcherServlet作为	前端控制器,内部提供了处理映射器,视图解析器等组件,可以简化javaBean封装,json转化,文件上传等
+	
+
+
+快速入门
+
+	客户端请求发生给前端控制器,前端控制器再分发到对应的controller
+	
+
+	导入Spring-mvc,servlet-api坐标
+
+
+	配置前端控制器DispatchServlet
+		<!--    配置前端控制器-->
+   	 <servlet>
+       		 <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        	<init-param>
+            		<param-name>contextConfigLocation</param-name>
+            		<param-value>classpath:spring-mvc.xml</param-value>
+        	</init-param>
+        	<load-on-startup>2</load-on-startup>
+    	</servlet>
+		<!--    前端控制器的映射地址-->
+    	<servlet-mapping>
+        	<servlet-name>DispatcherServlet</servlet-name>
+        	<url-pattern>/</url-pattern>
+    	</servlet-mapping>
+
+
+
+	编写controller交给Spring容器管理
+		
+	<!--    加载Spring配置文件-->
+   	 <context-param>
+       	 	<param-name>contextConfigLocation</param-name>
+        	<param-value>classpath:application.xml</param-value>
+    	</context-param>
+	<!--    监听器-->
+   	<listener>
+     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  	 </listener>
+
+
+SpringMVC关键组件简析
+	处理器映射器:	HandlerMapping
+		匹配映射路径对应的Handler,返回可执行的处理器链对象HandlerExecutionChain对象
+		常用:	RequestMappingHandleMapping
+
+	处理器适配器:	HandlerAdapter
+		匹配HandlerExecutionChain对应的适配器进行处理器调用,返回视图模型对象
+		常用:	RequestMappingHandlerAdapter
+
+	视图解析器:	VIewResolver
+		对视图模型对象解析
+		常用:	InternalResourceViewResolver
+
+	也就是,先用映射器根据路径找处理链对象,再用适配器在处理链对象中匹配对应的适配器调用方法,
+	返回对象,再用视图解析器去处理返回结果,最终返回视图对象
+			
+	流程:	客户端发出请求到前端控制器
+		前端控制器通过映射器找到处理器可执行链并返回给前端控制器
+		前端控制器将处理链给适配器去适配对应的可执行处理器并执行Handler,并返回结果数据
+		前端控制器再将结果数据给视图解析器,返回视图对象
+		前端控制器将视图对象响应给客户端
+
+	这些组件都有默认的,如果配置了新的,就不会加载默认的
+
+
+
+
+
+	

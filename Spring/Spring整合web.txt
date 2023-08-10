@@ -1,0 +1,52 @@
+web三大组件
+	Servlet			服务端程序,接收客户端请求并响应
+		单例对象,默认第一次访问创建,(可以配置为服务器启动即创建),创建完执行init方法
+		每一个Servlet有一个service方法,每次访问都执行
+		缺点是业务要配置Servlet
+	
+	filter			过滤器,对客户端请求过滤
+		单例对象,启动就创建,创建完执行init方法
+		核心是doFilter方法
+	
+	Listener		监听器,对域对象创建和属性变化监听
+		根据类型和作用不同,可分为监听域对象创建销毁和域对象属性内容变化的
+		根据监听的域不同,可分为监听Request,Sesson,ServtContext等
+
+	
+
+
+入门流程:	导入spring-mvc依赖
+		配置前端控制器DispatcherServlet
+			前端控制器:	映射bean,解析参数封装实体,响应视图和数据
+		编写controller,配置映射地址交给springmvc
+		
+传统web开发的问题:
+	问题:	每个业务功能请求对应一个Servlet	
+	问题:	每个Servlet的业务操作繁琐
+	问题:	Servlet获得Spring容器组件只能通过客户端代码获取,不能整合
+
+mvc开发解决
+		解决:	根据业务模块划分Controller	
+		解决:	将通用的行为,功能进行抽取封装
+		解决:	通过Spring的扩展点封装框架,从Servlet接受web层业务
+
+mvc设计思想:
+	原始web开发中,servlet当controller角色,jsp当view角色,javaBean当模型角色,后期Ajax异步后,
+	加上前后端分离模式后,view被html和vue替代
+
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+	

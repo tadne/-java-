@@ -1,0 +1,52 @@
+基于xml实现声明式事务
+	在Spring的配置文件中,配置平台事务管理器
+	<!--配置平台事务管理器-->
+		<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        		<property name="dataSource" ref="dataSource"/>
+    		</bean>
+
+	配置Spring的事务通知
+		先配置Spring事务管理的命名空间tx
+       		xmlns:tx="http://www.springframework.org/schema/tx"
+		 http://www.springframework.org/schema/tx
+            	 https://www.springframework.org/schema/tx/spring-tx.xsd
+
+		<!--Spring提供的事务通知-->
+    		<tx:advice id="txAdvice" transaction-manager="transactionManager">
+        		<tx:attributes>
+            			<tx:method name="*"/><!--任意方法-->
+        		</tx:attributes>
+    		</tx:advice>
+	配置aop引入切入点和通知方法
+		<aop:config>
+	<!-- 切点表达式-->
+        <aop:pointcut id="txPointcut" expression="execution(* ltt.service.impl.*.*(..))"/>
+        		<!-- 织入关系-->
+			<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    		</aop:config>
+
+	
+	事务管理器:	管理事务的各种参数
+		隔离级别isolation
+			默认/读未提交/读已提交/可重复读/串行化
+				无	脏读	不可重复的  幻读	
+		超时时间:timeout
+			超时时间,单位是秒
+		是否只读:read-only
+			只读
+		传播行为:propagation
+			事务嵌套问题
+			reauired:	a调用b,b需要事务,如果a有事务就加入,没有就创建b事务
+			required_new	a调用b,b需要事务,a有事务就挂起,b创建事务
+			supports:	a调用b,a有事务就用,没有就无
+			not_suppoorts:	a调用b,b无事务执行,a有事务就挂起
+			never:		a调用b,b用a事务,a没有事务就异常
+			nested:		a调用b,b创建事务,a有事务就嵌套,没有就创建
+
+
+
+	原理:	就是aop来处理的,内部的事务类实现了MtthodInterceptor接口
+		调用invoke方法,实现动态代理实现
+
+
+
