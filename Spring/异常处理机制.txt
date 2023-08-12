@@ -1,0 +1,32 @@
+SpringMVC异常处理流程
+
+
+	异常分为编译时异常和运行时异常,编译时异常用try-catch,运行时异常不可预期
+
+	SpringMVC最终,提供了异常处理器来统一处理异常,避免了随时随地捕获异常,并且可以同一返回异常
+
+	
+	思路:
+		客户端发请求到前端控制器,前端控制器调用controller,调service,调dao
+		遇到异常就往前抛出,最终抛到前端控制器,前端控制器再调用异常处理器
+
+
+
+	SpringMVC的异常处理方式:
+		简单异常处理器:	用MVC内置的异常处理器处理SimpleMappingExceptionResolver
+			只能进行视图响应
+			
+		自定义异常处理器:	实现HandlerExceptionResolver接口,自定义异常处理
+			可以响应json格式字符串,但是不算方便
+	
+		注解方式:	用@ControllerAdvice+@ExceptionHandler处理		
+			都能处理,常用
+
+
+	常用异常解析器:
+		HandlerExceptionResolver  	顶级接口,实现会被标记为异常处理类
+		MyHandlerExceptionResolver	自定义处理类
+		HandlerExceptionResolveComposite异常解析器混合器,内部存有多种异常解析器
+		SimpleMappingExceptionResolver	简单映射异常处理器,可以匹配异常与对应的
+		ExceptionHandlerExceptionResolve异常处理器解析器,默认注册到Spring中,
+						@ExceptionHandler就是它解析

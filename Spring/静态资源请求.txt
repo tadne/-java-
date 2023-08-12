@@ -1,0 +1,43 @@
+请求静态资源
+	原始开发方式中有一个DefaultServlet来统一处理没有被特别处理的资源请求
+		这个defaultServlet有访问静态资源的能力
+	
+	但是在mvc开发中,	mvc的前端控制器被优先使用,但是前端控制器没有访问静态资源的能力
+		
+	
+解决方式一:
+	再次激活defaultServlet
+		 <servlet-mapping>
+       			<servlet-name>default</servlet-name>
+        		<url-pattern>*.html</url-pattern>
+  		  </servlet-mapping>
+		通过扩展名"*.html"匹配静态资源比"/"的缺省程度高,在与前端控制器匹配前,
+			要先经过defaultServlet匹配
+
+解决方式二:
+	在spring的xml中配置静态资源的映射,匹配映射路径指定位匹配资源
+	<mvc:resources mapping="/image/*" location="/img/">
+	mapping:	映射资源虚拟路径
+	location:	匹配映射路径的请求到实际资源
+	
+解决方式三:
+	在spring的xml中配置<mvc:default-servlet-handler> 
+		这个方式注册了一个DefaultServletHttpRequestHandler处理器	
+		静态资源的访问都要由该处理器处理,开发常用
+
+	
+如果要使用方式二和方式三
+
+	spring中要配置一个	处理器映射器RequestMappingHandlerMapping	
+
+	因为如果不配置它,spring会默认配置一个RequestMappingHandlerMapping
+	但是<mvc:default-servlet-handler/>标签在解析后底层注入了一个SimpleUrlHandleMapping	
+		这就导致,默认的handlerMapping不再加载
+
+	同样的,如果使用<mvc:resources mapping="/image/*" location="/img/">标签也会这样,
+		这个标签底层同样的注入了SimpleUrlHandlerMapping
+
+	但是,SimpleUrlHandlerMapping是不能解析注解的映射的,最终会导致访问404
+
+
+

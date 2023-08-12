@@ -1,0 +1,30 @@
+前端控制器初始化
+	前端控制器是SpringMVC的入口
+	
+	本质是一个Servlet,当配置了load-on-startup时,在服务器启动时执行创建和执行初始化init方法
+		每次请求执行service方法
+
+	初始化做了什么?	
+		获得一个SpringMVC的ApplicationContext容器
+		注册了SpringMVC的九大组件	
+			包括像是	文件上传解析器,处理器映射器,处理器适配器,视图解析器等等
+				
+
+		
+
+获取容器细节:	Spring的容器和Spring-mvc容器是不一致的,是父子容器的关系
+		子容器可以获取到父容器的Bean的
+		所以,springmvc中获取bean时,先在spring-mvc容器中查找,然后再找spring容器
+		所以,spring中找不到spring-mvc容器的bean
+
+
+	
+
+
+组件注册细节:	
+	最终有一个监听机制,容器创建完,最终会发一个监听事件,调用onReftrsh方法最终就初始化九大组件
+
+	如果手动注入了对应的bean,它就不会去加载默认组件了
+	
+	
+	

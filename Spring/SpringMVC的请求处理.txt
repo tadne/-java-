@@ -1,0 +1,94 @@
+请求映射路径的配置
+	@RequestMapping("/path")	
+	@GetMapping("/path")	
+	@PostMapping("/path")	
+		value和path属性:		配置路径别名,可以写多个
+		method属性:		RequestMethod.GET	GET/POST/PUT/DELETE
+		
+			
+	
+
+请求数据的接收
+
+键值对形式接收数据	请求:	localhost://param/?paramName=value
+		@RequestParam("paramName") String name		接收请求中的键值对数据
+				请求:	localhost://param/?param=value&param=value2
+		@RequestParam("param") String[] params		数组接收请求中同名数据
+		@RequestParam("param") List<String> params	数组接收请求中同名数据
+				请求:	localhost://param/?param1=value&param2=value2
+	@RequestParam("param") Map<String,String> params	数组接收请求中不同名数据
+		
+
+		required属性:		要求当前参数是必要的
+			@RequestParam(value="param",required=true)
+
+
+	请求:	http://localhost/param?username=zhangsan&age=18
+		@RequestMapping("/param")
+		public void methodName( @RequestBody String user){
+			ObjectMapper object=new ObjectMapper();
+			User user = objectMapper.readValue(user,User.calss);
+		}
+
+
+	配置RequestMappingHandlerAdapter指定消息转换器,然后就直接可以获得对应对象
+	 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+	请求:	http://localhost/param?username=zhangsan&age=18
+		@PostMapping("/param")
+		public void methodName( @RequestBody User user){}
+
+
+接受Restful风格数据
+	规则:		用url表示某个资源时,资源名称为名词
+					例:	http://localhost/user
+			用请求方式表示当前模块具体业务操作
+					例:	get查/post增/put改/delete删
+			用HTTP响应状态码表示结果,包括:状态码/状态信息/响应数据
+
+	请求:	http://localhost:8080/user/id
+		@RequestMapping("/user/{id}")
+		public void methodName( @PathVariable("id") int id)
+
+
+请求文件的接收
+	接收文件上传的数据,文件上传的表单要一定的要求:
+		表单的提交方式必须是POST
+		表单的enctype属性必须是multipart/form-data
+		文件上传项需要有name属性
+		<form action="",enctype="myltipate/form-data" method="post">
+			<input type="file" name="myFile">
+		</form>
+
+	加依赖 commons-fileupload
+	配置文件上传解析器
+		    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>	
+
+	请求:	@PostMapping("/param")
+		public void methodName(@RequestBody MultipartFile myFile){
+			sout(myFile)
+		}
+	
+请求头数据信息
+	@GetMapping("/param")
+	public String param(@RequestHeader("Accept-Encoding")String headerValue){}
+		
+	@GetMapping("/param")
+	public String param(@RequestHeader Map<String,String> map){}
+
+Cookie数据接收
+	@GetMapping("/param")
+	public String param(@CookieValue("JSESSIONID") String jsessionId){}
+
+	@GetMapping("/param")
+	public String param(@CookieValue Map<String,String> map){}
+	
+获取域中对象
+	@GetMapping("/request")
+	public String request(@RequestAttribute("name") String name)
+	
