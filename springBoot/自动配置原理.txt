@@ -1,0 +1,63 @@
+自动配置设计思想:
+	收集spring开发者编程习惯,整理常用技术表(技术集a)
+	收集常用技术使用参数,整理技术常用设置列表(技术集b)
+	初始化SpringBoot环境,加载导入的bean和坐标,形成初始化环境
+	将技术集a包含的技术定义,默认加载
+	将技术表a中有使用条件的约定,设置条件加载,导入对应依赖就加载
+	设置技术集b默认配置加载
+	开放技术集b默认配置覆盖接口
+ 
+
+原理:	
+	@SpringBootApplication注解
+		是一个组合注解,主要包含了
+		@SpringBootConfiguration,@EnableAutoConfiguration,@ComponentScan
+	
+	其中:	
+		@SpringBootConfiguration=@Configuration+@Component+@Indexed+..
+		@EnableAutoConfiguration=@AutoConfigurationPackage+...
+	
+	其他都是常见的,以下是一些不常见的
+
+	@Indexed:	SpringBoot运行时加速启动的
+	
+其中最主要的两个:
+
+	**@Import(AutoConfigurationPackages.Registrar.class)
+		主要是两个作用:
+		一:	ImportBeanDefinitionRegister:导入BeanDefinition注册器
+		二:	DeterminableImports: 设置当前启动类所在包为扫描包,后续针对当前包扫描
+
+
+	@Import(AutoConfigurationImportSelector.class)
+		实现了很多接口,分三部分
+		Aware类:		当bean实现了该接口,可以在当前bean中获取对象
+			比如BeanFactoryAware:就是可以获取对应的BeanFactory对象,
+				在bean所在类中,操作BeanFactory,并随着bean的加载执行
+
+		Orderd:				这个接口可以指定bean加载的顺序
+		DeferedImportSelector:		推迟导入选择器,
+			识别@EnableAutoConfiguration中要导入和不导入的技术集,
+			调用loadFactoryName方法,获取类加载器,用类加载器获取spring的web资源
+			"META-INF/spring.factories",其中就是spring的工厂类名
+			将其中对应值取出后循环遍历,作为技术集a
+			这些资源都有对应的配置类,有默认配置,但同时有@ConfigurationProperties注解
+			导入配置文件的写的参数,可以用来覆盖默认配置
+
+
+
+
+自定义自动配置实现
+	加依赖
+	在"META-INF/spring.factories"文件中写入要加载的自动配置类即可
+	
+	
+	还可以在配置文件中排除
+		spring.autpconfigure.exclude=..
+
+
+
+
+
+			
+

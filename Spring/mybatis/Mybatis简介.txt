@@ -1,0 +1,37 @@
+mybatis简介
+
+	mybatis是一个持久层框架,支持sql,存储过程以及高级映射
+
+	免除了大量jdbc代码和参数设置
+
+
+入门:
+	准备数据库表,springboot工程/SpringMVC工程,对象类
+	引入依赖
+	编写sql(注解/xml)
+
+
+JDBC介绍:	Java DataBase Connectivity	使用Java语言操作关系型数据库的一套api
+
+	是一套接口规范,各个数据库厂商实现这一套规范,给用户提供数据库驱动jar包
+
+
+操作数据库实现:		注册驱动(确认数据库厂商)
+			获取连接对象(password,url,driver,username)
+			编写sql
+			创建statement对象
+			执行sql
+			解析结果集  (一个字段一个字段解析)
+
+
+问题:	jdbc硬编码太多,耦合太严重,而且非常繁琐
+	连接的频繁获取和释放太浪费资源
+
+
+
+mybatis解决:
+	将数据库连接要素放在配置文件中,解耦管理
+	自动封装数据,便利舒适
+
+	
+	

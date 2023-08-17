@@ -53,7 +53,7 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 
 
 
-	IOC:	控制翻转:	反转的是什么?反转的是Bean的创建权,将bean的创建交给BeanFActory
+	IOC:	控制翻转:	反转的是什么?反转的是Bean的创建权,将bean的创建交给BeanFactory
 	DI:	依赖注入:	注入的是什么?注入的是bean,实现不同bean之间的调用
 				目标是在service层就实现业务逻辑
 
@@ -71,7 +71,7 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 
 	
 ApplicationContext快速入门
-	ApplicationContext称为Spring容器,内部封装BeanFActory,比BeanFactory更强大
+	ApplicationContext称为Spring容器,内部封装BeanFactory,但比BeanFactory更强大
 	用Spring容器开发,配置文件习惯写成:	applicationContext.xml
 
 	Service代码
@@ -89,10 +89,10 @@ ApplicationContext快速入门
 		1:BeanFactory是Spring的早期接口,称为Spring的Bean工厂,
 			ApplicationContext是后期更高级接口,称为Spring容器	
 		2:ApplicationContext在Beanfactory基础上对功能进行了扩展,如监听功能,国际化功能等
-			BeanFactory的API更底层,ApplicationContext的API多是堆想这些底层API封装
+			BeanFactory的API更底层,ApplicationContext的API多是对这些底层API封装
 		3:Bean创建主要逻辑和功能被封装在BeanFactory中,不仅基础了BeanFactory,而且内部还
 			维护着BeanFactory的引用,所以既有继承关系,还有融合关系
-		4:Bean初始化时机不同,BeanFactory是在首次调用getBean的时候创建Bean,					而ApplicationCOntext是配置文件加载,容器已创建就将Bean实例化并初始化了	
+		4:Bean初始化时机不同,BeanFactory是在首次调用getBean的时候创建Bean,					而ApplicationContext是配置文件加载,容器已创建时将Bean实例化并初始化了	
 	
 
 	

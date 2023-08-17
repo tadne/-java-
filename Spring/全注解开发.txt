@@ -28,5 +28,3 @@ SpringMVC的全注解开发
 		SpringServletContainerInitializer会查找WebApplicationInitializer类
 		Spring提供了一个WebApplicationInitializer的基础实现类					AbstractAnnationConfigDispatcherSercletInitializer当我们编写类继承它
 		容器会自动发现我们自己的类,在该类中我们就可以配置Spring和SpringMVC入口
-		
-		

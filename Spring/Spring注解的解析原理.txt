@@ -1,7 +1,7 @@
 Spring注解的解析原理
 	
 	
-	xml方式,配置<context:component-scan base-package="...">
+	xml方式实现半注解形式,配置<context:component-scan base-package="...">
 		这种方式就是通过扫描文件获取对应bean信息
 		通过命名空间,有对应命名空间处理器
 		命名空间处理器中有标签对应解析器

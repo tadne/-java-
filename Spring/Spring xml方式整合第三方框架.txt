@@ -2,10 +2,6 @@ Spring xml方式整合第三方框架
 
 	
 
-
-
-
-
 两种整合方式:
 	
 	方式一:	不需要自定义命名空间,不用使用Spring的配置文件第三方框架本身内容,如Mybatis
@@ -35,12 +31,12 @@ Spring xml方式整合第三方框架
 	
 	MapperScannerConfigurer实现Bean工厂后处理器,(在实例化之前,BeanDefinitionMap放入元素后)
 	其中ClassPathMapperScanner继承调用ClassPathBeanDefinitionScanner的scan方法扫描mapper
-	最终将mapper注册到BeanDefinitionMap中,并将BeanDefinitionMap返回ClassPathMapperScanner
-	但是由于mapper是个接口,不能反射,spring是通过反射创建对象
+	将mapper注册到BeanDefinitionMap中,并将BeanDefinitionMap返回ClassPathMapperScanner
+	(但是由于mapper是个接口,不能反射,spring是通过反射创建对象)
 	所以,调用了setBeanClass方法里面传递一个MapperFactoryBean参数覆盖这个Bean的class属性
-	也就是说,其实创建的是MapperFactoryBean的Bean对象
-	然后,MapperFactoryBean中有getObject方法,它可以调用SQLSession获取Mapper
-	SqlSession通过SqlSessionFactory获取的,SqlSessionFactoryBean获取SqlSessionFactory
+	(也就是说,其实创建的是MapperFactoryBean的Bean对象)
+	MapperFactoryBean中有getObject方法,它可以调用SQLSession获取Mapper
+	SqlSession通过SqlSessionFactory获取,SqlSessionFactoryBean获取SqlSessionFactory
 	获取mapper对象后,需要注入到spring中,这里通过调用setAutowireMode(2) 修改自动注入状态
 	将mapper对象注入到Spring容器中
 

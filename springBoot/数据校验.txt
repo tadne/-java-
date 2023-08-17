@@ -1,0 +1,12 @@
+JS2303规范
+
+
+加依赖导入规范:		validation-api
+加依赖hibernate实现规范:	hibernate-validator
+用具体校验规则指定对应对应字段
+
+@Validated	//开启对当前bean的属性注入校验
+
+
+@Max(value=999,message="最大值不能超过999")		message是报错信息
+

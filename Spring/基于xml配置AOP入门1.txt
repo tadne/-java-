@@ -20,10 +20,10 @@
 		<aop:config>
 		<!--切点表达式指定被增强方法-->
  <aop:pointcut id="myPointcut" expression="execution(void ltt.service.Userservice.show1())"/>
-		<!--指定织入方式,切点与通知结合-->
-        	<aop:aspect ref="myAdvice">
-            	<aop:before method="before" pointcut-ref="myPointcut"/>
-        	</aop:aspect>
+			<!--指定织入方式,切点与通知结合-->
+        		<aop:aspect ref="myAdvice">
+            			<aop:before method="before" pointcut-ref="myPointcut"/>
+        		</aop:aspect>
 		</aop:config>
 		配置织入(切点被哪些通知增强,前置还是后置)
 

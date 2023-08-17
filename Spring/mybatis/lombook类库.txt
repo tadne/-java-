@@ -1,0 +1,11 @@
+lombok是一个java类库,用注解形式生成构造器,getter/setter/equals/hashcode/toString等方法字符化为日志变量,简化开发
+		
+@Getter				get方法
+@Setter				set方法
+@ToString			toString方法
+@Data				综合代码生成(getter/setter/toString/equals/hashCode)
+@NoArgsConstructor		无参构造器
+@AllArgsConstructor		给statuc字段外设置带参数构造器方法	
+
+
+lombok是一个idea的插件,可以下载插件,不用导依赖

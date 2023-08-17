@@ -48,7 +48,7 @@ Bean的实例化配置
 	工厂方式实例化factory-bean
 		静态工厂实例化		用constructor-arg来传递参数
 			在实现类中写一个静态构造方法,用factory-method来指定这个方法即可
-			作用:	bean创建前后不会操作,如果bean创建前/后想要操作可以用它
+			作用:	bean创建前后不会操作,如果bean创建前/后想要写些代码可以用它
 		实例工厂实例化		用constructor-arg来传递参数
 			先配置工厂对象
 		<bean id="factory" class="com.factory.beanFactory"></bean>

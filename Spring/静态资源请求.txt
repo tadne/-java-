@@ -30,7 +30,7 @@
 
 	spring中要配置一个	处理器映射器RequestMappingHandlerMapping	
 
-	因为如果不配置它,spring会默认配置一个RequestMappingHandlerMapping
+因为:	如果不配置它,spring会默认配置一个RequestMappingHandlerMapping
 	但是<mvc:default-servlet-handler/>标签在解析后底层注入了一个SimpleUrlHandleMapping	
 		这就导致,默认的handlerMapping不再加载
 

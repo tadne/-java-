@@ -1,0 +1,46 @@
+services:
+    port: 8080
+
+
+@ConfigurationProperties(prefix="services")
+@Data
+@Component
+public class ServletConfig(){
+	private int port;
+}
+
+
+ConfigurationProperties		:	这个注解就可以自动装配配置文件中的数据
+
+
+这个注解可以用在类上,也可以用在方法上
+	比如用来绑定第三方bean属性
+	用来注入对象属性等等
+	
+
+
+还有@EnableConfigurationProperties注解:		将对应的配置类加入到spring容器中
+
+
+
+这个注解支持松散绑定:	配置文件中的名称忽略大小写
+			支持大小写各种模式
+			"-"连接,"."连接等等
+			
+
+@Value注解不支持松散绑定
+
+
+
+
+单位设置
+
+@DurationUnit(CHronUnit.MINUTES)	//时间单位配置
+private Duration serverTimeout
+
+
+@DataSizeUnit(DataUnit.MEGABYTES)	//文件大小单位
+private DataSize dataSize;
+	
+	
+

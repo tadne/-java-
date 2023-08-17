@@ -1,0 +1,56 @@
+热部署/热启动:
+	
+	服务器不用重新启动就可以更新页面
+
+
+	先加依赖			spring-boot-devtools
+	每次修改都重新build工程		
+
+
+
+	重启:Restart	自定义开发代码,包含类,页面,配置文件等,加载位置restart类加载器
+	重载:ReLoad	jar包,加载位置base类加载器
+	
+	
+	热部署就是Restart过程,相比于重载项目节约很多时间
+
+
+
+idea可以设置自动build
+
+	Settings===>Build,Execution...===>Compiler====>Build project automatically
+
+	按  ctrl+alt+shift+/ ===> Register  ====>compiler.automake.allow.when.app.runing
+
+	
+	默认:	idea失去焦点5秒后自动build
+
+
+热部署范围配置
+	默认不触发重启的目录列表:
+		/META-INF/maven
+		/META_INF/resources
+		/resources
+		/static
+		/public 
+		/templates
+	
+	修改不参与重启目录
+		spring.devtools.restart.exclude=XXX
+
+
+关闭热部署
+		spring.devtools.restart.enable: false
+
+
+	也可以直接设置在java系统配置中保证优先级
+		System.setProperty("spring.devtools.restart.enable","false");
+
+
+
+
+
+
+
+
+

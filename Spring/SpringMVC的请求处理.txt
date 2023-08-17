@@ -14,9 +14,9 @@
 		@RequestParam("paramName") String name		接收请求中的键值对数据
 				请求:	localhost://param/?param=value&param=value2
 		@RequestParam("param") String[] params		数组接收请求中同名数据
-		@RequestParam("param") List<String> params	数组接收请求中同名数据
+		@RequestParam("param") List<String> params	集合接收请求中同名数据
 				请求:	localhost://param/?param1=value&param2=value2
-	@RequestParam("param") Map<String,String> params	数组接收请求中不同名数据
+	@RequestParam("param") Map<String,String> params	map接收请求中不同名数据
 		
 
 		required属性:		要求当前参数是必要的

@@ -1,0 +1,90 @@
+加载测试专用属性
+	@SpringBootTest(properties="spring.port=8080")
+	properties可以为当前类中要注入的属性再次赋值,这样可以让作为临时属性来供测试
+	
+	@SpringBootTest(args="--spring.port=8080")
+	args属性可以为当前测试添加临时命令行参数
+
+	如果两个都有,args优先级更高
+
+	
+加载测试专用配置
+	在test包下加配置文件就好了
+
+	test下配置类加载配置文件:		@Import(XxxConfig.class)
+	可以导入专用配置,临时使用,避免冲突
+
+
+测试类启动web环境
+	@SpringBootTest(WebEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)//默认端口
+	@SpringBootTest(WebEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)//随机端口
+	
+
+发送虚拟请求
+	@AutoConfigureMockMvc	//开启虚拟调用,类注解
+	
+	@Autowired
+	MockMvc mvc;	
+	
+	//匹配响应执行状态
+	@Test
+	void testWeb(){
+		//设置虚拟请求
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/app");		//发送请求
+		mvc.perform(builder);
+		//设置预期值,与真实值比较,成功测试通过
+		//定义结果匹配器	
+		StatusResultMatchers actio= MockResultMatchers.status();
+		//定义预期结果
+		ResultMatcher ok = status.isOk();
+		//添加预期值到本次调用过程中进行匹配
+		action.andExpect(ok);
+	}
+
+	//匹配字符串响应体
+	@Test
+	void testBody(){
+		//设置虚拟请求
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/app");		//发送请求
+		mvc.perform(builder);
+		//设置预期值,与真实值比较,成功测试通过
+		//定义结果匹配器	
+		ContentResultMatchers action = MockResultMatchers.content();
+		//定义预期结果
+		ResultMatcher result = content.String("预期值");
+		//添加预期值到本次调用过程中进行匹配
+		action.andExpect(result);
+	}
+
+	//匹配JSON响应体
+	@Test
+	void testBody(){
+		//设置虚拟请求
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/app");		//发送请求
+		mvc.perform(builder);
+		//设置预期值,与真实值比较,成功测试通过
+		//定义结果匹配器	
+		ContentResultMatchers content = MockResultMatchers.content();
+		//定义预期结果
+		ResultMatcher result = content.json("预期值");
+		//添加预期值到本次调用过程中进行匹配
+		action.andExpect(result);
+	}
+
+
+	//匹配响应头
+	@Test
+	void testBody(){
+		//设置虚拟请求
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/app");		//发送请求
+		mvc.perform(builder);
+		//设置预期值,与真实值比较,成功测试通过
+		//定义结果匹配器	
+		ContentResultMatchers header = MockResultMatchers.header();
+		//定义预期结果
+		ResultMatcher result = header.string("Content-Type","application/json");
+		//添加预期值到本次调用过程中进行匹配
+		action.andExpect(result);
+	}
+
+

@@ -24,7 +24,7 @@ Spring配置非自定义Bean
 	        Object dataSource = applicationContext.getBean("dataSource");
 
 
-	注入java的方法
+	注入java中方法
     	<bean id="simpleDateFormat" class="java.text.SimpleDateFormat">
     	    <constructor-arg name="pattern" value="yyyy-MM-dd HH:mm:ss"></constructor-arg>
     	</bean>

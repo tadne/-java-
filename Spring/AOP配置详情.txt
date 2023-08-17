@@ -7,7 +7,7 @@ XML中AOP配置详情:
 		
 		其中
 			访问修饰符可以省略
-			返回值类型,某一级包名,类名,方法名可以用   * 表示
+			返回值类型,某一级包名,类名,方法名可以用 * 表示
 			参数列表可以用两个点  ..  表示任意参数
 		
 		例子:	execution(public void com.ltt.aop.TargetImpl.show())

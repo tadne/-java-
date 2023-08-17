@@ -1,0 +1,41 @@
+	SpringBoot启动流程
+	
+包括的一些需求
+	1:	初始化各种属性,加载成对象.
+			读取环境属性(Environment)
+			系统配置(spring,Factories)
+			参数(Arguement,application,properties)
+
+	2:	创建spring容器对象ApplicationContext,加载配置
+	3:	创建容器前,通过监听机制,应对不同阶段加载数据和更新数据的需求
+	4:	容器初始化中追加的各种功能,如日志,统计时间
+
+
+
+工作流程:
+SpringBoot30StartupApplication中===> 							pringApplication.run(SpringBoot30StartupApplication.lass,args)调用run方法执行
+  也就是在SpringApplication类中调用run(new Class<?>[] {primarySource},args);
+     SpringApplication中===>return new SpringApplication(primarySources).run(args);
+	
+
+1==>	SpringApplication(primarySources):		加载各种初始化信息,初始化各种配置对象
+	   SpringApplication===>this(null,primarySources);
+	     	this.resourceLoader=resourceLoader;//初始化资源加载器
+	     	...//初始化配置类类名信息
+		...//确认当前容器加载的类型
+		...//获取系统配置引导信息
+		...//获取ApplicationContextInitializer.class对应的实例
+		...//监听,SpringBoot没有给每一个初始化位置加接口监听
+			而是用监听器监听,要监听哪个位置就加对应的监听器
+		...//初始化引导类类名信息,备用
+
+2==>	SpringApplication(primarySources).run(args):	初始化容器
+		...//设置计时器统计获取启动时间
+		...//模拟输入输出信号,避免缺少外设导致传输失败
+		...//获取监听器,并执行对应监听器操作
+		...//获取容器参数,将前面读取的数据加载为环境对象,用来描述信息
+		...//初始化logo,创建容器,将上下文,环境,监听器,参数等传入
+		...//刷新容器
+		...//判断是否记录启动信息日志
+		...//创建日志对象,输出日志信息,包含启动时间
+
