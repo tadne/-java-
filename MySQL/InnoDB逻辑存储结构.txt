@@ -1,0 +1,86 @@
+逻辑存储结构
+	
+	表空间Tablespace==>段Segment==>区Extent==>页Page==>行Row
+
+	表空间:		在mysql中,是一个ibd文件,用于储存记录索引等数据
+	段:		分为数据段,索引段,会滚段.Innodb是索引组织表,数据段就是B+树的叶子节点
+				索引段就是B+树的非叶子节点.端用来管理多个Extent区
+	区:		表空间的单元结构,每个区的大小为1M.默认情况下,Innodb存储引擎页大小为16k
+	页:		Innodb引擎磁盘管理的最小单元,每个页的大小默认是16kb,Wi为保证页的连续性,
+				innodb每次向磁盘申请4-5个区
+
+	行:		Innodb引擎中的数据,Innodb引擎中数据按行存放
+
+
+Mysql5.5版本开始,默认使用Innodb,擅长事务处理,有崩溃恢复特性,开发使用广泛
+	
+
+内存结构:	
+	Buffer Pool:	缓冲池是主内存中的一个区域,里面可以缓冲磁盘中真实数据,操作时,先操作缓冲池			中数据,然后再按照评论刷新到磁盘,减少io,加快速度
+			
+			缓冲池以页为单位,底层用链表管理页.根据状态,将页分三种
+				free page:	空闲page,未被使用
+				clean page:	被使用page,数据未被修改
+				dirty page:	脏页,被使用page,数据被修改,页中数据与磁盘不一致
+
+	Change Buffer:	更改缓冲区,在执行DML语句时,若数据没有在Buffer Pool中,不会直接操作磁盘
+			会将数据变更缓冲区中,在未来数据被读取时,将数据合并恢复到Buffer Pool中
+			再将数据刷新到磁盘]
+
+		作用:	与聚集索引不一样,二级索引不唯一,并且以相对随机的顺序插入插入二级索引
+			删除和更新会影响索引树中不相邻索引页,如果每一个操作磁盘,会造成大量磁盘IO
+			这时,用Change Buffer缓冲池中可以在缓冲池中进行合并,减少io
+
+	Adaptive Hash Index:
+			自适应hash索引,用于优化对Buffer Pool数据的查询.
+			会监控对表上各索引页的查询,观测到hash索引可以提升速度,则建立hash索引
+
+
+	Log Buffer:	日志缓冲区,保存要写入磁盘中的log日志数据,默认16mb,日志定期刷新到磁盘,
+			如果要增删改的事务,增加日志缓冲区可以节约磁盘io
+			innodb_log_buffer_size:	缓冲区大小
+
+磁盘结构
+	General Tablespaces:	通用表空间,需要通过create tablespace创建通用表空间,
+				在创建表时,可以指定该表空间
+
+	创建表空间	create tablespace xxx ADD datagile 'file_name' engine=engine_name;
+	指定表空间	create table xxx tablesapce ts_name;
+
+
+	Undo tableSpace:	撤销表空间,mysql实例在初始化时会创建两个默认的undo表空间(16mb)
+				用于储存在undo log上
+
+	temparary tablespaces:	innodb使用会话临时表空间和全局临时表空间,储存用户创建的临时表数据
+
+	Doublewrite Buffer Files(.dblwr文件):
+				双写缓冲区,innodb引擎将数据页从缓冲池刷新到磁盘前,
+				先将数据页写入双写缓冲区文件中,便于系统异常时恢复数据
+
+	Redo Log:		重做日志,用来实现事务的持久性,由两部分组成:
+				重做日志缓冲以及重做日志文件,前者是在内存中,后者是在磁盘中
+				事务提交后会把所有修改信息都存到该日志中,
+				用于刷新脏页到磁盘时,发生错误时,进行数据恢复
+
+
+后台线程:	将缓冲池中数据在合适的时候刷新到磁盘中
+	四种:	
+		
+	MasterThread	核心后台线程,负责调度其他线程,还负责将缓冲池中数据异步刷新到磁盘中,保持数			据一致,包括脏页刷新,合并插入缓冲,undo页回收
+	
+	IOThread	在innodb储存引擎中用了aio来处理io,提供性能,iothread主要用来处理:
+			读,写,日志刷新到磁盘,写缓冲区刷新到磁盘四种线程,
+				其中读写线程默认有四个,日志和写缓冲线程一个
+		
+	Purge Thread	回收事务已经提交了的undolog,在事务提交后,undo log可能不用了,就用它回收
+
+	Page Cleaner Thread
+			协助Master Thread属性脏页到磁盘的线程,减轻MasterThread工作压力,减少阻塞
+
+
+
+
+
+
+			
+	

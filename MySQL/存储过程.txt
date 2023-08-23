@@ -1,0 +1,267 @@
+存储过程:	事先经过编译储存在数据库中的一段SQL语句集合,调用存储过程可以简化应用开发人员的工作
+		减少数据在数据库和应用服务器之间的传输,对于提高数据处理的效率有好处
+
+		就是对数据库SQL语言的代码封装和重用
+
+
+特点:		封装,复用
+		可以接受参数,也可以返回数据
+		减少网络交互,效率提高
+
+	创建:		create procedure 存储过程名([参数列表])
+			begin
+				SQL语句
+			end;
+			
+		在命令行中执行创建存储过程时,遇到创建语句中的sql语句的分号时,会报错
+	
+		解决:	使用delimiter $$,	设置命令行的结束符号为 $$
+
+
+	调用:		call 存储过程名([参数列表]);
+
+
+	查看:		查询指定数据库的存储过程以及状态信息
+			select * from informationSchema.routines routie_schema ='数据库名';
+		
+			查询某个存储过程的定义
+			show create procedure 存储过程名;
+
+	删除:		drop procedure [if exist] 存储过程名;
+
+
+变量:
+系统变量:	系统变量是MySQL服务器提供,不是用户定义的,服务器层面,分为全局变量,会话变量
+	
+	查询系统变量
+		查看所有系统变量(默认session):	show [session|global] variables;	
+		通过like模糊匹配查找变量:		show [session|global] variables like '..';
+		查看指定变量值:			select @@[session|global] 系统变量名;
+
+	
+	设置系统变量
+		set [session|global] 系统变量名=值;
+		set @@[session|global] 系统变量名=值;
+
+用户自定义变量:	用户根据需要自己定义的变量,用户变量不用提前声明,用的时候直接用"@变量名"使用即可
+		作用域为当前连接
+
+	赋值:	set @var_name=expr[@var_name=expr] ..;
+		set @var_name:=expr[@var_name:=expr] ..;
+	
+		select @var_name:=expr[@var_name:=expr]..;
+		select 字段名 into @var_name from 表名;
+
+
+	例:	select count(*) into @myCount from tb_name;
+
+
+	使用:	select @var_name;
+
+局部变量:	根据定义在局部生效的变量,访问前,用declare声明,
+		可以用做储存过程中的局部变量和输入参数,局部的范围是在其内声明begin...end块内
+
+	声明:		declare 变量名 变量类型 [default ..]
+
+	变量类型:	int bigint,char,varchar,date,time
+
+	赋值:		set 变量名=值;
+			set 变量名:=值;
+			select 字段名 into 变量名 from 表名..;
+
+
+if条件判断
+	语法:		if  条件1  then   ...
+			elseif 条件2 then ...
+			else ...
+			end if
+
+
+参数:		分三类,in,out,inout
+	in	:	该类作为输入参数,需要调用时传入值
+	out	:	该类作为输出参数,可以作为返回值
+	inout	:	即可以作为输入参数,也可以输出
+
+	语法:	create procedure 存储过程名称([in/out/inout 参数名 参数类型])
+		begin  
+			--SQL
+		end;
+	
+	其中调用时,in参数需要传入数据,out参数需要变量接受
+
+	例:
+		create procedure Procedure_Name(in score , out result)
+		begin  
+			set result = score;
+		end;
+	
+		调用:	call Procedure_Name(111,@result);
+
+	例:	
+		create procedure Procedure_Name1(inout score int)
+		begin  
+			set result = score;
+		end;
+		
+		调用:	set @score=111;
+			call Procedure_Name1(@score);
+
+
+
+case条件判断:		
+	语法一:
+		case case_value
+			where when_value1 then statement_list
+			[where when_value2 then statement_list2]
+			[else statement_list]
+		end case;
+
+	语法二:
+		case 
+			where search_condition1 then statement_list
+			[where search_condition2 then statement_list2]
+			[else statement_list]
+		end case;
+
+
+while循环
+	语法:
+		while 条件 do
+			--SQL
+		end while;			
+
+	例:	create procedure Procedure_Name3(in n int)
+		begin  
+			declare total int default 0;
+			while n>0 do
+				set total = total + n;
+				set n = n - 1;
+			end while;
+			select total;
+		end;
+		
+		call  Procedure_Name3(10);
+
+repeat循环:
+	语法:	
+		repeat
+			SQL
+			until 条件
+		end repeat;
+
+	例:	
+		create procedure Procedure_Name4(in n int)
+		begin  
+			declare total int default 0;
+			repeat
+				set total = total + n;
+				set n = n - 1;
+			until n <= 0
+			end repeat;
+
+			select total;
+		end;
+
+loop循环:	
+	语法:
+		leave:			配合循环使用,退出循环
+		iterate:		跳过当前循环,到达下一次循环
+	
+		[begin_label:] loop
+			--SQL
+		end loop [end_label];
+
+		leave label;		退出指定循环
+		iterate label;		跳出当前次指定循环
+
+	例:	
+		create procedure Procedure_Name5(in n int) #创建存储过程
+		begin
+			declear total int default 0 #定义total变量
+			sum: loop #定义loop循环sum
+				if n<=0 then 
+					leave sum; # 退出循环
+				end if;
+			
+				set total = total + n;
+				set n = n+1
+			end loop sum; # 结束循环
+			
+			select total;
+		end;
+			
+游标cursor	用来储存查询结果集的数据类型,在存储过程和函数中可以使用游标对结果集进行循环的处理
+	语法:	
+		声明:			declare 游标名称 cursor for 查询语句;	
+
+		open 打开游标:		open 游标名称
+		
+		fetch 获取游标:		fetch 游标名称 into 变量[,变量];		
+	
+		close 关闭游标:		close 游标名称;
+
+
+
+条件处理程序(Handler): 	可以用来定义在流程控制结构执行过程中遇到问题时相应的处理步骤
+	语法:	
+	declare handler_action handler for candition_value [,condition_value] statement
+
+		handler_action:
+				continue:	继续执行程序
+				exit:		终止执行程序
+		condition_value:
+				sqlstate_value:	状态码,如0200
+				sqlwarning:	以01开头的sqlstate代码简写
+				not found:	以02开头的sqlstate代码简写
+				sqlexception:	没有被sqlwarning或not found捕获的sqlstate简写
+	
+
+	
+	例:	
+	create procedure Procedure_Name6(in uage int) 
+	begin 
+	# 游标声明
+	declare use_cursor cursor for select profession,name from tb_user where age<=uage;
+		declare uname varchar(100);
+		declare upro varchar(100);
+		declare exit handler for sqlState '02000' close u_cursor;# 条件处理程序声明
+		
+		drop table if exists tb_user_pro;
+		create table if not exists tb_user_pro(
+			id int primary key auto_increment,
+			name varchar(10),
+			profession varchar(100)
+		);
+		open use_cursor;
+		while true do 
+			fetch use_cursor into uname,upro
+			insert into tb_user_pro values (null,uname,upro)
+		end while;
+		close u_cursor;
+	end;
+
+
+
+
+
+存储函数		有返回值的存储过程,参数只能是in类型的
+
+	语法:	create function 存储函数名称([参数列表])
+		returns type [characteristic ..]
+		begin 
+			--SQL
+			return..
+		end;
+
+	characteristic:	
+		deterministic:	相同的输入参数总是产生相同的结果
+		nosql:		不包含sql语句
+		reads sql data:	包含读取数据的语句,但是不包含写入数据的语句
+				
+
+	能用存储函数的地方都能用存储过程
+
+
+
+
+

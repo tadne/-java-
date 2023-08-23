@@ -1,0 +1,85 @@
+MVCC
+	
+基本概念
+	当前读:	读取记录的最新版本,读取时要保证其他并发事务不能修改当前记录,会对读取的记录进行加锁
+		对应日常操作,如: select..lock in share mode(共享锁),
+					select ..for update,crud等都是当前读
+		
+	快照读:	简单的select(不加锁)就是快照读,读取的是数据的可见版本,可能是历史数据,是非阻塞读
+		Read Committed:		每次select 都生成一个快照读
+		Repeatable Read:	开启事务后第一个select才是快照读
+		Serializable:		快照读退化为当前读
+
+	MVCC:	全称 Multi-Version Concurrency Control,多版本控制.
+		指维护一个数据的多个版本,使读写操作没有冲突
+		快照读为mysql实现MVCC提供了非阻塞的功能
+		MVCC实现依赖于数据库记录中的三个隐式字段,undolog日志,readView
+
+
+实现原理:
+	数据库表中记录的隐藏字段:		
+		db_trx_id:	最近修改事务id,记录插入这条记录或最后一次修改改记录的事务id
+		db_roll_ptr:	回滚指针,直线这条记录的上一个版本,用于配合undo log
+		db_row_id:	隐藏主键,如果表结构没有指定主键,将会生成该隐藏字段
+
+	undo log日志:	回滚日志,用于记录数据被修改前的信息
+		在insert时,产生的undolog日志只在回滚时需要,在事务提交后立即删除
+		而update和delete时,产生的undolog日志不仅在回滚时需要,在快照读时也要,不会立即删除
+
+	undo log版本链:	每次删改操作都会在undolog中记录
+			事务对同一行的修改和删除的记录,会形成链表,链表的头节点是数据库中的记录
+			db_roll_ptr属性记录下一个节点的地址值
+			除了头节点,其他节点都存在undolog中,按照时间顺序依靠db_roll_ptr连接
+
+	readview:	是快照读SQL执行时,MVCC提前数据的依据,记录并维护系统当前活跃事务id
+		包含四个核心字段:(事务id是自增的)
+			m_ids		:	当前活跃事务id集合
+			min_trx_id	:	最小活跃事务id
+			max_trx_id	:	预分配事务id,当前最大事务id+1
+			creator_trx_id	:	readView创建者的事务id
+
+
+		版本链数据访问规则:
+			trx_id==creator_trx_id 		可以访问该版本	
+				因为数据时当前这个事务修改的
+			trx_id<min_trx_id		可以访问该版本	
+				数据已经提交
+			trx_id>max_trx_id		不可以访问	
+				事务在readView生成后开启
+			min_trx_id<=trx_id<=max_trx_id	如果trx_id不在m_ids中可以访问该版本
+				数据已经提交
+			
+		不同隔离级别,生成readview时机不同:
+			read commited:		在事务执行快照读时生成
+			Repeatable read:	仅在事务中第一次执行快照读时生成,并且后续复用
+
+	
+
+	
+MVCC就是依靠 
+	三个隐藏字段(事务id,回滚指针,隐藏主键)
+	undoLog版本链
+	Readview(四个核心字段)
+	
+	实现版本控制
+
+而MVCC+锁就保证了事务的隔离性
+
+
+数据库一致性:	用redolog和undolog共同保证(事务提交数据一定更新,事务失败数据一定回滚)
+
+
+
+InnoDb总结:	逻辑存储结构:	表空间,段,区,页,行
+		架构:		内存结构和磁盘结构
+		事务原理:	原子性:undoLog		回滚日志
+				持久性:redolog		脏页刷新
+				一致性:undolog+redolog	
+				隔离性:锁+MVCC		
+		MVCC:		三个隐藏字段(主要是事务id和回滚指针)
+				undolog版本链(对版本形成链表)
+				readview(定义查找所需版本的判断条件)
+
+
+
+	

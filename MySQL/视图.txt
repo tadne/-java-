@@ -1,0 +1,53 @@
+视图:	一种虚拟存在的表,视图中的数据不再数据库中真实存在,行和列数据来自视图的查询中使用的表,
+		并且在使用视图时动态产生的
+
+		即,视图只保存查询的sql逻辑,不保存结果.
+
+	所以,在创建视图时,主要工作落在sql查询语句中
+
+
+语法:	创建:create [or replace] view 视图名称 as selec语句 [with[casaded]|local] check option]
+		
+
+	查询:	show create view 视图名;		# 查询创建视图语句
+		select * from 视图名称 where...;	# 查询视图数据
+
+	修改:create or replace view 视图名称 as select语句 [with[casaded]|local] check option];
+	     alter view 视图名称[(列表名)] as select语句 [with[casaded]|local] check option];
+
+	删除:	drop view [if exist] 视图名称;
+
+
+	or replace:		创建或者替换视图
+
+	 [with[casaded]|local] check option]:	
+		当使用check option选项创建视图时,mysql会通过视图检查正在更改的每一行
+		如:增删改,让其满足视图定义
+		
+		mysql运行基于视图创建视图,还会检查依赖视图的规则并保持一致,为确定检查范围
+		提供了:	cascaded和local,默认是cascaded
+
+		cascaded:	会检查依赖(所有父类视图)视图定义条件
+		local:		如果依赖视图(父类视图)没有加选项就不会检查,加选项就检查
+
+
+更新:
+	更新条件:	视图中的行和表中的行存在一对一的关系.
+		
+	不可更新的条件:(存在任意一个则不可更新)
+		聚合函数或窗口函数(sum,min,max,count)
+		distinct
+		group by
+		having
+		union或union all
+
+作用:	简单:	视图可以简化用户对数据的理解,简化操作,被经常使用的查询可以被定义为视图,
+		使用户不用为以后的每次都指定全部条件
+
+	安全:	数据库可以授权,但不能授权到数据库特定行和列上,通过视图用户只能查询和修改见到的数据
+	
+	数据独立:视图可以帮助用户屏蔽真实结构变化带来的影响
+
+
+
+

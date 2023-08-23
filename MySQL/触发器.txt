@@ -1,0 +1,22 @@
+触发器
+	触发器是与表有关的数据库对象,指在增删改前或后自动触发,可以协助做一些日志,数据校验等工作
+
+	创建
+		create trigger 触发器名
+		before/after insert/update/delete on 表名 for each row --行级触发器
+		begin
+			--SQL
+		end;
+
+	查看	show triggers;
+	删除	drop trigger [数据库名.]触发器名	--默认为当前数据库
+
+
+
+	例:	修改数据触发器
+	create trigger 触发器名
+		after update on 表名 for each row
+	begin
+		insert into 日志表(id,name...) values
+		(null,...);
+	end;

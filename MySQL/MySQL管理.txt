@@ -1,0 +1,68 @@
+MySQL数据库安装后自带四个数据库
+	mysql:			储存mysql服务器运行所需信息(时区,主从,用户,权限)
+	information_schema:	访问数据库元数据的各种表和视图,包括数据库,表,字段类型,访问权限等
+	performance_schema:	mysql运行时状态提供了一个底层监控功能,用于收集数据库服务器性能参数
+	sys:			一写方便DBA和开发用performance_schema进行性能调试和诊断的视图
+
+
+常用指令工具:
+	mysql:		mysql客户端工具
+		语法:	mysql [opyions] [database]
+
+		选项:
+			-u 		指定用户名
+			-p		指定密码
+			-h		指定服务器ip或域名
+			-P		指定连接端口
+			-e		执行sql并退出	
+
+	mysqladmin:	一个执行管理操作的客户端程序,检查服务器的配置和当前状态,创建并删除数据库		选项	通过--help看全部命令
+		这个工具在window命令行用,在mysql服务器中用不了
+
+	mysqlbinlog:	由于服务器生成的日志以二进制报错,要检查这些文本的格式,就用mysqlbinlog
+		语法:	mysqlbinlog [options] log-files log-files2 ...
+		选项:	-d      指定数据库名称,列出数据库相关操作
+			-o	忽略日志中的前n行
+			-r	将输出文本格式日志输出到指定文件
+			-s	显示简单格式,省略一些信息
+			-start-datatime=date1 -stop-datatime=data2  指定日期间隔内的所有日志
+			-start-position=pos1 --stop-position=pos2   指定位置间隔内的所有日志
+
+	mysqlshow	客户端对象查找工具,查找存在的数据库,表,表中的段,列,索引
+		语法:	mysqlshow [options] [db_name[table_name[col_name]]]
+		选项:	--count		显示数据库及表的统计信息,显示指定数据库或表的状态信息
+
+
+	mysqldump	备份数据库或在不同数据库间数据迁移
+		语法	mysqldump [options] db_name[tables]
+			mysqldump [options] --database/-B db1 [db2 db3..]
+			mysqldump [options] --all-databases/-A
+	
+		连接选项:	-u	指定用户名
+				-p	指定密码
+				-h	指定服务器ip或域名
+				-P	指定端口
+		输出选项:	-add-drop-database	在所有数据库创建语句前加drop database
+				-add-drop-table		在所有表创建语句前加drop table语句
+				-n,--no-create-db	不包含数据库的创建语句
+				-t,--no-create-info	不包含数据表的创建语句
+				-d --no-data		不包含数据
+				-T,--tab=name		自动生成两个文件,
+					一个.sql.创建表结构的语句,一个.txt文件,数据文件
+		
+
+
+	mysqlimport	客户端数据导入工具,导入mysqldumo加-T参数导出的文本文件
+		语法:	mysqlimport [options] db_name textfile1 [textfile2..]
+		
+	source		导入sql文件的source指令
+		语法:	source/root/xxx.sql
+
+
+
+
+
+
+
+
+	
