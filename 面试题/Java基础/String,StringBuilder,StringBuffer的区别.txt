@@ -1,0 +1,55 @@
+String,StringBuilder,StringBuffer的区别
+
+String是一个不可变的类
+	也就是说，一旦创建了一个String对象，它的内容就不能被修改。
+	每次对String对象进行拼接、替换、截取等操作，都会生成一个新的String对象，并且占用新的内存空间。	这样会导致内存浪费和性能下降。
+
+StringBuilder和StringBuffer都是可变的类，
+	也就是说，它们的对象可以在原有的基础上进行修改，而不需要生成新的对象。
+	它们内部使用一个可扩展的字符数组来存储字符串，并提供了各种方法来操作字符串。
+	这样可以提高内存利用率和性能。
+
+StringBuilder和StringBuffer的另一个区别是线程安全。
+	StringBuilder是一个非线程安全的类，
+		也就是说，它不保证多个线程同时操作同一个对象时的正确性。
+		因此，它适合在单线程环境下使用。
+
+	StringBuffer是一个线程安全的类，也就是说，它保证了多个线程同时操作同一个对象时的同步性。
+		因此，它适合在多线程环境下使用。
+
+
+StringBuilder为什么线程不安全呢？我们可以通过以下几个方面来分析：
+
+	StringBuilder的append方法中，有一个count变量用来记录字符数组已经使用的数量。
+		这个变量的增加操作（count += len）不是原子的，
+		也就是说，它可能会被多个线程同时执行，并且产生错误的结果。
+		
+	StringBuilder的append方法中，还有一个ensureCapacityInternal方法检查字符数组是否要扩容。		这个方法中有一个value变量用来存储字符数组。
+		如果字符数组不够用，就会创建一个新的字符数组，并将原来的字符数组复制到新的数组中。
+		这个过程也可能会被多个线程同时执行，并且产生错误的结果。
+		
+	StringBuilder的append方法中，还有一个getChars方法用来将字符串中的字符复制到字符数组中。
+		这个方法中有一个dstBegin参数用来指定复制到字符数组中的起始位置。
+		这个参数的值是由count变量决定的。
+
+
+StringBuffer为什么线程安全呢？我们可以通过以下几个方面来分析：
+
+	StringBuffer的append方法和StringBuilder的append方法基本一致，
+	但在方法上加了synchronized关键字。
+		保证了每次只有一个线程访问或修改对象，避免了多线程并发问题。
+
+	StringBuffer的synchronized关键字还作用于其他所有修改对象内容或状态的方法，
+		比如insert、delete、replace等。保证了对象在任何时候都处于一致和完整的状态。
+
+	StringBuffer通过synchronized关键字实现了线程安全，但带来了一定的性能损失。
+		因每次只能有一个线程访问或修改对象，其他线程必须等待。
+		所以，在单线程环境下，使用StringBuilder会比使用StringBuffer更快。
+
+
+
+
+
+
+
+

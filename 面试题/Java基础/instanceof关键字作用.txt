@@ -1,0 +1,24 @@
+instanceof关键字作用:
+	
+
+instanceof	Java中的一个二元操作符，用来测试一个对象是否是一个类或接口的实例化。
+
+语法格式：	object instanceof class
+
+	object:		要测试的对象
+	class:		要测试的类或接口
+	
+	若object是 class的实例 或是 class的子类或实现类的实例 ，那instanceof返回true；否则，false
+
+特点：
+	只能用于引用数据类型：
+		instanceof方法不能用于基本数据类型，只能用于引用类型，如类、接口、数组等。
+		如果object是null，那么instanceof方法总是返回false。
+
+	考虑继承和多态：
+		instanceof可判断object是否是class的直接实例
+		还可以判断object是否是class的子类或实现类的实例。
+		这样可实现多态性，即不同类型的对象可以响应相同的消息。
+
+	与类型转换配合：
+		instanceof通常与类型转换（强制类型转换或向下转型）配合使用，来避免在转换时发生异常。		如，要将一个父类引用转换为子类引用，可先用instanceof判断是否可以转换，然后再转换。

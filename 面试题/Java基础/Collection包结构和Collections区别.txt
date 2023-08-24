@@ -1,0 +1,31 @@
+Collection包结构和Collections区别
+
+Collection和Collections是Java中两个不同的概念
+
+Collection是一个接口，它是Java集合框架的顶级接口
+	它表示一组对象的集合。
+	Collection接口提供了添加、删除、遍历和查询集合中元素的操作，
+		包括List、Set、Queue等子接口和实现类。
+
+Collections是一个类，一个工具类，
+	它提供了一系列静态方法来操作或返回集合对象。
+	Collections类包含了对集合进行排序、查找、复制、反转、洗牌、同步等操作的方法。
+
+Collection包结构是指Java集合框架的层次结构，它由以下几个部分组成：
+
+	Collection接口：它是所有集合类的父接口，它定义了一些通用的方法，
+		如add、remove、contains、size等。
+
+	List接口：继承自Collection接口，表示一个有序的可重复的元素序列，允许通过索引来访问元素
+		主要实现类有ArrayList、LinkedList、Vector等。
+
+	Set接口：继承自Collection接口，表示一个无序的不可重复的元素集合，不允许出现重复元素
+		主要实现类有HashSet、LinkedHashSet、TreeSet等。
+
+	Queue接口：继承自Collection接口，表示一个先进先出的元素队列，
+			提供了插入、删除和检查队首元素方法，
+		主要实现类有LinkedList、ArrayDeque、PriorityQueue等。
+
+	Map接口：不继承自Collection接口，但也属于集合框架的一部分
+		表示一个键值对映射关系，它允许通过键来访问或修改值
+		主要实现类有HashMap、LinkedHashMap、TreeMap等。

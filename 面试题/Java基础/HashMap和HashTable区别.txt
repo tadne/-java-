@@ -1,0 +1,43 @@
+HashMap和HashTable区别
+
+
+线程安全性：	HashMap是非线程安全的，
+			也就是说，它不保证多个线程同时操作一个对象时的正确性和同步性。
+		HashTable是线程安全的，
+			也就是说，它保证了多个线程同时操作一个对象时的正确性和同步性。
+
+	HashTable通过在方法上加synchronized关键字实现线程同步，使每次只有一个线程访问或修改对象。
+
+
+空键和空值：	HashMap支持null键和null值，而HashTable不支持null键和null值。
+		如果在HashTable中插入null键或null值，会抛出NullPointerException异常。
+
+继承关系：	HashMap继承自AbstractMap类，HashTable继承自Dictionary类。
+		Dictionary类是一个已经被废弃的类，它建议使用Map接口来代替。
+
+
+初始容量和扩容机制：
+		HashMap的初始容量为16，HashTable的初始容量为11，两者的负载因子默认都是0.75。
+		当哈希表中的元素数量超过了负载因子与当前容量的乘积时，会对哈希表进行扩容。
+
+		HashMap的扩容方式是将容量翻倍，即乘以2；
+		HashTable的扩容方式是将容量翻倍加1，即乘以2再加1。
+
+
+
+HashTable已经被淘汰了
+
+如果需要使用键值映射的数据结构，可以根据不同的场景选择以下几种类：
+
+如果不需要考虑线程安全问题，
+	可使用HashMap类，基于数组和链表及红黑树实现，支持null键和null值，提供了快速插入和查找操作。
+
+如果需要考虑线程安全问题，并且只需要对单个键或值进行操作，
+	可使用ConcurrentHashMap类，基于数组和链表以及红黑树实现，并采用分段锁机制来保证线程安全。
+	它不支持null键和null值，但是它提供了高效的并发操作。
+
+如果需要考虑线程安全问题，并且需要对整个映射进行操作，
+	可使用Collections.synchronizedMap方法包装一个普通的Map对象，使其有同步性。
+	它支持null键和null值，但是它需要手动进行同步控制。
+
+	
