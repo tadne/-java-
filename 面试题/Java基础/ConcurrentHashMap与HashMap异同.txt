@@ -1,0 +1,59 @@
+ConcurrentHashMap和HashMap都是Java中的容器类，用来存储和操作键值对（key-value）的数据。
+
+ConcurrentHashMap和HashMap的相同点有以下几个：
+
+	基于哈希表实现的：
+		哈希表是一种数组，每个数组元素叫做一个桶，每个桶可以存储一个或多个键值对。
+		哈希表可以根据key的哈希码值快速地定位和访问数据 。
+
+	都允许key和value为null：
+		这是与其他一些容器类（如Hashtable, TreeMap）的区别，					ConcurrentHashMap和HashMap都可存储空键或空值，但只能有一个空键，空键只能对应空值
+
+	都不保证元素的顺序：
+		这是与其他一些容器类（如LinkedHashMap, TreeMap等）的区别，
+		ConcurrentHashMap和HashMap都不按照元素的插入顺序或自然顺序来存储或遍历元素，
+		而是根据key的哈希码值来决定元素的位置 。
+
+
+ConcurrentHashMap和HashMap的不同点有以下几个：
+
+这是最主要的区别:
+	ConcurrentHashMap是线程安全的，HashMap是非线程安全的：
+
+		ConcurrentHashMap可以在多线程的环境下高效地存储和访问数据，
+		不需要使用额外的同步措施，如synchronized或Lock等；
+
+		HashMap不能在多线程的环境下正确地存储和访问数据，
+		在多线程的情况下使用它，可能会出现数据丢失、覆盖、死循环等问题 。
+
+实现线程安全的方式不同
+	ConcurrentHashMap使用分段锁，HashMap使用单一锁：
+		ConcurrentHashMap将哈希表分为若干个段，每个段都有一个独立的锁，
+		在进行读写操作时，只要锁定相关的段，而不用锁定整个哈希表，提高了并发性能；
+
+		HashMap将整个哈希表作为一个锁对象，这样在进行读写操作时，必须锁定整个哈希表，
+		降低了并发性能 。
+
+
+	ConcurrentHashMap支持原子操作和批量操作，HashMap不支持：
+		原子操作和批量操作:	
+			一些可以保证在多线程的情况下，不会出现数据不一致或竞争条件的问题的操作。
+
+		例如putIfAbsent, replace, remove, forEach, reduce等。
+		ConcurrentHashMap支持这些操作，而HashMap不支持 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

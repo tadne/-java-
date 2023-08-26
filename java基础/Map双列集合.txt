@@ -103,7 +103,7 @@
 
 
 
-	HahsTable:	是较为远古的使用Hash算法的容器结构了，现在基本已被淘汰，
+	HashTable:	是较为远古的使用Hash算法的容器结构了，现在基本已被淘汰，
 			单线程转为使用HashMap，多线程使用ConcurrentHashMap。
 		实现了Map<K,V>和Cloneable以及Serializable接口。
 

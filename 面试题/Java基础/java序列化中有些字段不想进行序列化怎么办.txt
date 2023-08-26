@@ -1,0 +1,78 @@
+Java序列化是指将对象转换为字节流的过程，它可以用来实现对象的持久化或网络传输。
+
+
+
+
+Java序列化的方式有以下几种：
+
+	使用Serializable接口：
+		最常用也最简单的序列化方式，让类实现Serializable接口，并提供serialVersionUID字段如：
+	class Student implements Serializable {
+	    private static final long serialVersionUID = 1L; // 序列化版本号
+	    private String name; // 姓名
+	    private int age; // 年龄
+	    // 省略构造函数和getter/setter方法
+	}
+
+	使用Externalizable接口：
+		一种自定义的序列化方式，要让类实现Externalizable接口，
+		重写writeExternal和readExternal方法，来控制对象的序列化和反序列化过程 。
+
+
+如:
+	class Student implements Externalizable {
+   		 private static final long serialVersionUID = 1L; // 序列化版本号
+   		 private String name; // 姓名
+   		 private int age; // 年龄
+   		 // 省略构造函数和getter/setter方法
+	
+	  	  @Override
+	  	  public void writeExternal(ObjectOutput out) throws IOException {
+	     	   // 自定义序列化逻辑
+	      	  out.writeObject(name); // 写入姓名
+	       	  out.writeInt(age); // 写入年龄
+	    }
+
+	    @Override
+	    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+	        // 自定义反序列化逻辑
+		        	name = (String) in.readObject(); // 读取姓名
+	        	age = in.readInt(); // 读取年龄
+	   	}
+	}
+
+
+
+
+
+如果在Java序列化中有些字段不想进行序列化，有以下几种方法：
+
+	使用transient关键字：
+		最简单也是最常用的方法，只要在不想进行序列化的字段前加上transient关键字，
+			就可以使该字段在序列化时被忽略，而在反序列化时被赋予默认值 。
+	
+
+	重写writeObject和readObject方法：
+		一种自定义的方法，要在类中重写writeObject和readObject方法，
+			在其中指定哪些字段要进行序列化，哪些字段不要进行序列化 。
+
+
+如:	class Student implements Serializable {
+   	 private static final long serialVersionUID = 1L; // 序列化版本号
+   	 private String name; // 姓名
+    	private int age; // 年龄，不想进行序列化
+    	// 省略构造函数和getter/setter方法
+
+    	private void writeObject(ObjectOutputStream out) throws IOException {
+       	 	// 自定义序列化逻辑
+        	out.defaultWriteObject(); // 调用默认的序列化方法
+        	out.writeInt(0); // 写入一个假的年龄值，代替真实的年龄值
+    	}
+
+    	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        	// 自定义反序列化逻辑
+        	in.defaultReadObject(); // 调用默认的反序列化方法
+        	in.readInt(); // 读取一个假的年龄值，忽略它，不赋值给真实的年龄属性
+    		}
+	}
+	

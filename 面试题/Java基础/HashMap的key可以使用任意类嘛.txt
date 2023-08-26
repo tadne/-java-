@@ -1,0 +1,20 @@
+HashMap是Java中的一个容器类，
+	可以用来存储和操作键值对（key-value）的数据。
+	
+
+HashMap的key可以是任意类的对象，但是有以下几个要求：
+
+	key必须实现hashCode()和equals()方法：
+		因为HashMap内部是使用哈希表（hash table）来存储数据的，
+			需要根据key的哈希码值来确定数据的存储位置，
+			根据key的相等判断来避免或解决哈希冲突 。
+		如果key没有实现hashCode()和equals()方法，或实现不正确，那么HashMap就无法正常工作 。
+
+	key最好是不可变的：
+		因为如果key在存入HashMap后被修改了，它的哈希码值和相等判断也可能发生变化，
+			导致HashMap无法找到或更新对应的数据 。
+		如果key是可变的，那么在使用HashMap时要特别注意不要修改key的状态 。
+
+	key最好是有意义的：
+		因为如果key是没有意义或重复的，HashMap就失去了存储和查找数据的效率和功能 。
+		如果key是有意义且唯一的，那么HashMap就可以快速地定位和操作数据 。

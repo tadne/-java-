@@ -1,0 +1,86 @@
+Java允许我们创建和使用不同类型的对象。
+
+	对象:	具有属性和行为的实体，可用来表示现实世界中的事物或概念。
+
+Java创建对象的方式有以下几种：
+
+	用new关键字：这是最常用也是最简单的创建对象的方式。
+		通过这种方式，我们可以调用任意的构造函数（无参的和带参数的）。例如：
+		Student s = new Student(); // 调用无参构造函数
+		Student s = new Student("张三", 18); // 调用带参数构造函数
+
+
+
+
+
+	用Class类的newInstance方法（反射）：
+		可使用Class类的newInstance方法创建对象。
+		newInstance方法调用无参的构造函数创建对象。
+		可通过类名或者类的全限定名来获取Class对象，然后调用其newInstance方法。例如：
+
+		// 通过类名获取Class对象
+		Employee emp = Employee.class.newInstance(); 
+		// 通过类的全限定名获取Class对象
+	     Employee emp = (Employee) Class.forName("org.example.Employee").newInstance(); 
+
+
+
+
+	用Constructor类的newInstance方法：
+		java.lang.reflect.Constructor类里也有一个newInstance方法可以创建对象。	
+		可通过newInstance方法调用有参数的和私有的构造函数。
+		需先通过Class对象获取Constructor对象，再传入相应的参数调用newInstance方法。例如：
+
+	// 获取带参数的构造函数
+Constructor<Employee> constructor = Employee.class.getConstructor(String.class, int.class);
+	// 调用带参数的构造函数 
+	Employee emp = constructor.newInstance("李四", 20); 
+
+
+
+
+	用clone方法：
+		调用一个对象的clone方法，jvm就会创建一个新的对象，将前面对象的内容全部拷贝进去。
+		用clone方法创建对象不会调用任何构造函数。
+		使用clone方法，要先实现Cloneable接口并重写其定义的clone方法。例如：
+
+		// 使用new关键字创建对象
+		Employee emp1 = new Employee("王五", 22); 
+		// 使用clone方法创建对象
+		Employee emp2 = (Employee) emp1.clone(); 
+
+
+
+
+
+	用反序列化：
+		当序列化和反序列化一个对象，jvm会给我们创建一个单独的对象。
+		反序列化时，jvm创建对象不会调用任何构造函数。
+		反序列化一个对象，需要让类实现Serializable接口。
+		还要使用ObjectInputStream和ObjectOutputStream来读写对象。例如：
+	
+    // 序列化
+	ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("emp.obj")); 	// 创建输出流
+	Employee emp1 = new Employee("赵六", 24); // 使用new关键字创建对象
+	// 写入对象
+	oos.writeObject(emp1); 
+	// 关闭输出流
+	oos.close(); 
+
+   // 反序列化
+	// 创建输入流
+	ObjectInputStream ois = new ObjectInputStream(new FileInputStream("emp.obj")); 
+	// 读取对象
+	Employee emp2 = (Employee) ois.readObject(); 
+	// 关闭输入流
+	ois.close(); 
+
+
+
+	
+
+
+
+
+
+
