@@ -1,0 +1,41 @@
+Bootstrap ClassLoader	启动类加载器	JAVA_HOME/jre/lib	顶级类加载器
+Extension ClassLoader	扩展类加载器	JAVA_HOME/jre/lib/ext	上级为Bootstrap,显示为null
+Application ClassLoader	应用类加载器(默认)classpath		上级为Extension
+自定义类加载器				自定义			上级为Application
+
+
+从自定义类加载器开始,逐级向上加载
+
+
+
+双亲委派:	使用类加载器loadClass方法时,查找类的规则
+	
+		先检查该类是否加载
+		有上级就委派上级
+		没有上级就委派Bootstrap
+
+		如果Bootstrap也找不到,会调用findClass方法(每个类加载器自己扩展)来加载
+
+
+
+
+线程上下文类加载器:	
+		使用jdbc时,需要加载driver驱动,但是不写Class.forName("com.mysql.jdbc.driver")		也可以让com.mysql.jdbc.driver正确加载
+		
+		因为在 JDBC 4.0 之后，引入了一种新的机制，叫做 SPI（Service Provider Interface），			它让 JDBC 驱动自动加载，不需要显式调用 Class.forName() 方法。
+		
+		SPI 原理:每个 JDBC 驱动包中，都有一个名为 META-INF/services/java.sql.Driver 
+		的文件，记录了该驱动包中实现了 java.sql.Driver 接口的类的全限定名。
+		当调用 DriverManager.getConnection() 方法时，JDBC 扫描所有的 JDBC 驱动包，
+		从这些文件中读取驱动类的信息，然后自动加载并注册这些驱动类 。
+
+
+自定义类加载器:		希望加载任意路径文件
+			通过接口使用实现,希望解耦时
+			希望隔离,不同应用的同名类都可以加载
+		
+		步骤:	继承ClassLoader父类
+			遵从双亲委派机制,重写findClass方法
+			读取类文件字节码
+			调用父类的defineClasss方法加载类
+			使用者类加载器的loadClass方法

@@ -1,0 +1,107 @@
+语法糖:		java编译器将.java文件编译为.class文件时,自动生成和转换一些代码便于阅读和减轻开发负担
+
+
+默认构造器:		自动给类加载一个无参构造器
+
+自动拆装箱(jdk5):	基本类型与包装类间有自动转换
+			(-128~127)会重用Integer对象
+
+泛型集合取值(jdk5):	在编译泛型时会执行泛型擦除动作,即在编译为字节码时丢失了
+			编译时所有类型都是相当于Object类了
+
+		但是在局部变量类型表中(栈帧中),其中包含了方法参数中泛型信息,这些信息没有被擦除
+		但是不能通过反射机制获取,只有在方法参数或返回值上才能获取泛型信息
+	如:	Method类中有类中getGenericParameterTypes()方法获取参数类型信息
+		参数类型信息包含:		原始类型信息(int...)  泛型参数类型(Integer..)
+	
+
+
+可变参数(jdk5):		可变参数 String... args其实是一个String[] 数组
+			编译器会根据实际传入参数创建对应长度数组,如果实际无参,就创建空数组
+
+
+forEach循环(jdk5):	int arr={1,2,3}  	//简化数组写法
+			实际会被编译为   new int[]{1,2,3};
+
+					
+			对集合的增强for遍历
+			实际被编译为iterate迭代器遍历
+
+switch-string(jdk7):	也就是case可以写字符串了
+			编译时,将字符串计算hashcode,将他们的哈希码作为case,并且再用equals比较
+				先匹配对应hashcode,用byte x=-1来接收,
+				即还有第二个switch来用byte来映射hashcode,然后在执行代码
+
+			equals解决hash冲突
+			hashcode可以大量的缩减字符串匹配所需的性能
+
+switch-enum:		枚举switch
+			会为枚举类生成一个静态内部类,叫合成类
+			在其中,定义了一个整数数组,长度和枚举类元素个数相同,其中存case对比数字
+			
+			编译时对应的是一个switch来,用case 数字来对应枚举元素
+
+枚举类enum(jdk7):		枚举类实例个数有限
+			编译时:	会对每一个枚举属性用 static final修饰
+				有一个带参构造方法
+				一个value方法,可以根据字符串名称来获取枚举实例对象
+
+			枚举类举例:	enum Sex{male,female}
+			编译时:		public final class Sex extends Enum<Sex>{
+						public static final Sex male;
+						public static final Sex female;
+						private static final Sex[] &VALUES;
+						static {
+							male=new Sex("male",0);
+							female=new Sex("female",1);
+							$VALUES=new Sex[]{male,female};
+						}//初始化
+						private Sex(String name,int ordinal){
+							super(name,ordinal);
+						}
+						public static Sex[] values(){
+							return $VALUES.clone();
+						}//带参构造方法
+						public static Sex valueOf(String name){
+						      return Enum.valueOf(Sex.class,name);
+						}//根据字符串名称来获取枚举实例对象
+					}
+
+
+
+
+try-with-resources(jdk7):	新增了堆需要关闭的资源处理的特殊语法
+	
+				只要资源对象实现了AutoCloseable接口
+				使用try-with-resources可以不用写finally语句块
+				编译器会帮助生成关闭资源代码
+			
+	
+方法重写时的桥接模式:		
+				方法重写根据返回值分两种情况:
+					父子类返回值一致
+					子类返回值可以是父类返回值的子类
+				
+				编译时:	会写一个重写方法,其返回值一致,这个方法会调用我们写的方法
+					然后返回我们写的方法的返回值
+					我们的返回是子类对象,向上转型
+
+
+
+匿名内部类:		编译时:	生成额外类,	类名是当前类名+$+数字
+				实现了对应接口以及方法,对应代码不变,就是完整的一个内部类
+				
+				如果将外部参数传入匿名内部类,那么要求该参数必须是final的
+				原因:	如果外部参数变了,匿名内部类中是无法跟着改变的
+				
+					
+				
+				
+
+
+
+
+
+
+
+
