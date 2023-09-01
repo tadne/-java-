@@ -12,7 +12,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 		相关参数	
 			-XX:+UseG1GC			开关
 			-XX:G1HeapRegionSize=size	G1堆中的Region大小
-	-		XX:MaxGCPauseMills=time	
+	-		-XX:MaxGCPauseMills=time	
 
 
 	G1回收
@@ -47,7 +47,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 				新生代对象空间会记录引用它的脏card地址,减少标记GCRoot的时间
 		
 				然后minorgc时,新生代清理复制算法,引用变更的时候,
-					通过post-writer barrier +dirty carf queue队列
+					通过post-writer barrier + dirty carf queue队列
 					用线程concurrentRefinementThreads更新RememberedSet
 
 		Young Collection+Concurrent Mark:	
@@ -64,7 +64,8 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 
 		
 		Mixed Collection:
-				进行最终标记		会STW暂停用户线程
+				进行最终标记(防止并发下的引用改变)	会STW暂停用户线程
+				拷贝存活	(如上)			会STW
 
 
 
@@ -95,7 +96,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 			当类加载器所有类不再使用,就卸载所有类
 			-XX:+ClassUnloadingWithConcurrentMark
 
-		jdk8u60:	巨型对象回收4
+		jdk8u60:	巨型对象回收
 			一个对象占region一半时,叫巨型对象
 			G1不会对巨型对象进行拷贝
 			回收时被优先考虑
@@ -105,7 +106,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 
 		jdk9:		并发标记起始时间调整
 			并发标记在堆空间占满前完成,否则退化为FullGC
-			jdk9前,要使用-XX:InitiatingOccupancyPercent
+			jdk9前,要使用-XX:InitiatingOccupancyPercent(默认45%)
 			jdk9可以动态调整
 				-XX:InitiatingHeapOccupancyPercent 设置初始值
 				进行数据采样并动态调整

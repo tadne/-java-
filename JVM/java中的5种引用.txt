@@ -58,6 +58,7 @@ SoftRefef=rence<byte[]> ref=new softReference<>(new SoftReference<>(new byte[_1M
 		
 		被PhantomReference对象引用的对象称为虚引用对象
 		当gc垃圾回收时，无论内存是否充足，都会回收虚引用关联的对象。
+			就会将引用对象放入引用队列,会有线程来定时清理
 		
 		
 		虚引用唯一的作用就是对垃圾回收过程进行跟踪，当虚引用对象引用的对象被垃圾回收了

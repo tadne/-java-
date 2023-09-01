@@ -4,13 +4,16 @@
 	分配回收成本高,但是读写性能高
 	不受垃圾回收管理	
 	
+	
+
 	为什么使用ByteBuffer或者说直接内存读写效率高?
 		java本身没有磁盘读写能力,要调用本地方法来处理
-		一般的缓冲区,java要想访问系统磁盘中数据,要先读到系统缓冲区中,
-			再从系统缓冲区到java缓冲区,再写入操作
+		java要想访问系统磁盘中数据,要先从系统缓冲区将数据读入到java缓冲区,
+			再从Java缓冲区来读数据,再写入操作
 
-		
-		但是用了ByteBuffer.会直接在系统缓冲区搞一搞缓冲区,java可以访问到这个缓冲区
+
+		ByteBuffer bb=ByteBuffer.allocateDirect(_1MB)
+		但是用了ByteBuffer直接内存.会直接在系统缓冲区搞一个缓冲区,java可以访问到这个缓冲区
 			所以速度更快
 
 
@@ -23,7 +26,7 @@
 			void unsafe.freeMemory(addr);		//释放内存
 
 			当ByteBuffer被垃圾回收的时候,自动会调用Cleaner类中clean方法
-			clean方法中会执行Unsafe类中的freeMemory方法\
+			clean方法中会执行Unsafe类中的freeMemory方法
 
 
 	分配与回收原理:	
@@ -31,3 +34,5 @@
 		也就是禁用 System.gc();来进行垃圾回收
 		因为显式垃圾回收用的是FUll GC,要回收新生代和老年代,让程序暂停时间长,非常耗性能
 		所以一般会禁用
+
+

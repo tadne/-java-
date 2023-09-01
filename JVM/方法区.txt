@@ -36,7 +36,7 @@
 			test.defineClass("className",code,0,code.length)
 
 
-	
+	永久代是jvm内存,相对小,效率低
 	元空间是系统内存,大小方面更充裕,并且其垃圾回收机制由元空间自行管理,效率更好
 
 

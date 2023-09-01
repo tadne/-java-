@@ -1,5 +1,5 @@
 垃圾回收器
-	串行垃圾回收器      SerialGC		开启命令:	-XX:+UseSerialGC=Serial+SerialOld
+	串行垃圾回收器      SerialGC	开启命令:	-XX:+UseSerialGC=Serial+SerialOld
 		单线程
 		堆内存较小,适合个人电脑
 		
@@ -10,13 +10,13 @@
 			    开启命令:(默认开启)	-XX:+UseParallelGC或-XX:+UseParallelOldGC 
 		多线程
 		堆内存较大,多核cpu支持
-		尽可能让单位时间内,STW时间最短
+		尽可能让单位时间内,STW时间最短(即单位时间尽可能让暂停时间变短)
 
 		会启动多个线程同时进行垃圾回收,线程个数默认和cpu核数相同,会cpu占用100%
 		线程数目控制:	-XX:ParallelGCThreads=n
 
 		根据目标设置工作方式
-		开关:	自适应方式调整(堆/新生代)大小:	-XX:+UseAdaptiveSizePolicy			目标:	自适应吞吐量调整目标(百分比):		-XX:GCTimeRatio=ratio
+		开关:	自适应方式调整(堆/新生代)大小:	-XX:+UseAdaptiveSizePolicy			目标:	自适应吞吐量调整目标(百分比):	-XX:GCTimeRatio=ratio
 				(垃圾回收时间不能超过工作时间的1/100)
 				达不到目标就会自动去调整堆大小来达到目标,一般是增大堆
 			自适应吞吐量调整目标(值):			-XX:MaxGCPauseMills=ms
@@ -27,19 +27,21 @@
 
 
 	响应时间优先垃圾回收器 CMS
-			开启命令:+UseConcMarkSweepGC ~ -XX:+UseParNewGC ~ SerialOld
+			开启命令:-XX:+UseConcMarkSweepGC ~ -XX:+UseParNewGC ~ SerialOld
 		多线程
 		堆内存较大,多核cpu支持
-		尽可能让单次的STW的时间最短
+		尽可能让单次的STW的时间最短(即单次暂停时间最短)
 		
 		并发标记清除,可以在垃圾回收的时候和用户线程一起运行,减少暂停时间
 		有时会并发失败,那时会退化成串行回收器
 		
 		流程:	UseConcMarkSweepGC是一个老年代垃圾回收器,
-			垃圾回收时,先暂停用户线程进行初始标记,标记根对象.标记结束
+			垃圾回收时,先暂停用户线程进行初始标记,标记根对象.标记结束(初始标记时间短)
 			暂停结束,用户线程可以继续运行,垃圾回收线程开始并发标记其他的对象
 			第二次标记结束,再次暂停,开启多个线程进行重新标记
 			标记结束,再次开启用户线程,并行清理垃圾
+
+			初步标记(stw)==>并发标记/运行==>重新标记(stw)==>并发清理/运行
 
 		并行时的线程数:	-XX:ParallelGCThreads=n		(默认是cpu核数)
 		并发时的线程数:	-XX:ConcGCThreads=threads	(一般设置为核数的1/4)

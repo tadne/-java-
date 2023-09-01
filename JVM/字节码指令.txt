@@ -27,7 +27,8 @@ javap工具
 案例:	分析a++
 	psvm{	
 		int a=10;
-		int b=a++ + ++a + a--;}
+		int b=a++ + ++a + a--;
+	}//10+12+12
 
 	a++和++a的区别是执行iload还是先执行iinc,iinc命令是自增命令,iload是计算
 
@@ -80,7 +81,7 @@ javap工具
 	构造方法和私有方法和静态方法是唯一确定的,是直接绑定的
 	但是public普通方法是动态绑定的
 
-	对于静态方法的调用,是不需要对象调用的,在加载到操作数栈中时,会直接pop
+	对于静态方法的调用,是不需要对象调用的,在加载到操作数栈中时,会直接pop弹出
 		
 
 多态的原理
@@ -92,7 +93,39 @@ javap工具
 	查表得到方法的具体地址
 	执行方法的字节码
 
+异常处理
+	catch(Exception e)
+		先加载e的异常信息
+		底层有一个异常表,可以检查try中代码,一旦出现异常,就会执行catch
+	multi-catch
+		catch(NoSuchMethodException|IllegalAccessException  e)
+		就多个异常存入同一个地方,入口相同
+		底层有一个异常表,可以检查try中代码,一旦出现异常,就会执行catch
+	finally
+		加载字节码时,在try和catch后以及catch剩余的异常类型流程   都加载finally的字节码
+			catch剩余的异常类型流程:	error..
+		确保finally一定执行
+		抛出异常
+		不要在finally中return,因为这样会导致出现异常但是没有抛出
+	
+锁synchronized(方法内)
+	加载锁对象
+	在正常情况下,加载解锁字节码
+	在异常表中,也加载解锁字节码
+	保证在任何情况下,都加载解锁字节码
 
-锁synchronized
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	
