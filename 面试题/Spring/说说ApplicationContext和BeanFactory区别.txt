@@ -1,0 +1,69 @@
+ApplicationContext和BeanFactory都是Spring IOC容器的核心组件，都负责创建和管理所有的bean对象。
+
+
+但是它们之间也有一些不同之处，主要有以下几点：
+
+	功能：	ApplicationContext是BeanFactory的子接口，
+		在BeanFactory的基础上提供了更多的高级特性，如事件发布、国际化支持、注解支持等。
+		BeanFactory只提供了最基本的IOC服务支持，如bean的定义、注册、获取等 。
+
+	初始化：	ApplicationContext默认采用预初始化策略，
+			在容器启动时就创建和注入所有的单例非懒加载的bean对象。
+
+		BeanFactory默认采用延迟初始化策略，
+			只有当客户端对象要访问容器中的bean对象时，才对该bean初始化和依赖注入。
+
+	资源：	ApplicationContext可以自动检测并加载类路径下的配置文件，
+			如applicationContext.xml。
+
+		BeanFactory要手动指定配置文件的位置，
+			如使用ClassPathResource或FileSystemResource等 。
+
+		表达式：ApplicationContext支持使用SpEL访问和操作bean对象和属性。
+			BeanFactory不支持使用SpEL 。
+
+
+
+
+SPEL表达式:	
+	SpEL的语法类似于EL（Expression Language），它使用#{...}作为表达式的界定符，例如：
+
+
+	<!-- 使用SpEL为bean的属性赋值 -->
+	<bean id="user" class="cn.tewuyiang.pojo.User">
+	    	<!-- 为name属性赋值为一个字符串常量 -->
+	    	<property name="name" value="#{'aaa'}"/>
+	    	<!-- 为age属性赋值为一个数学表达式的结果 -->
+	    	<property name="age" value="#{100 + 23}"/>
+	    	<!-- 为car属性赋值为另一个bean的引用 -->
+	    	<property name="car" value="#{myCar}"/>
+	</bean>
+
+SpEL支持以下几种常见的表达式类型：
+
+字面量：	SpEL支持字符串、数值、布尔值等基本类型的字面量，以及null值。
+		如：#{'Hello World'}、#{3.14159}、#{true}、#{null}等。
+
+属性：	SpEL支持访问和修改bean对象的属性，使用.或[]来表示属性访问。
+		如：#{user.name}、#{user['name']}等。
+
+方法：	SpEL支持调用bean对象的方法，使用.或[]来表示方法调用，使用()来表示方法参数。
+		如：#{user.getName()}、#{user'getName'}等。
+
+运算符：	SpEL支持使用各种运算符来进行数学、逻辑、关系等运算，包括一元运算符、二元运算符和三元运算符。	如：#{2 + 3 * 4}、#{user.age > 18}、#{user.name == null ? 'unknown' : user.name}等。
+
+集合：	SpEL支持创建和访问数组、列表、集合和映射等集合类型，用{}来表示集合创建，用.或[]表示集合访问	如：#{new int[]{1,2,3}}、#{new java.util.ArrayList()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

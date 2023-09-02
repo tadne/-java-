@@ -1,0 +1,29 @@
+Autowired和resource注解都是Spring框架中用于实现依赖注入的注解，
+
+作用都是将一个对象注入到另一个对象中。
+
+区别如下：
+
+	Autowired注解是Spring提供的，而resource注解是Java EE标准提供的。
+
+		Autowired注解默认通过byType方式注入，也就是根据类型匹配，
+		如有多个实现类，则通过byName方式注入，
+		也可以配合@Qualifier注解来显式指定name值。
+		
+		Autowired注解只能标注在字段、setter方法和构造方法上，
+
+		Autowired注解需要配合@Qualifier注解来指定name值，
+
+		Autowired注解要在IOC容器中存在对应的bean，否则会报错，
+		除非设置required属性为false，表示忽略当前要注入的bean。
+
+
+	resource注解默认通过byName方式注入，也就是根据名称匹配，
+		如没有匹配则通过byType方式注入，
+		也可以指定name和type属性来显式指定byName和byType方式124。
+
+		resource注解可以标注在任意方法上。
+
+		resource注解可以直接使用name属性来指定name值。
+
+		resource注解不需要设置required属性，如果没有找到对应的bean，会自动忽略。

@@ -1,0 +1,65 @@
+SpringMVC	
+基于Servlet API的Web框架，实现了MVC模式，即模型（Model）、视图（View）和控制器（Controller）
+
+
+SpringMVC中，重定向和转发是两种常用的页面跳转方式。
+
+	重定向：		指在服务器端返回一个特殊的响应给客户端，
+			告诉客户端重新发送一个新的请求到另一个URL地址。
+
+		特点：
+			需要两次请求和响应，会增加网络开销。
+			可以跳转到任意服务器中的任意资源，包括静态资源和动态资源。
+			会改变浏览器地址栏中的URL地址，用户可以看到跳转后的地址。
+			不能共享请求域中的数据，每次请求都是一个新的请求域。
+			可以解决表单重复提交的问题，每次提交都需要用户确认。
+
+	转发：		指在服务器端将一个请求转交给另一个处理器或者视图来处理，
+			返回最终的响应给客户端。
+	
+		特点：
+			只需要一次请求和响应，会减少网络开销。
+			只能跳转到当前服务器中的资源，不能跳转到其他服务器中的资源。
+			不会改变浏览器地址栏中的URL地址，用户看不到跳转后的地址。
+			可以共享请求域中的数据，整个过程都是在同一个请求域中。
+			不能解决表单重复提交的问题，每次刷新都会重新执行同一个请求。
+
+在SpringMVC中，设定重定向和转发有以下几种方式：
+
+	用关键字：	在控制器方法中返回逻辑视图名时，
+			用redirect:或者forward:作为前缀来表示重定向或者转发4。
+		如：
+			// 重定向到index.jsp页面
+			return "redirect:/index.jsp";
+			// 转发到index.jsp页面
+			return "forward:/index.jsp";
+
+	用Servlet API：在控制器方法中可用HttpServletRequest和HttpServletResponse对象
+			调用原生的Servlet API来实现重定向或者转发。
+
+		如：
+			// 重定向到index.jsp页面
+			response.sendRedirect("/index.jsp");
+			// 转发到index.jsp页面
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+	用ModelAndView对象：
+			在控制器方法中可以返回一个ModelAndView对象，
+			对象封装了模型数据和逻辑视图名，
+			这个对象也可用redirect:或者forward:作为前缀表示重定向或者转发。
+		如：
+			// 重定向到index.jsp页面
+			ModelAndView mv = new ModelAndView("redirect:/index.jsp");
+			return mv;
+			// 转发到index.jsp页面
+			ModelAndView mv = new ModelAndView("forward:/index.jsp");
+			return mv;
+
+
+
+
+
+
+
+
+

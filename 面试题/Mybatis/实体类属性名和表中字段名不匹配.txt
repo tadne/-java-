@@ -1,0 +1,63 @@
+实体类属性名和表中字段名不匹配:	
+	在Java对象和数据库表之间进行映射时，Java对象的属性名和数据库表的字段名不一致，
+	导致无法正确进行数据转换和赋值。
+
+
+有以下几种常见的解决方法：
+
+	使用resultMap
+		在XML配置文件中定义Java对象和数据库表之间的映射关系的方式，
+		可以自由地指定每个属性和字段之间的对应关系，而不需要遵循任何命名规则。
+
+		要使用这种方法，需要在XML配置文件中使用<resultMap>标签定义一个resultMap，
+		使用<result>标签来指定每个属性和字段之间的对应关系，
+		在<select>、<insert>、<update>或<delete>标签中用resultMap来引用resultMap
+
+	如：
+    	<resultMap id="userMap" type="cn.tewuyiang.pojo.User">
+        	<!-- 使用column属性指定数据库表的字段名，使用property属性指定Java对象的属性名 -->
+        	<result column="user_id" property="id"/>
+        	<result column="user_name" property="name"/>
+        	<result column="user_age" property="age"/>
+        	<result column="user_email" property="email"/>
+    	</resultMap>
+    	<!-- 根据id查询用户，使用resultMap属性引用上面定义的resultMap -->
+    	<select id="selectUserById" resultMap="userMap">
+    	    	select * from user where user_id = #{id}
+    	</select>
+
+	使用别名：
+		一种在SQL语句中给数据库表的字段名起一个别名的方式，可以简化SQL语句的编写，
+		并让别名与Java对象的属性名保持一致，实现自动映射。
+	
+		要使用这种方法，需要在SQL语句中使用as关键字来给每个字段名起一个别名，
+			并让别名与Java对象的属性名相同 。
+
+	如：
+    	<!-- 根据id查询用户，用as关键字给字段名起别名，并让别名与Java对象的属性名相同 -->
+    	<select id="selectUserById" resultType="cn.tewuyiang.pojo.User">
+		select 	user_id as id, user_name as name, 
+			user_age as age,user_email as email 
+			from user where user_id = #{id}
+    	</select>
+
+
+	使用注解：
+		一种在Java对象或方法上添加注解的方式，可以省略XML配置文件，
+			直接在注解中指定Java对象和数据库表之间的映射关系。
+
+		要使用这种方法，需要在Java对象或方法上添加相应的注解，
+			并在注解中指定每个属性或参数与字段之间的对应关系 。例如：
+
+		@Table(name = "user")
+		public class User {
+			// 使用@Table注解指定数据库表的名称
+			@Table(name = "user")
+			public class User {
+    			// 使用@Id注解指定主键字段
+    			@Id
+    			// 使用@Column注解指定数据库表的字段名
+    			@Column(name = "user_id")
+    			private int id;
+		}
+

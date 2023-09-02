@@ -1,0 +1,30 @@
+SpringMVC是一个基于Java的Web框架，实现了MVC模式，即模型（Model）、视图（View）和控制器（Controller）
+
+SpringMVC的流程可以用以下几个步骤来概括：
+	
+	DispatcherServlet:	前端控制器
+	HandlerMapping:		处理器映射器
+	
+	
+	第一步：
+		用户通过浏览器发送一个HTTP请求，请求被前端控制器DispatcherServlet接收。
+	
+	第二步：
+		前端控制器DispatcherServlet调用处理器映射器HandlerMapping，
+		根据请求的URL找到对应的处理器Handler，
+		将处理器封装成一个处理器执行链HandlerExecutionChain，
+			包括Handler本身和一些拦截器Interceptor。
+	
+	第三步：
+		前端控制器DispatcherServlet调用处理器适配器HandlerAdapter，
+		根据Handler的类型选择合适的适配器来执行Handler，
+		返回一个模型和视图对象ModelAndView，包括要展示的数据和要跳转的视图名称。
+	
+	第四步：
+		前端控制器DispatcherServlet调用视图解析器ViewResolver，
+		根据视图名称解析出一个具体的视图对象View，
+		如JSP、Freemarker、Thymeleaf等。
+	
+	第五步：DispatcherServlet调用View对象，将模型中的数据填充到视图中，形成最终的响应页面。
+	
+	第六步：DispatcherServlet将响应页面返回给浏览器。

@@ -1,0 +1,53 @@
+bean的作用域指的是bean在Spring容器中的存在范围和生命周期，决定了bean在何时何处被创建和销毁。
+
+
+Spring支持以下几种bean的作用域：
+
+	singleton：	默认的作用域，
+		表示在Spring容器中只存在一个共享的bean实例，所有对该bean的请求都会返回同一个实例。
+		适合无状态的bean，如服务层或数据访问层的组件。
+
+	prototype：
+		表示每次对该bean的请求都会创建一个新的实例，
+		即每次调用getBean()方法时，相当于执行new操作。
+		适合有状态的bean，如会话相关的组件。
+
+	request：
+		表示每次HTTP请求都会创建一个新的bean实例并在同一个请求内共享，不同请求用不同实例。
+		只适用于Web应用中的Spring WebApplicationContext环境。
+
+	session：
+		表示每次HTTP会话都会创建一个新的bean实例并在同一个会话内共享，不同会话用不同实例。
+		只适用于Web应用中的Spring WebApplicationContext环境。
+
+	application：
+		表示每个ServletContext都会创建一个新的bean实例并在整个Web应用内共享，
+			不同Web应用使用不同实例。
+		只适用于Web应用中的Spring WebApplicationContext环境。
+
+	websocket：
+		表示每个WebSocket都会创建一个新的bean实例并在同一个WebSocket内共享，
+			不同WebSocket使用不同实例。
+		只适用于Web应用中支持WebSocket协议的Spring WebApplicationContext环境。
+
+
+
+Spring中request和prototype这两种bean的作用域的区别
+
+	request只适用于Web应用中的Spring WebApplicationContext环境。
+	意味着只能在Web层中使用这种作用域，且Spring容器会负责管理这些bean的销毁，
+	请求结束时，这些bean也会被销毁。
+
+	prototype适合有状态的bean.
+	意味着可以在任何层中使用这种作用域，且Spring容器不会负责管理这些bean的销毁，
+	需要手动销毁或者等待垃圾回收器回收。
+
+	即:	二者作用域不同,request只能在web环境用,prototype适用所有情况
+		二者的处理方式不同,
+			request归ioc管理,会自动销毁
+			prototype要手动销毁或垃圾回收器
+
+
+
+
+

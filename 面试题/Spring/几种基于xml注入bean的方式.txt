@@ -1,0 +1,85 @@
+Spring:		一个轻量级的Java开发框架，可以通过配置文件或注解来管理和装配Java对象（称为bean）。
+
+
+基于XML注入bean是指通过XML配置文件来定义和初始化bean，以及为bean的属性赋值或注入依赖。
+
+基于XML注入bean有以下几种方式：
+
+	构造函数注入：
+		通过调用bean的带参构造函数来创建和初始化bean，以及为bean的属性赋值或注入依赖。
+
+		适合当获取bean对象时，注入数据是必须的操作，否则对象无法创建成功。
+
+		弊端:	改变了bean对象的实例化方式，在创建对象时，如果用不到这些数据，也必须提供。
+		要使用这种方式，要在XML配置文件中使用<constructor-arg>标签来指定构造函数的参数
+
+		<bean id="myCar" class="cn.tewuyiang.pojo.Car">
+    			<!-- 属性注入值，基本数据类型使用value为属性设置值；引用类型用ref为注入值
+        		 name为speed和price，不是属性名,而是构造函数中参数的名称；
+    			-->
+    			<constructor-arg name="speed" value="100"/>
+    		 	<constructor-arg name="bean" ref="myBean"/>
+		</bean>
+
+	设值方法注入：
+		通过调用bean的无参构造函数来创建和初始化bean，
+		以及通过调用bean的set方法来为bean的属性赋值或注入依赖。
+
+		适合当创建对象时没有明确的限制，可以直接使用默认构造函数。
+	
+		弊端:	如果有某个属性必须有值，则获取对象时有可能set方法没有执行。
+		要使用这种方式，需要在XML配置文件中使用<property>标签来指定设值方法的参数。
+
+		<bean id="myCar" class="cn.tewuyiang.pojo.Car">
+    			<!-- 属性注入值，基本数据类型使用value为属性设置值；引用类型用ref为注入值
+        		 name为speed和price，不是属性名,而是构造函数中参数的名称；
+    			-->
+   	 		<property name="speed" value="100"/>
+    			<property name="bean" ref="myBean"/>
+		</bean>
+
+	静态工厂方法注入：
+		通过调用bean的静态工厂方法来创建和初始化bean，
+		以及为bean的属性赋值或注入依赖。
+
+		适合当bean的实例化过程比较复杂，需要一些额外的操作或逻辑。
+		
+		用这种方式，要在XML配置文件中使用factory-method属性来指定静态工厂方法的名称，
+		然后使用<constructor-arg>或<property>标签来指定工厂方法的参数
+
+	实例工厂方法注入：
+		通过调用bean的实例工厂方法来创建和初始化bean，
+		以及为bean的属性赋值或注入依赖。
+		
+		适合当bean需要依赖于另一个bean来创建。
+
+		要使用这种方式，要在XML配置文件中使用factory-bean属性
+		指定实例工厂方法所属bean的id，然后用factory-method属性指定实例工厂方法的名称，
+		再使用<constructor-arg>或<property>标签来指定工厂方法的参数
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

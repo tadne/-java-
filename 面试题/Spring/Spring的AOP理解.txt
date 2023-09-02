@@ -1,0 +1,26 @@
+AOP是一种编程思想
+	可以让您在不修改源代码的情况下，给程序动态地添加一些额外的功能，如日志、事务、权限等。
+	AOP可以实现关注点的分离，提高代码的模块化和可维护性。
+
+要使用Spring的AOP，您需要了解以下几个术语：
+
+连接点（Joinpoint）：
+	连接点是在应用执行中能够插入切面的一个点，如方法调用、异常抛出等。
+	Spring AOP只支持方法级别的连接点。
+
+切点（Pointcut）：
+	切点是真正需要插入切面的一个或多个连接点，可以通过AspectJ的切点表达式语言来定义。
+	如execution(* concert.Performance.perform(..))表示concert包下Performance类的perform方法
+
+通知（Advice）：
+	通知是切面的具体逻辑，定义了在切点处要执行的操作。
+	Spring AOP支持五种类型的通知：前置通知、后置通知、返回通知、异常通知和环绕通知。
+	可用@Before、@After、@AfterReturning、@AfterThrowing和@Around注解标记不同类型的通知方法
+
+切面（Aspect）：
+	切面是通知和切点的结合，定义了什么功能，在何时和何处执行。
+	可以使用@Aspect注解来创建一个切面类。
+
+织入（Weaving）：
+	织入是把切面应用到目标对象并创建新的代理对象的过程。
+	Spring AOP是在运行时通过动态代理来实现织入的。

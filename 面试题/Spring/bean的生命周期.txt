@@ -1,0 +1,51 @@
+bean的生命周期:	是bean从创建到初始化再到销毁的过程，这个过程由IOC容器管理。
+	Spring中bean的生命周期只有四个主要阶段，其他都是在这四个主要阶段前后的扩展点，这四个阶段是：
+
+实例化（Instantiation）：指根据bean的定义创建一个Java对象的过程。
+		Spring提供了三种常用的bean实例化方式：默认构造方法、静态工厂方法或实例工厂方法。
+
+属性赋值（Populate）：指给bean的属性设置值的过程。
+		Spring支持两种常用的依赖注入方式：构造方法注入和setter方法注入。
+
+初始化（Initialization）：指在bean实例化和属性赋值之后，执行一些自定义的初始化逻辑的过程。
+		Spring提供两种常用的bean初始化方式：实现InitializingBean接口或用@PostConstruct注解
+
+销毁（Destruction）：指在容器关闭时，执行一些自定义的销毁逻辑的过程。
+		Spring提供两种常用的bean销毁方式：实现DisposableBean接口或使用@PreDestroy注解
+
+
+除了这四个主要阶段，Spring还提供了一些接口和注解，可以在bean的生命周期中进行一些额外的操作，
+
+
+如：
+
+	BeanPostProcessor：bean后处理器aop的实现
+		可以在bean初始化阶段的前后，对bean进行一些修改或增强，
+		如AOP就是利用这个接口实现动态代理。
+
+	InstantiationAwareBeanPostProcessor：
+		BeanPostProcessor的子接口，
+		可以在bean实例化阶段的前后，对bean进行一些修改或增强，
+		如自动注入就是利用这个接口实现依赖查找
+
+	BeanFactoryPostProcessor：bean工厂后处理器
+		可以在bean定义加载到容器之后，对bean定义进行一些修改或增强，
+		如@PropertySource就是利用这个接口加载外部配置文件。
+
+	BeanDefinitionRegistryPostProcessor：
+		BeanFactoryPostProcessor的子接口，
+		可以在bean定义注册到容器之前，对bean定义进行一些修改或增强，
+		如@Configuration就是利用这个接口动态注册bean定义。
+
+bean工厂后处理器先执行
+流程	
+	容器启动，加载并解析XML配置文件，将所有的bean定义注册到容器中。
+	调用bean工厂后处理器的postProcessBeanFactory方法，对所有的bean定义进行修改或增强。
+	根据bean定义创建并实例化所有的单例非懒加载的bean对象。
+	调用bean后处理器的postProcessBeforeInitialization方法，对所有的bean对象进行修改或增强。
+	调用bean对象的初始化方法(如afterPropertiesSet或@PostConstruct),执行自定义的初始化逻辑。
+	调用bean后处理器的postProcessAfterInitialization方法，对所有的bean对象进行修改或增强。
+
+
+
+
