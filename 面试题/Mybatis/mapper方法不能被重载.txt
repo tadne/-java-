@@ -1,0 +1,23 @@
+Mybatis中的mapper方法是不能重载的
+	即:不能在同一个mapper接口中定义两个或以上同名但参数不同的方法。
+	
+	因为Mybatis在映射SQL语句时是根据namespace+id的方式查找，如有多个同名的方法，
+		会造成不唯一性，导致出错。
+
+
+如果想实现类似重载的效果，可使用Mybatis的动态SQL在XML文件中根据参数是否为空来判断执行哪个SQL语句。
+也就是自己用逻辑代码实现
+
+如：
+
+	<select id="findUsers" resultType="user">
+	    select * from user
+	    <where>
+	        <if test="id != null">
+	            id = #{id}
+	        </if>
+	    </where>
+	</select>
+
+	if标签是Mybatis中用来实现动态SQL的一种方式，可以根据某个条件是否成立决定是否包含某个SQL片段
+	test属性用来指定判断条件，值是一个OGNL表达式，可以引用传入的参数对象的属性或一些内置变量。

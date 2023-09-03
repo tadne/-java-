@@ -1,0 +1,120 @@
+Java是一门支持多线程编程的语言，可以让程序同时执行多个任务，提高效率和性能。
+
+
+Java创建线程的方式:
+
+	继承Thread类：
+		将一个类声明为Thread的子类，并重写run()方法，将线程要执行的任务放在run()方法中。
+		然后创建Thread子类的对象，并调用start()方法启动线程。
+
+		class MyThread extends Thread {
+   	 		//重写run()方法
+    			@Override
+    			public void run() {
+        		//线程要执行的任务
+        			System.out.println("Hello, Thread");
+    			}
+		}
+
+		//创建并启动线程
+		MyThread t = new MyThread();
+		t.start();
+
+
+
+	实现Runnable接口：
+		将一个类声明实现Runnable接口，并实现run()方法，将线程要执行的任务放在run()方法中。		然后创建Runnable实现类的对象，并作为参数传递给Thread类的构造器，
+		创建Thread对象，并调用start()方法启动线程.
+
+		class MyRunnable implements Runnable {
+    			//实现run()方法
+    			@Override
+    			public void run() {
+        			//线程要执行的任务
+        			System.out.println("Hello, Runnable");
+    			}
+		}
+
+		//创建并启动线程
+		MyRunnable r = new MyRunnable();
+		Thread t = new Thread(r);
+		t.start();
+
+
+
+	使用Callable和Future：
+		创建类实现Callable接口，并实现call()方法，将线程要执行的任务放在call()方法中				call()方法可以有返回值，也可以抛出异常。
+		然后创建Callable实现类的对象，并作为参数传递给FutureTask类的构造器，
+		创建FutureTask对象。FutureTask是一个RunnableFuture接口的实现类，
+		也就是说它既是Runnable又是Future。
+		Future可以用来获取异步计算的结果，也就是call()方法的返回值。
+		然后将FutureTask对象作为参数传递给Thread类的构造器，
+		创建Thread对象，并调用start()方法启动线程。
+
+	
+		//定义一个实现Callable接口的类
+		class MyCallable implements Callable<Integer> {
+	    		//实现call()方法
+    			@Override
+    			public Integer call() throws Exception {
+        			//线程要执行的任务
+        			int sum = 0;
+        			for (int i = 1; i <= 100; i++) {
+        			    sum += i;
+        			}
+        			return sum; //返回结果
+    			}
+		}
+
+		//创建并启动线程
+		MyCallable c = new MyCallable();
+		//将Callable对象包装成FutureTask对象
+		FutureTask<Integer> ft = new FutureTask<>(c); 
+		Thread t = new Thread(ft); //将FutureTask对象作为参数传递给Thread对象
+		t.start();
+		Integer result = ft.get(); //获取call()方法的返回值
+		System.out.println(result);
+
+
+	使用线程池：
+		使用Executor框架提供的一些工具类创建和管理线程池，
+		如Executors、ExecutorService、ThreadPoolExecutor等。
+		线程池可以避免频繁地创建和销毁线程，提高资源利用率和性能。
+
+		要使用线程池，
+		首先要创建一个ExecutorService对象，它是一个执行器服务，
+			可以用来提交Runnable或Callable任务，并管理线程的生命周期。
+		然后调用execute()或submit()方法来执行任务，
+		最后调用shutdown()或shutdownNow()方法来关闭线程池。
+
+
+		//定义一个实现Runnable接口的类
+		class MyRunnable implements Runnable {
+		    //实现run()方法
+		    @Override
+		    public void run() {
+        		//线程要执行的任务
+        		System.out.println(Thread.currentThread().getName());
+    		    }
+		}
+
+		//使用线程池
+		//创建一个固定大小为3的线程池
+		ExecutorService pool = Executors.newFixedThreadPool(3); 
+		for (int i = 0; i < 10; i++) {
+		    pool.execute(new MyRunnable()); //提交10个任务给线程池
+		}
+		pool.shutdown(); //关闭线程池
+
+
+
+
+
+
+
+
+
+
+
+
+

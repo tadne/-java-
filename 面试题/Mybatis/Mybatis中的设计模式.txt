@@ -1,0 +1,46 @@
+Mybatis至少使用了以下九种设计模式1：
+
+前四个比较常用
+
+工厂模式：
+	定义一个创建对象的接口，让子类决定实例化哪一个类。
+	如:	SqlSessionFactory、ObjectFactory、MapperProxyFactory等类
+		用来根据不同的参数或配置创建SqlSession、MapperProxy等对象。
+
+代理模式：
+	为其他对象提供一种代理以控制对这个对象的访问。
+	如，MapperProxy、ConnectionLogger等类都是用来实现动态代理，拦截方法调用并执行相应的逻辑。
+
+适配器模式：
+	将一个类的接口转换成客户希望的另外一个接口。
+	如，Log和它对jdbc、log4j等各种日志框架的适配实现都是用来统一日志输出的接口。
+
+单例模式：
+	保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+	如，ErrorContext和LogFactory等类都是用来在整个应用程序中维护唯一的错误上下文和日志工厂。
+
+
+Builder模式：
+	将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+	如:	SqlSessionFactoryBuilder、XMLConfigBuilder、XMLMapperBuilder、
+		XMLStatementBuilder、CacheBuilder
+	等类都是用来构建Mybatis运行时所需的各种对象。
+
+组合模式：
+	将对象组合成树形结构以表示“部分-整体”的层次结构。
+	如，SqlNode和各个子类如ChooseSqlNode等类都是用来表示动态SQL语句中的不同节点。
+
+模板方法模式：
+	定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。
+	如，BaseExecutor和SimpleExecutor等类都是用来定义执行器的基本流程，
+	而具体的查询缓存、日志等操作由子类实现。
+
+
+装饰者模式：
+	动态地给一个对象添加一些额外的职责。
+	如，cache包中的cache.decorators子包中的各个装饰者类都是用来给缓存添加一些功能，
+		如定时清理、防止溢出等。
+
+迭代器模式：
+	提供一种方法顺序访问一个聚合对象中各个元素，而又不暴露该对象的内部表示。
+	如，PropertyTokenizer类是用来对属性表达式进行分词和迭代访问的。

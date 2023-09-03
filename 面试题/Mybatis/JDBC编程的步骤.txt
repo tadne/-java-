@@ -1,0 +1,42 @@
+JDBC是Java Database Connectivity的缩写，
+	是一个用于连接和操作数据库的Java API，
+	可以通过标准的接口和类来访问不同类型的数据库，从而实现数据库的跨平台访问。
+
+JDBC编程的步骤大致如下：
+
+	加载驱动：
+		注册数据库驱动的过程，可以让Java程序识别并连接到指定的数据库。
+		加载驱动要使用Class类的forName()方法来加载驱动类，并捕获可能抛出的异常。
+
+	获取连接：
+		建立与数据库的连接的过程，可以让Java程序通过网络与数据库进行通信。
+		获取连接要使用DriverManager类的getConnection()方法来获取Connection对象，
+			并传入数据库的URL、用户名和密码，并捕获可能抛出的异常。
+
+	创建语句：
+		创建SQL语句的过程，可以让Java程序向数据库发送SQL命令，并接收返回结果。
+		创建语句要使用Connection对象的createStatement()方法或prepareStatement()方法
+			获取Statement对象或PreparedStatement对象，并根据需要设置参数或占位符，
+			并捕获可能抛出的异常。
+
+	执行语句：
+		执行SQL语句的过程，可以让Java程序根据SQL的类型和返回结果的类型选择合适的执行方法，			并处理返回结果。
+		执行语句要使用Statement对象或PreparedStatement对象的executeQuery()方法
+			或executeUpdate()方法或execute()方法执行SQL语句，
+			并获取ResultSet对象或int值或boolean值，并捕获可能抛出的异常。
+
+	处理结果：
+		处理SQL语句返回结果的过程，可以让Java程序根据返回结果的类型和内容进行相应操作
+			和处理。
+		处理结果要使用ResultSet对象或int值或boolean值判断SQL语句是否成功执行，
+			并遍历或操作返回结果，并捕获可能抛出的异常。
+
+
+	释放资源：
+		释放数据库资源的过程，可以让Java程序在使用完数据库资源后，及时关闭连接，
+			从而避免资源浪费和内存泄漏。
+		释放资源要使用Connection对象或Statement对象或PreparedStatement对象
+			或ResultSet对象的close()方法来关闭资源，并捕获可能抛出的异常。
+
+
+

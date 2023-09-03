@@ -1,0 +1,70 @@
+Mybatis实现一对一的方式有以下两种：
+
+association标签：
+	在XML配置文件中用association标签定义Java对象中有另一个对象作为属性时的映射关系的方式，
+	可以根据主键或外键来关联两个表，将查询结果封装为一个包含另一个对象的对象。
+
+	用这种方式，要在XML配置文件中使用<resultMap>标签来定义resultMap，
+	在其中用<association>标签指定属性名、Java类型、列前缀等，并用<resultMap>或<result>标签
+	指定子对象和字段间的对应关系，然后在<select>标签中用resultMap属性引用该resultMap。
+
+如：	(注意,建user表时要外键关联address表)
+    <resultMap id="userMap" type="cn.tewuyiang.pojo.User">
+        <result column="id" property="id"/>
+        <!-- 用association标签指定User类的Address类作为属性，用columnPrefix属性指定列前缀 -->
+    <association property="address" javaType="cn.tewuyiang.pojo.Address" columnPrefix="a_">
+            <!-- 使用result标签指定Address类和address表之间的映射关系 -->
+            <result column="a_id" property="id"/>
+        </association>
+    </resultMap>
+    <select id="selectUserById" resultMap="userMap">
+        select 
+	u.*, a.id as a_id, a.city as a_city, a.street as a_street, a.zip_code as a_zip_code 	from user u 
+	left join address a 
+	on u.address_id = a.id 
+	where u.id = #{id}
+    </select>
+
+
+@One注解：
+	在Java方法用@One注解定义对象中包含另一个Java对象作为属性时的映射关系的方式，
+	可以省略XML配置文件，在注解中指定子对象的查询方法，并将查询结果封装为包含另一个对象的对象。
+	
+	使用这种方式，要在Java方法上添加@Select注解来指定SQL语句，
+	在@Results注解中用@Result注解指定每个属性和字段之间的对应关系，
+	在@Result注解中用@One注解来指定属性名、Java类型、查询方法等。
+
+如：
+
+	public interface UserMapper {
+   	 	// 根据id查询，关联查询地址，用@Select注解指定SQL，用@Results注解指定映射关系
+   	 @Select(
+	"select 
+	u.*, a.id as a_id, a.city as a_city, a.street as a_street, a.zip_code as a_zip_code 	from user u 
+	left join address a 
+	on u.address_id = a.id 
+	where u.id = #{id}")
+
+	@Results({
+        	// 用@Result注解指定属性和字段之间的对应关系，用column属性指定数据库表字段名，
+		//	用property属性指定Java对象的属性名
+
+       	@Result(column = "id", property = "id"),
+        	// 用@Result注解指定User类中的Address类为属性，用@One注解指定子对象的查询方法，
+		//用column属性指定传入的参数值
+
+        @Result(
+		property = "address", javaType = Address.class, 
+		one = @One(select = "cn.tewuyiang.mapper.AddressMapper.selectAddressById"),
+		column = "address_id"
+		)
+  	  })
+   	 User selectUserById(@Param("id") int id);
+     }
+
+	public interface AddressMapper {
+	    // 根据id查询地址，用@Select注解指定SQL语句，用@Results注解指定映射关系
+	    @Select("select * from address where id = #{id}")
+	    @Results({.....    })
+	    Address selectAddressById(@Param("id") int id);
+	}

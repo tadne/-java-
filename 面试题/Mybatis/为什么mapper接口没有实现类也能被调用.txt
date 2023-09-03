@@ -1,0 +1,15 @@
+Mybatis中的mapper接口
+	是一种定义数据库操作的接口，它的方法与SQL语句一一对应。
+	不需要提供mapper接口的实现类，只需要创建一个继承了基础接口的mapper接口就可以直接使用了。
+
+因为Mybatis基于JDK的动态代理技术为mapper接口生成了动态代理类，操作时调用的也是该代理类的方法
+
+Mybatis中的mapper接口原理可以分为以下几个步骤：
+
+	首先，在实体类上添加@Entity注解，指定实体类对应的表名和列名等元数据信息。
+	然后，创建一个继承了Mapper或其子接口的mapper接口，并在其中定义与SQL语句对应的方法。
+	接着，通过Mybatis或Spring等方式配置mapper接口的扫描，让Mybatis能够找到并加载mapper接口。
+	最后，通过SqlSession或MapperFactoryBean等方式获取mapper接口的实例时，
+		Mybatis利用MapperProxyFactory和MapperProxy等类创建一个动态代理对象，并缓存起来。
+		当调用mapper接口中的方法时，会进入动态代理对象的invoke方法，
+		在其中根据方法名和参数等信息构造MapperMethod对象，并通过它执行具体的数据库操作。

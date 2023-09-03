@@ -1,0 +1,49 @@
+Mybatis提供了以下几种常用的标签：
+
+mapper：		根标签，用来定义映射文件，包含了一个命名空间和一些子标签。
+		命名空间是一个唯一的标识符，通常与Java接口的全限定名相同，来区分不同的映射文件。
+		子标签是一些具体的映射语句或规则，如select、insert、update、delete、resultMap
+
+	resultMap：子标签，用来定义对象和数据库表之间的映射关系，包含了id、type和一些子标签。
+		id是唯一的标识符，用来区分不同的映射规则。
+		type是返回值类型，用来指定要映射的Java对象的类型。
+		子标签是一些具体的映射规则，如result、association、collection等。
+
+	result：子标签，用来定义对象的属性和数据库表的字段间的对应关系，包含了一些属性。
+		如column、property、javaType、jdbcType等。
+
+	association：子标签，用来定义Java对象中包含另一个对象作为属性时的映射关系，
+		包含了一些属性和子标签。属性有property、javaType、columnPrefix等。
+		子标签有resultMap或result等。
+
+	collection：子标签，用来定义对象中包含集合或数组作为属性时的映射关系，
+		包含了一些属性和子标签。属性有property、ofType、columnPrefix等。
+		子标签有resultMap或result等。
+
+	foreach：子标签，用来遍历集合或数组，并拼接SQL语句或参数占位符，
+		包含了一些属性。属性有collection、item、index、open、close、separator等。
+
+	select：	子标签，用来定义查询语句，包含了id、resultType/resultMap、parameterType等属性。
+		id是唯一的标识符，用来区分不同的查询语句。
+		resultType/resultMap是返回值类型或映射规则，用来指定将查询结果封装为目标对象。
+		parameterType是参数类型，用来指定传入的参数对象的类型。
+		还有一些如fetchSize、timeout、statementType等属性。
+
+	insert：	子标签，用来定义插入语句，包含了id、parameterType等属性。
+		id是唯一的标识符，用来区分不同的插入语句。
+		parameterType是参数类型，用来指定传入的参数对象的类型。
+		还有一些如useGeneratedKeys、keyProperty、keyColumn等。
+
+	update：子标签，用来定义更新语句，包含了id、parameterType等属性。
+		id是唯一的标识符，用来区分不同的更新语句。
+		parameterType是参数类型，用来指定传入的参数对象的类型。
+		还有一些如flushCache等。
+
+	delete：子标签，用来定义删除语句，包含了id、parameterType等属性。
+		id是唯一的标识符，用来区分不同的删除语句。
+		parameterType是参数类型，用来指定传入的参数对象的类型。
+		还有一些如flushCache等。
+
+
+
+
