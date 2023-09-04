@@ -1,0 +1,49 @@
+你好，这是Bing。我很高兴你对Java编程感兴趣。😊
+
+SynchronizeMap和ConcurentMap是两种提供了线程安全的Map接口的实现类，
+
+	都可以在多线程的环境下保证对Map的操作不会出现并发问题。
+
+
+区别主要有以下几点：
+
+实现创建方式不同:
+	SynchronizeMap通过Collections类的synchronizedMap()方法来创建的，
+	可以接收任意类型的Map作为参数，然后返回一个包装后的SynchronizeMap对象。
+	
+	ConcurentMap是一个接口，继承自Map接口，并且增加了一些原子性的操作方法。
+	ConcurentMap的一个常用的实现类是ConcurrentHashMap，它是从JDK1.5开始提供的。
+
+
+同步的实现方式不同:
+	SynchronizeMap和Hashtable一样，通过对整个Map对象加锁实现线程同步，
+	意味着在多线程访问SynchronizeMap时，只能有一个线程能操作Map，其他线程必须等待。
+	导致性能低下和线程阻塞的问题。
+
+	ConcurentMap是通过对Map中的若干个桶（Segment）加锁来实现线程同步的，
+	意味着在多线程访问ConcurrentHashMap时，只要不是操作同一个桶，就可以并发地执行。
+	可以提高性能和吞吐量。
+
+
+遍历的实现不同:
+	SynchronizeMap和Hashtable在遍历时，若有其他线程要修改Map，
+		会抛出ConcurrentModificationException异常。
+
+	ConcurrentHashMap在遍历时修改Map,不会抛出ConcurrentModificationException异常
+	因为使用了一种叫做快照（snapshot）的技术，遍历时，会复制一个当前Map的副本，
+	然后遍历这个副本,避免了修改和遍历的冲突。
+
+
+是否支持null值:
+	SynchronizeMap和Hashtable不支持null作为键或值。
+
+	ConcurrentHashMap也不支持null作为键，但是支持null作为值。
+
+
+
+
+
+
+
+
+

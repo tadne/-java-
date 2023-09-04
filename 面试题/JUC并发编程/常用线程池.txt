@@ -1,0 +1,104 @@
+不断创建和销毁线程非常销毁性能,浪费资源
+
+线程池是一种用于管理多个线程的工具，它可以提高程序的性能和资源利用率。
+
+线程池
+
+	创建一个线程池,空的
+	提交任务的时候,线程池会创建新线程对象,任务执行完毕,线程归还给线程池,下次再提交任务,不会再创		建线程,而是复用已有线程
+	如果提交任务时,线程池没有空闲线程,也无法创建新线程,任务就会排队
+
+
+线程池中有两种常用的方法来提交任务给线程执行，分别是submit和execute。
+
+
+它们的区别主要有以下几点：
+
+	方法来源不同：
+		execute方法在Executor接口中定义的，而submit方法在ExecutorService接口中定义。
+		ExecutorService接口继承了Executor接口，包含了execute方法，
+			但是Executor接口不包含submit方法。
+	
+	接收的参数不同：
+		execute方法只能接收实现了Runnable接口的任务，
+		submit方法既可以接收Runnable类型的任务，也可以接收Callable类型的任务。
+			Runnable和Callable的区别是前者没有返回值，后者可以有返回值2。
+
+	返回值不同：
+		execute方法的返回值是void，也就是说，提交任务后不能得到线程的执行结果。
+		submit方法的返回值是Future对象，通过Future对象的get方法可以获取到线程执行的结果
+			get方法是同步的，执行get方法时，
+			如果线程还没执行完，会同步等待，直到线程执行完成。
+
+	异常处理不同：
+		execute方法执行Runnable任务时，如果任务有异常，会直接抛出异常并打印异常信息。
+		submit方法执行Runnable或Callable任务时，如果任务中有异常，
+			不会抛出异常也不会打印异常信息，而是将异常保存在Future对象中，
+			在调用Future对象的get方法时再抛出异常。
+
+
+
+
+java提供的线程池
+	构造方法static静态
+	newFixedThreadPool：	
+		创建固定大小的线程池
+		提交一个任务就创建一个线程，直到达到线程池的最大值 nThreads
+		线程池的大小达到最大值后，再有新的任务提交时则放入无界阻塞队列中，
+		等到有线程空闲时，再从队列中取出任务继续执行。
+
+	newCachedThreadPool：
+		创建一个可缓存的线程池。 
+		新任务提交时，有空闲线程则直接处理，没有则创建新的线程处理，队列中不储存任务。
+		线程池不对线程池大小限制，线程池大小依赖于操作系统能够创建的最大线程大小。 
+		如果线程空闲时间超过了60秒就会被回收。
+
+	newScheduledThreadPool：
+		创建一个可定时调度的线程池，可设置在给定延迟时间后执行或定期执行某个线程任务。
+
+	newSingleThreadExecutor：
+		创建一个单线程化的线程池，只会用唯一线程执行任务，保证所有任务按照指定顺序执行。
+									
+
+		线程池中线程方法
+		Future<?> submit(Runnable task)：	提交任务
+		void shutdown()：			关闭线程池
+				
+	任务执行完毕,关闭线程池(实际中,但线程池一般不关)
+
+
+
+自定义线程池
+	ThreadPoolExector()
+	自定义线程池的构造方法,七个参数解释
+	corePoolSize：   		核心线程的最大值，不能小于0
+	maximumPoolSize：	最大线程数，不能小于等于0，maximumPoolSize>= corePoolSize
+	keepAliveTime：  		空闲线程最大存活时间,不能小于0
+	unit：           		时间单位
+	workQueue：      		任务队列，不能为null
+	threadFactory：  		创建线程工厂,不能为null      
+	handler：        		任务的拒绝策略,不能为null    
+			一般用的是
+			Executors.defaultThreadFactory()	底层就是new个Thread,加设置
+	任务的拒绝策略(ThreadPoolExector中的静态内部类)
+			AbortPolicy		丢弃任务并抛出RejectedExecution异常
+			DiscardPolicy		丢弃任务但是不抛出异常
+			DiscardOldestPolicy	抛弃队列中等待最久的任务,把当前任务加入队列
+			CallerRunsPolicy	调用任务的run()方法绕过线程池直接执行
+
+
+
+
+	判断线程池大小多少合适?
+		cpu密集运算的项目:	最大并行数+1
+		IO密集型运算的项目:	
+			最大并行数*期望cpu利用率*总时间(cpu计算时间+等待时间)/cpu计算时间
+		
+
+		最大并行数:		java虚拟机可用的处理器数目,其实就是电脑的线程数,
+					如四核八线程,那最大并行数就是8
+					
+			代码获取方式:	int i = Runtime.getRuntime().availableProcessors();
+			
+		
+

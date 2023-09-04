@@ -1,0 +1,38 @@
+线程池:
+	一种用于管理多个线程的工具，可以提高程序的性能和资源利用率。
+
+
+线程池中有两种常用的方法来提交任务给线程执行，分别是submit和execute。
+
+
+它们的区别主要有以下几点：
+
+方法来源不同：	
+	execute方法是在Executor接口中定义的
+	submit方法是在ExecutorService接口中定义的。
+		ExecutorService接口继承了Executor接口，它包含了execute方法，
+		但是Executor接口不包含submit方法。
+
+接收的参数不同：	
+	execute方法只能接收实现了Runnable接口的任务，
+	submit方法既可以接收Runnable类型的任务，也可以接收Callable类型的任务。
+		Runnable和Callable的区别是前者没有返回值，后者可以有返回值。
+
+返回值不同：	
+	execute方法的返回值是void，也就是说，提交任务后不能得到线程的执行结果。
+	submit方法的返回值是Future对象，通过Future对象的get方法可以获取到线程执行的结果，			get方法是同步的，执行get方法时，线程没执行完，会同步等待，直到线程执行完
+
+异常处理不同：
+	execute方法执行Runnable任务时，如果任务中有异常，会直接抛出异常并打印异常信息。
+	submit方法执行Runnable或Callable任务时，如果任务中有异常，不会抛出异常也不会打印异常信息，
+		而是将异常保存在Future对象中，在调用Future对象的get方法时再抛出异常。
+
+在使用线程池提交任务时，需要根据不同的情况选择合适的方法。
+	一般来说，如果任务没有返回值或者不需要获取返回值，可以使用execute方法；
+	如果任务有返回值或者需要获取返回值，可以使用submit方法。
+
+
+在使用submit方法时，最好显式地处理任务中可能出现的异常，以免丢失异常信息。
+
+
+
