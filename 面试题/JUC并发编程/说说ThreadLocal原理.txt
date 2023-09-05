@@ -1,0 +1,15 @@
+ThreadLocal是一个Java类，可以为每个线程提供一个独立的变量副本，从而实现线程间的数据隔离。
+
+主要作用:	解决多线程环境下的变量同步问题，避免使用锁机制造成的性能损耗。
+
+ThreadLocal的实现原理:
+	基于ThreadLocalMap这个类，它是一个定制化的哈希映射，以ThreadLocal对象为键，以线程变量为值。
+	每个线程都有ThreadLocalMap类型的成员变量threadLocals，来存储该线程的所有ThreadLocal变量。
+
+	调用ThreadLocal的set方法时，会将当前线程和要设置的值作为参数传递给ThreadLocalMap的set方法
+	并在ThreadLocalMap中根据当前线程的ThreadLocal对象找到或创建对应的Entry对象，
+	将值存在Entry对象中。
+
+	调用ThreadLocal的get方法时，会先获取当前线程的ThreadLocalMap对象，
+	然后根据当前线程的ThreadLocal对象在ThreadLocalMap中查找对应的Entry对象，
+	如果找到了就返回Entry对象中存储的值，如果没有找到就返回初始值或者null。

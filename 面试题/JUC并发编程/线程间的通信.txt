@@ -1,0 +1,35 @@
+Java线程间通信方式有多种，主要分为两类：共享内存和消息传递。
+
+共享内存方式是指多个线程访问同一个共享变量或对象，通过同步机制来协调线程间的操作。
+
+常用的同步机制有：
+
+	volatile关键字，可以保证变量的可见性，即一个线程修改了变量的值，其他线程可以立即看到。
+
+	synchronized关键字，可以实现临界区的互斥访问，以及
+		使用wait()、notify()、**notifyAll()**方法来实现线程间的等待和通知。
+
+	ReentrantLock/Condition类，可以实现更灵活的锁机制和条件变量。
+
+	JUC工具类，如CountDownLatch、Semaphore、CyclicBarrier等，实现多种复杂的线程协作场景。
+
+
+消息传递方式是指一个线程向另一个线程发送消息，从而实现通信。
+
+
+常用的消息传递方式有：
+
+	生产者/消费者模型，是一种经典的消息队列模式，可以使用阻塞队列来实现。
+
+	基于LockSupport的阻塞和唤醒，
+		可使用LockSupport类提供的park()和unpark()方法来阻塞和唤醒指定线程。
+
+	通过Socket网络通信，
+		可使用java.net包提供的Socket类和ServerSocket类实现基于TCP协议的网络通信。
+
+	信号量机制，
+		可使用java.util.concurrent.Semaphore类来实现无名线程信号量或命名线程信号量。
+
+	管道通信，
+		可使用java.io.PipedInputStream和java.io.PipedOutputStream类
+		实现基于字节流的管道通信。
