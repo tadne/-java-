@@ -1,0 +1,12 @@
+SpringBoot是一个基于Spring框架的开源项目，
+	可以让我们快速地创建和运行基于Spring的应用程序，无需繁琐的配置和依赖管理。
+
+SpringBoot有一个重要的特点，就是可以**内嵌Web容器**，如Tomcat, Jetty, Undertow等，
+	让我们无需部署到外部的Web容器中，就可以直接运行SpringBoot应用程序。
+
+	因此，SpringBoot**不需要**独立容器运行，它可以作为一个可执行的Jar文件，通过Java命令，
+	如java -jar, 来运行。这样可以简化部署和运维的过程，提高程序的可移植性和灵活性。
+
+	如果我们想要将SpringBoot应用程序部署到外部的Web容器中，也是可以做到的。
+	只需要将SpringBoot项目打包成一个War文件，然后修改一些配置信息，
+	就可以将其部署到任何支持Servlet 3.0规范的Web容器中。

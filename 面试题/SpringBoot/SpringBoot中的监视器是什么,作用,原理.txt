@@ -1,0 +1,48 @@
+SpringBoot中的监视器（Actuator）
+	一种用于监控和管理SpringBoot应用程序的工具，可以提供一些端点（Endpoint），
+	可以获取应用程序的运行状态、配置信息、性能指标、日志信息等。
+
+
+SpringBoot中的监视器有以下几个主要的作用：
+
+提高应用程序的可观察性：
+	使用监视器可以让我们实时地观察应用程序的运行状况，
+	如内存占用、线程数、垃圾回收、HTTP请求等，从而及时发现和解决问题。
+
+提高应用程序的可管理性：
+	使用监视器可以远程地管理应用程序的行为，
+	如修改日志级别、关闭应用程序、触发垃圾回收等，从而方便地控制和调整应用程序。
+
+提高应用程序的可扩展性：
+	使用监视器可以让我们轻松地集成其他的监控和管理工具，
+	如Prometheus, Grafana, JMX等，从而扩展应用程序的功能和性能。
+
+监视器的原理是：
+	使用注解@EnableActuator启用监视器功能，然后在配置文件中指定需要开启的端点和相关的属性，
+	如端点ID, 端点路径, 端点权限等。当应用程序启动后，可以通过HTTP请求或者JMX访问这些端点，
+	获取或者修改应用程序的信息。
+
+例:
+
+
+	@SpringBootApplication
+	@EnableActuator // 启用监视器功能
+	public class SpringBootDemoApplication {
+	    public static void main(String[] args) {
+	        SpringApplication.run(SpringBootDemoApplication.class, args);
+	    }
+	}
+
+	# 配置文件
+	management:
+	  endpoints:
+	    web:
+	      exposure: # 指定需要开启的端点
+	        include: health, info, metrics, loggers
+	      base-path: /actuator # 指定端点的基础路径
+	  endpoint:
+	    health: # 指定健康检查端点的属性
+	      show-details: always # 显示详细信息
+	    loggers: # 指定日志端点的属性
+	      enabled: true # 启用日志端点
+

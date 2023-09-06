@@ -1,0 +1,11 @@
+SpringBoot提供了一个接口ApplicationRunner，
+	可以让我们在SpringBoot应用程序启动后执行一些特定的代码，如初始化数据、加载配置、执行任务等。
+
+	可以实现这个接口，重写它的run(ApplicationArguments args)方法，
+	然后将实现类注册为一个Bean，就可以在SpringBoot启动后执行我们的代码。
+
+
+	如果想要在SpringBoot启动前执行一些特定的代码，可以使用@PostConstruct注解，
+	可以让我们在Bean初始化完成后执行一些特定的代码，如设置属性、检查状态、打印日志等。
+	可以在任何一个Bean类中定义一个带有@PostConstruct注解的方法，
+	就可以在SpringBoot启动前执行我们的代码。

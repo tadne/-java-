@@ -1,0 +1,23 @@
+SpringBoot的Starters是一系列的依赖包，
+	可以根据我们的需求自动引入相关的依赖包，避免了版本冲突和冗余依赖的问题。
+
+
+SpringBoot的Starters有以下几个特点：
+
+	简化依赖：
+		使用Starters可以省略很多繁琐的依赖配置，如XML配置文件、pom.xml文件等，
+		只需要指定一个或几个Starter依赖，就可以创建一个可运行的SpringBoot应用程序。
+
+	集成自动配置：
+		用Starters可以自动加载SpringBoot提供的一系列自动配置，
+		如数据源、事务管理、Web容器、安全、缓存等，无需手动配置这些常用的功能。
+
+	管理版本号：
+		用Starters可以利用SpringBoot提供的一个工具spring-boot-dependencies，
+		可以管理所有Starter依赖的版本号，让我们无需指定每个依赖的版本号。
+
+
+	SpringBoot提供了很多种类的Starters，
+	如spring-boot-starter-web, spring-boot-starter-security等，
+	都以spring-boot-starter-为前缀，表示不同的功能或者领域。
+	可以根据不同的需求和场景来选择合适的Starter依赖。

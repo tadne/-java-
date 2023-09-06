@@ -1,0 +1,21 @@
+SpringBoot:
+	一个基于Spring框架的开源项目，可以让我们快速地创建和运行基于Spring的应用程序，
+	无需繁琐的配置和依赖管理。
+
+
+运行SpringBoot有以下几种方式：
+
+	使用IDE：
+		可以使用支持SpringBoot的IDE，如Eclipse, IntelliJ IDEA, Visual Studio Code等，
+		来创建和运行SpringBoot项目。
+		这种方式可以方便地进行代码编写、调试、测试等操作，适合开发环境。
+
+	使用Maven或Gradle：
+		可以使用构建工具，如Maven或Gradle，来构建和运行SpringBoot项目。
+		这种方式可以利用构建工具提供的插件和命令，
+		如spring-boot-maven-plugin, spring-boot-gradle-plugin, mvn spring-boot:run, 		gradle bootRun等，来快速地打包和启动SpringBoot应用程序，适合测试环境。
+		
+	使用Java命令：
+		可以使用Java命令，如java -jar, 来运行SpringBoot项目。
+		可以直接运行打包好的SpringBoot应用程序，无需安装额外的软件或者配置任何环境变量，
+		适合生产环境。

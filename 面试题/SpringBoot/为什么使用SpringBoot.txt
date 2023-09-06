@@ -1,0 +1,30 @@
+SpringBoot:
+	基于Spring框架的开源项目，可以让我们快速地创建和运行基于Spring的应用程序，
+	无需繁琐的配置和依赖管理。
+
+
+优点：
+
+	简化配置：
+		SpringBoot提供了一系列的自动配置，如数据源、事务管理、Web容器、安全、缓存等，
+		让我们只需要指定少量的参数，就可以创建一个可运行的应用程序。
+		SpringBoot还提供了一个注解@SpringBootApplication，
+		可以集成@Configuration、@EnableAutoConfiguration和@ComponentScan三个注解，
+		让我们只需要一个注解就可以启动SpringBoot应用程序。
+
+	减少依赖：
+		SpringBoot提供了一系列的Starter依赖，
+		如spring-boot-starter-web,spring-boot-starter-security等，
+		可以根据我们的需求自动引入相关的依赖包，避免了版本冲突和冗余依赖的问题。
+
+		SpringBoot还提供了一个工具spring-boot-dependencies，
+		可以管理所有Starter依赖的版本号，让我们无需指定每个依赖的版本号。
+
+	增强生产力：
+		SpringBoot提供了一系列的工具，
+		如spring-boot-devtools, spring-boot-actuator, spring-boot-test等，
+		可以帮助我们实现热部署、监控、测试等功能，提高我们的开发和运维效率。
+
+		SpringBoot还支持多种IDE和构建工具，
+		如Eclipse, IntelliJ IDEA, Maven, Gradle等，
+		让我们可以方便地创建和管理SpringBoot项目。

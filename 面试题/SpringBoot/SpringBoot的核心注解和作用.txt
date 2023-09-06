@@ -1,0 +1,24 @@
+SpringBoot:
+	核心注解是@SpringBootApplication，它是一个组合注解，由以下三个注解组成：
+
+	@Configuration：
+		表示该类是一个配置类，可以用来定义Bean对象和配置信息。
+	@EnableAutoConfiguration：
+		表示启用自动配置，让SpringBoot根据项目中的依赖和配置来自动配置合适的Bean对象。
+	@ComponentScan：
+		表示扫描当前包及其子包下的所有组件（如@Controller, @Service, @Repository等），
+		并将它们注册到Spring容器中。
+
+
+@SpringBootApplication注解的作用是：
+
+	简化配置：使用该注解可省略很多繁琐的配置，如XML配置文件、Bean定义等，
+		让我们只需要指定少量的参数，就可以创建一个可运行的SpringBoot应用程序。
+
+	集成自动配置：
+		使用该注解可以自动加载SpringBoot提供的一系列的自动配置，
+		如数据源、事务管理、Web容器、安全、缓存等，让我们无需手动配置这些常用的功能。
+
+	扫描组件：
+		使用该注解可以自动扫描当前包及其子包下的所有组件，
+		并将它们注册到Spring容器中，无需手动指定@ComponentScan的basePackages属性。

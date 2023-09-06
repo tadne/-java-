@@ -1,0 +1,74 @@
+生产者消费者模型:
+	一种经典的并发编程模式，
+	描述了多个生产者线程和多个消费者线程间通过共享的缓冲区进行数据交换的过程。
+
+	生产者线程负责向缓冲区中放入数据，消费者线程负责从缓冲区中取出数据，缓冲区的容量是有限的
+	当缓冲区为空时，消费者线程需要等待生产者线程放入数据；
+	当缓冲区满时，生产者线程需要等待消费者线程取出数据。
+
+
+阻塞队列（BlockingQueue）可以简化生产者消费者模型实现，阻塞队列本身就提供了同步和阻塞的功能，
+		无需额外的锁和条件变量。
+
+阻塞队列有多种实现类，如ArrayBlockingQueue, LinkedBlockingQueue, PriorityBlockingQueue等，
+	这些都实现了BlockingQueue接口，提供了以下几个主要的方法：
+
+void put(E e)：
+		向队列尾部插入一个元素，如果队列已满，就阻塞当前线程，直到有空闲的位置。
+
+E take()：
+		从队列头部取出一个元素，并返回该元素，如果队列为空，就阻塞当前线程，直到有新的元素。
+
+boolean offer(E e, long timeout, TimeUnit unit)：
+	向队列尾部插入一个元素，并返回是否成功插入，
+	如果队列已满，就阻塞当前线程，直到有空闲的位置或者超过指定的时间。
+
+E poll(long timeout, TimeUnit unit)：
+	从队列头部取出一个元素，并返回该元素，
+	如果队列为空，就阻塞当前线程，直到有新的元素或者超过指定的时间。
+
+//用阻塞队列实现生产者消费者模型很简单,就是生产者不停放,消费者不停消费就完了
+
+用ArrayBlockingQueue实现的生产者消费者模型的示例：
+
+public class ProducerConsumerDemo {
+    // 定义一个容量为10的阻塞队列作为缓冲区
+    private static BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+    // 定义一个生产者类，实现Runnable接口
+    static class Producer implements Runnable {
+        @Override
+        public void run() {
+            try {
+                int i = 0;
+                while (true) {
+                    // 向队列中放入一个整数，并打印信息
+                    queue.put(i);
+                    i++;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    // 定义一个消费者类，实现Runnable接口
+    static class Consumer implements Runnable {
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    // 从队列中取出一个整数，并打印信息
+                    int i = queue.take();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void main(String[] args) {
+        // 创建两个生产者线程和三个消费者线程，并启动它们
+        for (int i = 0; i < 2; i++) 
+            new Thread(new Producer(), "P" + i).start();
+        for (int i = 0; i < 3; i++) 
+            new Thread(new Consumer(), "C" + i).start();
+    }
+}
