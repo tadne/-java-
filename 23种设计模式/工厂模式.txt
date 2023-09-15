@@ -1,0 +1,258 @@
+工厂模式
+	一种设计模式，
+
+思想:
+	将对象的创建过程封装在一个工厂类中，而不是直接使用new关键字创建对象。
+
+原理：
+	抽象产品：	定义一个产品的接口或抽象类，描述产品的公共属性和方法。
+	具体产品：	实现或继承抽象产品，表示具体的产品类型。
+	抽象工厂：	定义一个工厂的接口或抽象类，声明创建产品的方法。
+	具体工厂：	实现或继承抽象工厂，根据不同的参数或条件，创建并返回具体的产品对象。
+
+
+	抽象工厂是以接口为对象的面向对象思想	
+				如 鼠标,键盘接口,可以有戴尔鼠标,惠普键盘等实现
+				就是抽象对象 
+	具体工厂就是以接口为概念相似代码抽取:  	
+				如 大叫 概念接口,可以有狗叫,猫叫等实现
+				就是抽象方法
+
+作用：
+
+	封装对象的创建过程：
+		将对象的创建过程封装在一个工厂类中，而不是直接使用new关键字创建对象。
+		降低代码的耦合度，提高代码的可维护性和可扩展性。
+	实现多态性：
+		工厂模式可以根据不同的参数或条件，创建并返回不同类型的对象。
+		实现多态性，让对象的类型在运行时决定，而不是在编译时决定。
+	实现产品族：
+		工厂模式可以实现产品族的概念，即一系列相关或相互依赖的产品对象。
+		保证产品对象的一致性和完整性。
+
+
+工厂模式的实现有多种方式，以下是一些常见的实现方式：
+
+	简单工厂：只有一个工厂类，根据传入的参数或条件，创建并返回不同类型的产品对象。
+		简单易用，但不符合开闭原则，如果需要增加新的产品类型，就要修改工厂类的代码。
+
+	工厂方法：每个具体产品都有一个对应的具体工厂类，负责创建该类型的产品对象。
+		符合开闭原则，如果需要增加新的产品类型，只需要增加新的具体工厂类即可。
+		但是会增加类的数量和复杂度。
+	抽象工厂：每个具体工厂类可以创建一系列相关或相互依赖的产品对象。
+		可以实现产品族的概念，例如不同风格的家具、不同品牌的电器等。
+		但是如果要增加新的产品类型或产品族，要修改抽象工厂和所有的具体工厂类。
+
+示例代码：
+
+// 简单工厂
+	// 抽象产品
+	public interface Shape {
+	    // 绘制方法
+	    void draw();
+	}
+
+	// 具体产品
+	public class Circle implements Shape {
+	    @Override
+	    public void draw() {
+	        System.out.println("Draw a circle");
+	    }
+	}
+
+	public class Square implements Shape {
+	    @Override
+	    public void draw() {
+	        System.out.println("Draw a square");
+	    }
+	}
+
+	public class Triangle implements Shape {
+	    @Override
+	    public void draw() {
+	        System.out.println("Draw a triangle");
+	    }
+	}
+
+	// 工厂类
+	public class ShapeFactory {
+	    // 根据传入的参数创建并返回不同类型的产品对象
+	    public static Shape getShape(String type) {
+	        if (type == null) {
+	            return null;
+	        }
+	        if (type.equalsIgnoreCase("circle")) {
+	            return new Circle();
+	        } else if (type.equalsIgnoreCase("square")) {
+	            return new Square();
+	        } else if (type.equalsIgnoreCase("triangle")) {
+	            return new Triangle();
+	        }
+	        return null;
+	    }
+	}
+
+// 工厂方法
+	// 抽象产品
+	public interface Animal {
+	    // 叫声方法
+	    void makeSound();
+	}
+
+	// 具体产品
+	public class Cat implements Animal {
+	    @Override
+	    public void makeSound() {
+	        System.out.println("Meow");
+	    }
+	}
+
+	public class Dog implements Animal {
+	    @Override
+	    public void makeSound() {
+	        System.out.println("Woof");
+	    }
+	}
+
+	public class Duck implements Animal {
+	    @Override
+	    public void makeSound() {
+	        System.out.println("Quack");
+	    }
+	}
+
+	// 抽象工厂
+	public interface AnimalFactory {
+	    // 创建并返回产品对象的方法
+	    Animal createAnimal();
+	}
+
+	// 具体工厂
+	public class CatFactory implements AnimalFactory {
+	    @Override
+	    public Animal createAnimal() {
+	        return new Cat();
+	    }
+	}
+
+	public class DogFactory implements AnimalFactory {
+	    @Override
+	    public Animal createAnimal() {
+	        return new Dog();
+	    }
+	}
+
+	public class DuckFactory implements AnimalFactory {
+	    @Override
+	    public Animal createAnimal() {
+	        return new Duck();
+	    }
+	}
+
+	// 测试类
+	public class TestFactoryMethod {
+	    public static void main(String[] args) {
+	        // 使用具体工厂类创建并获取不同类型的产品对象
+	        AnimalFactory catFactory = new CatFactory();
+	        Animal cat = catFactory.createAnimal();
+	        cat.makeSound();
+	        AnimalFactory dogFactory = new DogFactory();
+	        Animal dog = dogFactory.createAnimal();
+	        dog.makeSound();
+	        AnimalFactory duckFactory = new DuckFactory();
+	        Animal duck = duckFactory.createAnimal();
+	        duck.makeSound();
+	    }
+	}
+
+// 抽象工厂
+	// 抽象产品
+	public interface Keyboard {
+	    // 输入方法
+	    void input();
+	}
+
+	public interface Mouse {
+	    // 点击方法
+	    void click();
+	}
+
+	// 具体产品
+	public class DellKeyboard implements Keyboard {
+	    @Override
+	    public void input() {
+       		 System.out.println("Input with Dell keyboard");
+    	    }	
+	}
+
+	public class DellMouse implements Mouse {
+	    @Override
+	    public void click() {
+	        System.out.println("Click with Dell mouse");
+	    }
+	}
+
+	public class HpKeyboard implements Keyboard {
+	    @Override
+	    public void input() {
+	        System.out.println("Input with Hp keyboard");
+	    }
+	}
+
+	public class HpMouse implements Mouse {
+	    @Override
+	    public void click() {
+	        System.out.println("Click with Hp mouse");
+	    }
+	}
+	
+	// 抽象工厂
+	public interface ComputerFactory {
+	    // 创建并返回键盘对象的方法
+	    Keyboard createKeyboard();
+	    // 创建并返回鼠标对象的方法
+	    Mouse createMouse();
+	}
+
+	// 具体工厂
+	public class DellComputerFactory implements ComputerFactory {
+	    @Override
+ 	    public Keyboard createKeyboard() {
+       		return new DellKeyboard();
+	    }
+
+	    @Override
+	    public Mouse createMouse() {
+	        return new DellMouse();
+	    }
+	}
+
+	public class HpComputerFactory implements ComputerFactory {
+ 	   @Override
+ 	   public Keyboard createKeyboard() {
+ 	       return new HpKeyboard();
+ 	   }
+
+ 	   @Override
+ 	   public Mouse createMouse() {
+ 	       return new HpMouse();
+	    }
+	}
+
+	// 测试类
+	public class TestAbstractFactory {
+	    public static void main(String[] args) {
+	        // 使用具体工厂类创建并获取一系列相关的产品对象
+	        ComputerFactory dellComputerFactory = new DellComputerFactory();
+	        Keyboard dellKeyboard = dellComputerFactory.createKeyboard();
+	        dellKeyboard.input();
+ 	       Mouse dellMouse = dellComputerFactory.createMouse();
+ 	       dellMouse.click();
+	
+  	      ComputerFactory hpComputerFactory = new HpComputerFactory();
+  	      Keyboard hpKeyboard = hpComputerFactory.createKeyboard();
+ 	       hpKeyboard.input();
+	        Mouse hpMouse = hpComputerFactory.createMouse();
+ 	       hpMouse.click();
+ 	   }
+	}

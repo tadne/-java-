@@ -1,0 +1,52 @@
+SpringBoot
+	基于Spring的Java框架，可以简化Java应用程序的开发和部署。
+
+
+SpringBoot提供了多种方式来实现异常处理：
+
+自定义错误页面：
+	SpringBoot默认的处理异常的机制:
+		一旦程序中出现了异常，SpringBoot就向/error的url发送请求，
+		然后跳转到默认显示异常的页面来展示异常信息。
+	如果需要将所有的异常统一跳转到自定义的错误页面，要在src/main/resources/templates
+		目录下创建error.html页面。
+
+
+@ExceptionHandler注解：
+	可以在Controller类中定义一个或多个方法，用@ExceptionHandler注解来指定捕获异常的类型，
+	然后在方法中封装异常信息和视图名称，返回一个ModelAndView对象。
+
+	这可以自定义异常信息存储的key和跳转视图名称，但要编写大量异常处理方法，且不能跨Controller
+
+@ControllerAdvice+@ExceptionHandler注解：
+	可以在一个单独的类中使用@ControllerAdvice注解来标识这个类是全局异常处理类，
+	然后在这个类中定义多个方法，用@ExceptionHandler注解来指定捕获异常的类型，
+		并在方法中封装异常信息和视图名称，返回一个ModelAndView对象。
+
+	这可以实现跨Controller的异常处理，但仍需要编写大量的异常处理方法，代码冗余。
+
+
+SimpleMappingExceptionResolver：
+	可以在配置类中定义一个SimpleMappingExceptionResolver类型的bean，
+		并设置它的exceptionMappings属性，这是一个Properties对象，
+		可指定异常类型和视图名称的映射关系。
+
+	这可以简化代码量，但是不能自定义异常信息存储的key。
+
+
+自定义全局异常处理：
+	可以自定义一个接口来定义错误码和错误描述，然后自定义枚举类来实现这个接口，
+		并定义不同类型的错误信息。
+	然后就可以自定义一个异常类来继承RuntimeException，并包含错误码和错误描述两个属性。
+	再自定义一个数据传输类来封装响应结果，包括状态码、消息和数据三个属性。
+	最后可以自定义一个全局异常处理类，并用@ControllerAdvice和@ResponseBody注解标识这个类
+		是全局异常处理类，并返回JSON格式的数据。
+	在这个类中可以用@ExceptionHandler注解来捕获不同类型的异常，
+		并根据异常类型返回相应的数据传输对象。
+	
+	这可以实现更优雅和人性化的全局异常处理。
+
+
+
+
+

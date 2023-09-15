@@ -9,6 +9,7 @@
 		end;
 
 	查看	show triggers;
+
 	删除	drop trigger [数据库名.]触发器名	--默认为当前数据库
 
 

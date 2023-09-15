@@ -1,8 +1,8 @@
 Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 
-			2009 JDK 6u14体验
-			2012  JDK 7u4官方支持
-			2017 JDK 9  默认
+		在jdk中进程	2009 JDK 6u14体验
+				2012 JDK 7u4 官方支持
+				2017 JDK 9   默认
 
 		适用场景
 			同时注重吞吐量和低延迟,默认的暂停目标是200ms
@@ -15,24 +15,24 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 	-		-XX:MaxGCPauseMills=time	
 
 
-	G1回收
-		阶段
+	
+	阶段
 		young Collection:			新生代垃圾回收
 	
 		Young Collection+Concurrent Mark:	新生代垃圾回收+并发标记
 		
 		Mixed Collection:			混合收集
 
+	
 		先新生代垃圾收集
-
-		当老年代内存超过阈值,新生代垃圾回收时,会开启并发标记,然后进行混合收集,
+		当老年代内存超过阈值时,下一次新生代垃圾回收会开启并发标记,并进行混合收集,
 			对新生代,老年代区域垃圾回收
 
 
 		工作流程
 		young Collection:		会STW,停止其他用户线程
 
-			就是先伊甸园,伊甸园满了后会进行新生代垃圾回收,复制幸存对象到幸存区to
+			先伊甸园垃圾回收,伊甸园满了后会进行新生代垃圾回收,复制幸存对象到幸存区to
 			交换幸存区from和幸存区to位置,当幸存区内快存满了,再次垃圾回收
 			一定时间后,一些年龄达到的就晋升老年代
 			
@@ -50,7 +50,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 					通过post-writer barrier + dirty carf queue队列
 					用线程concurrentRefinementThreads更新RememberedSet
 
-		Young Collection+Concurrent Mark:	
+		Young Collection + Concurrent Mark:	
 			新生代垃圾收集时对根对象GCRoot初始标记
 			老年代占用堆空间比例达到阈值时,进行并发标记(不会停止用户线程STW)
 			阈值:	-XX:InitiatingHeapOccupancyPercent=percent)(默认45%)
@@ -60,12 +60,13 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 				新生代:	伊甸园区进行复制算法到幸存区,到年龄就晋升老年代
 				老年代:	采用复制算法将幸存对象复制到老年代另一个区域
 					G1垃圾回收器会根据最大暂停时间有选择的回收
-					(对可能垃圾较多的区域回收,减少暂停时间达到目标)
+					(只对可能垃圾较多的区域回收,减少暂停时间达到目标)
 
 		
 		Mixed Collection:
 				进行最终标记(防止并发下的引用改变)	会STW暂停用户线程
 				拷贝存活	(如上)			会STW
+
 
 
 

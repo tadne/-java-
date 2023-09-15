@@ -1,0 +1,175 @@
+代理模式
+	一种设计模式，
+
+思想:	通过一个代理对象来代替或控制对一个真实对象的访问。
+
+
+作用：
+
+	增强功能：	可以在不修改真实对象的情况下，为真实对象增加一些额外的功能，
+			如日志、缓存、权限控制等。
+	延迟加载：	可以实现延迟加载，即在真正需要使用真实对象时才创建和初始化真实对象，
+			节省资源和提高性能。
+	隔离风险：	可以隔离真实对象和客户端之间的风险，
+			如网络异常、安全问题、远程调用等。
+
+原理：
+	抽象主题：定义一个主题的接口或抽象类，描述真实对象和代理对象的公共属性和方法。
+	真实主题：实现或继承抽象主题，表示真实的业务逻辑对象。
+	代理主题：实现或继承抽象主题，持有和控制对真实主题的访问。
+		代理主题可以在调用真实主题的方法之前或之后执行一些额外的操作。
+
+
+以下是一些常见的实现方式：
+
+	静态代理：	
+		编译时就确定代理类和真实类的关系，代理类需要实现和真实类相同的接口，
+			并持有一个真实类的引用。
+		简单易用，但不够灵活，如果需要增加新的真实类或接口，就要修改或增加新的代理类。
+
+	动态代理：
+		在运行时动态地创建代理类和真实类的关系，代理类不需要实现和真实类相同的接口，
+			而是通过反射机制来调用真实类的方法。
+		可以避免修改或增加新的代理类，但性能较低，而且要使用特定的API或框架。
+
+	CGLIB代理：
+		在运行时动态地创建代理类和真实类的关系，代理类不需要实现和真实类相同的接口，
+			而是通过继承真实类来重写其方法。
+		可以避免修改或增加新的代理类，而且性能较高，但不能对final修饰的方法进行代理。
+
+示例代码：
+// 静态代理
+	// 抽象主题
+	public interface UserService {
+	    // 注册用户方法
+	    void register(String name, String password);
+	    // 登录用户方法
+	    boolean login(String name, String password);
+	}
+
+	// 真实主题
+	public class UserServiceImpl implements UserService {
+	    @Override
+	    public void register(String name, String password) {
+	        System.out.println("Register user: " + name + ", " + password);
+	    }
+
+	    @Override
+	    public boolean login(String name, String password) {
+	        System.out.println("Login user: " + name + ", " + password);
+	        return true;
+	    }
+	}
+
+	// 代理主题
+	public class UserServiceProxy implements UserService {
+	    // 持有一个真实主题的引用
+	    private UserService userService;
+	
+	    // 通过构造方法传入真实主题对象
+	    public UserServiceProxy(UserService userService) {
+	        this.userService = userService;
+	    }
+
+	    @Override
+	    public void register(String name, String password) {
+	        // 在调用真实主题方法之前执行一些操作
+	        System.out.println("Start register");
+	        // 调用真实主题方法
+	        userService.register(name, password);
+	        // 在调用真实主题方法之后执行一些操作
+	        System.out.println("End register");
+	    }
+
+	    @Override
+	    public boolean login(String name, String password) {
+	        // 在调用真实主题方法之前执行一些操作
+	        System.out.println("Start login");
+	        // 调用真实主题方法
+	        boolean result = userService.login(name, password);
+	        // 在调用真实主题方法之后执行一些操作
+	        System.out.println("End login");
+	        return result;
+	    }
+	}
+
+	// 测试类
+	public class TestStaticProxy {
+	    public static void main(String[] args) {
+	        // 创建真实主题对象
+	        UserService userService = new UserServiceImpl();
+	        // 创建代理主题对象，并传入真实主题对象
+	        UserService userServiceProxy = new UserServiceProxy(userService);
+	        // 通过代理主题对象调用方法
+	        userServiceProxy.register("Alice", "123456");
+	        userServiceProxy.login("Alice", "123456");
+	    }
+	}
+
+// 动态代理
+	// 抽象主题
+	public interface Calculator {
+	    // 加法方法
+	    int add(int a, int b);
+	    // 减法方法
+	    int subtract(int a, int b);
+	}
+
+	// 真实主题
+	public class CalculatorImpl implements Calculator {
+	    @Override
+	    public int add(int a, int b) {
+	        System.out.println("Add: " + a + " + " + b);
+	        return a + b;
+	    }
+
+	    @Override
+	    public int subtract(int a, int b) {
+	        System.out.println("Subtract: " + a + " - " + b);
+	        return a - b;
+	    }
+	}
+
+	// 代理类
+	public class CalculatorProxy implements InvocationHandler {
+	    // 持有一个真实主题的引用
+	    private Object target;
+
+	    // 通过构造方法传入真实主题对象
+	    public CalculatorProxy(Object target) {
+	        this.target = target;
+	    }
+
+	    // 通过静态方法创建并返回代理对象
+	    public static Object getProxy(Object target) {
+	        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+                	target.getClass().getInterfaces(),
+                	new CalculatorProxy(target));
+    	     }
+
+	    @Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+	        // 在调用真实主题方法之前执行一些操作
+	        System.out.println("Start invoke");
+	        // 通过反射机制调用真实主题方法
+	        Object result = method.invoke(target, args);
+	        // 在调用真实主题方法之后执行一些操作
+        	System.out.println("End invoke");
+        	return result;
+	    }
+	}
+
+	// 测试类
+	public class TestDynamicProxy {
+	    public static void main(String[] args) {
+	        // 创建真实主题对象
+	        Calculator calculator = new CalculatorImpl();
+	        // 创建代理对象，并传入真实主题对象
+	    Calculator calculatorProxy = (Calculator) CalculatorProxy.getProxy(calculator);
+        	// 通过代理对象调用方法
+        	calculatorProxy.add(1, 2);
+        	calculatorProxy.subtract(3, 1);
+    		}
+	}
+
+

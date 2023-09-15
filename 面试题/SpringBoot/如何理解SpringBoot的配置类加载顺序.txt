@@ -1,0 +1,95 @@
+SpringBoot:
+	基于Spring的Java框架，可以简化Java应用程序的开发和部署。
+
+
+SpringBoot的配置类加载顺序:
+	SpringBoot在启动时，按照一定的顺序加载不同来源和类型的配置信息，
+		从而影响应用程序的行为和属性。
+
+SpringBoot的配置类加载顺序主要有以下几个特点：
+
+优先级：
+	配置类加载顺序的优先级由高到低，即优先级高的配置会覆盖优先级低的配置。
+	如，命令行参数的优先级高于application.properties，如果两者有相同的配置项，命令行参数生效
+
+灵活性：	
+	配置类加载顺序可以通过一些方式进行调整和自定义，
+	如用@PropertySource注解指定额外的配置文件，用@Profile注解指定不同的环境配置，
+	用spring.config.location和spring.config.name属性指定自定义的配置文件位置和名称等。
+
+多样性：
+	配置类加载顺序涵盖了多种不同的配置来源和类型，
+	如properties文件、YAML文件、系统环境变量、命令行参数、Devtools全局配置、
+		TestPropertySource注解、SpringBootTest注解、ServletConfig初始化参数、
+		ServletContext初始化参数、JNDI参数、Java系统参数、操作系统环境变量、
+		RandomValuePropertySource随机数、JAR包外部或内部的配置文件、默认参数等⁴。
+
+具体来说，SpringBoot的配置类加载顺序如下表所示：(优先级从上到下递减)
+
+|    |	 配置来源	 		|	 配置类型 
+| 1  | Devtools全局配置 	 		| devtools.properties 			|
+| 2  | TestPropertySource注解 		| @TestPropertySource 			|
+| 3  | SpringBootTest注解		| @SpringBootTest 			|
+| 4  | 	命令行参数 	 		| --name=value 				|
+| 5  | SPRING_APPLICATION_JSON属性 	| JSON格式 				|
+| 6  | ServletConfig初始化参数 		| web.xml或代码 				|
+| 7  | ServletContext初始化参数 		| web.xml或代码 				|
+| 8  | JNDI参数 				| java:comp/env/spring.application.json |
+| 9  | Java系统参数 			| System.getProperties() 		|
+| 10 | 操作系统环境变量 			| System.getenv() 			|
+| 11 | RandomValuePropertySource随机数 	| random.* 				|
+| 12 | JAR包外部的profile相关配置文件 	| application-{profile}.properties
+						或application-{profile}.yml 	|
+| 13 | JAR包内部的profile相关配置文件 	| application-{profile}.properties
+						或application-{profile}.yml 	|
+| 14 | JAR包外部的默认配置文件 		| application.properties或application.yml|
+| 15 | JAR包内部的默认配置文件 		| application.properties或application.yml|
+| 16 | PropertySource注解指定的配置文件	| @PropertySource 			|
+| 17 | 默认参数 				| SpringApplication.setDefaultProperties|
+
+
+全局配置>测试类配置>命令行>初始化参数>系统参数>jar包外参数>jar包内参数>@PropertySource>默认
+
+
+
+
+yml和properties是两种不同的配置文件格式，
+	都可以用来存储SpringBoot应用程序的配置信息。
+	yml是一种基于缩进的层次化数据结构，可以表示更复杂的配置信息，
+	properties是一种基于键值对的简单数据结构，更适合表示简单的配置信息。
+
+	yml和properties优先级取决于它们所在的位置和是否与profile相关。
+		一般来说，JAR包外部profile相关配置文件优先级小于JAR包内部profile相关配置文件，
+		JAR包外部的默认配置文件的优先级大于JAR包内部的默认配置文件。
+		如果同一个位置有多个格式的配置文件，那么yml文件会覆盖properties文件。
+
+
+bootstrap是一种特殊的配置文件，
+	主要用于Spring Cloud应用程序，可以用来加载一些外部的配置源，
+		如Config Server, Consul, Zookeeper等。
+	bootstrap文件会在application文件前加载，因此可以覆盖application文件中的配置信息。
+
+
+	也就是说,无论什么时候,bootstrap都优先yml和properties.在相同位置时,yml优先于properties
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

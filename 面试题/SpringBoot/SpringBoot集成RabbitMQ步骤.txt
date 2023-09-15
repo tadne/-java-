@@ -1,0 +1,37 @@
+rabbitMQ	一个开源的消息队列系统，它可以实现异步、解耦、可靠的消息传递。
+
+
+
+SpringBoot集成rabbitMQ有以下几个步骤：
+
+	添加依赖：	
+		添加spring-boot-starter-amqp依赖，
+		会自动引入rabbitMQ的客户端库和Spring AMQP的抽象层。
+
+	配置属性：
+		在application.yml文件中配置rabbitMQ的相关属性，
+		如host, port, username, password等。
+
+	创建连接工厂：
+		配置类中创建一个CachingConnectionFactory类型的bean，用于创建和管理rabbitMQ的连接
+		这个bean会自动使用application.yml文件中的属性进行初始化。
+
+	创建消息模板：
+		配置类中创建一个RabbitTemplate类型的bean，用于发送和接收消息。
+		这个bean会自动使用CachingConnectionFactory类型的bean作为连接工厂。
+
+	创建消息监听器：	
+		在配置类中创建一个SimpleMessageListenerContainer类型的bean，
+			用于监听指定的队列，并处理接收到的消息。
+		这个bean需要设置连接工厂、队列名称、消息监听器等属性。
+
+	创建消息转换器：
+		配置类中创建一个MessageConverter类型的bean	,用于将Java对象和字节数组之间进行转换。
+			这个bean可以是SimpleMessageConverter, Jackson2JsonMessageConverter, 			JavaSerializationMessageConverter等不同实现类，根据不同消息格式选择
+
+	发送和接收消息：	
+		业务类中注入RabbitTemplate类型的bean，
+			使用它的send或convertAndSend方法发送消息，
+			使用它的receive或receiveAndConvert方法接收消息。
+
+

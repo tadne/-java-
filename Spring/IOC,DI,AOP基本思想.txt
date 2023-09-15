@@ -7,11 +7,10 @@ IOC:	Inversion of Controller		控制翻转
 DI:	Dependency Injection		依赖注入
 	作用:	强调Bean之间的关系,这种关系第三方负责设置
 	
-	例:	就是说bean1如果要调用bean2,那么原来可能会需要在代码中注入bean1和bean2
-		然后将bean2设置给bean1.
+	例:	就是说bean1如果要调用bean2,原来要在代码中注入bean1和bean2,然后将bean2设置给bean1.
 		但是DI就可以在第三方就将bean2设置给bean1,实现间接引用
 
-aop:	Aspect Or iented Programming	面向切面编程
+aop:	 Aspect Or iented Programming	面向切面编程
 	功能的横向抽取,实现方式是Proxy代理模式
 	作用:	对bean功能增强
 
@@ -24,5 +23,5 @@ aop:	Aspect Or iented Programming	面向切面编程
 	具备扩展性
 	
 	基础框架:	基本业务逻辑框架:	MyBatis,Spring,SpringMVC,Stuts2,Hibernate等
-	服务框架:	特定领域:MQ,ES,Nacos
+	服务框架:	特定领域:			RabbitMQ,ElaticSerch,Nacos,Redis
 	

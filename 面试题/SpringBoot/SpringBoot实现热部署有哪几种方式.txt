@@ -1,0 +1,81 @@
+热部署/热启动:
+	
+	服务器不用重新启动就可以更新页面
+
+
+
+相关概念:
+	重启:Restart	自定义开发代码,包含类,页面,配置文件等,加载位置restart类加载器
+	重载:ReLoad	jar包,加载位置base类加载器
+	
+	
+	热部署就是Restart过程,相比于重载项目节约很多时间
+
+
+
+方式:
+
+
+使用Spring Boot Devtools：
+		Spring Boot提供的一个开发工具，可以实现热部署，
+		提高开发者的开发效率，无需手动重启Spring Boot应用。
+		
+	使用步骤:
+		idea可以设置自动build
+
+		Settings===>Build,Execution...===>Compiler====>Build project automatically
+		按ctrl+alt+shift+/===>Register====>compiler.automake.allow.when.app.runing
+	
+		默认:	idea失去焦点5秒后自动build	
+	
+		范围配置
+			默认不触发重启的目录列表:
+			/META-INF/maven
+			/META_INF/resources
+			/resources
+			/static
+			/public 
+			/templates
+		修改不参与重启目录
+			spring.devtools.restart.exclude=XXX
+		关闭热部署
+			spring.devtools.restart.enable: false
+		也可以直接设置在java系统配置中保证优先级
+			System.setProperty("spring.devtools.restart.enable","false");
+
+			
+	Devtools的原理:
+		是两个类加载器，一个加载不会改变的类，另一个加载会改变的类，	
+		检测到类路径上的文件变化时，会丢弃旧的类加载器，
+		创建新的类加载器，从而实现快速重启。
+
+	特点:	作用范围广，系统的任何变动包括配置文件修改、方法名称变化都能覆盖，
+		但后遗症也非常明显，是采用文件变化后重启的策略来实现，
+		节省了我们手动点击重启的时间，提高了实效性，在体验上会稍差。
+
+		其实配合ide还可以,蛮好用的
+
+
+
+使用JRebel：JRebel:
+	商业化的Java热部署工具，可以实现代码修改后无需重启应用程序就使新的代码生效。
+	支持多种框架和技术，包括Spring Boot。用JRebel需要安装相应的插件，并激活许可证。
+		
+	JRebel的原理:
+		通过字节码操作技术，在运行时修改类的定义，从而实现热替换。
+
+	这个最好,但要收费		
+
+使用Spring Loaded：
+	基于Java Agent的热部署工具，可以实现代码修改后无需重启应用程序就使新的代码生效。
+	支持多种框架和技术，包括Spring Boot。
+	用Spring Loaded要下载相应jar包，并在启动命令中添加-javaagent参数。
+
+	Spring Loaded的原理:
+		通过字节码操作技术，在运行时修改类的定义，从而实现热替换。
+
+
+
+
+
+

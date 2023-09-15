@@ -1,0 +1,109 @@
+单例模式
+	一种设计模式，
+
+思想:	是保证一个类只有一个实例，并提供一个全局访问点。
+
+
+原理：
+
+	私有化构造方法：		将类的构造方法私有化，防止外部通过new关键字创建多个实例。
+	提供静态变量或方法：	在类中提供一个静态变量或方法，用于存储或返回唯一的实例。
+	考虑线程安全：		在多线程环境下，要考虑线程安全的问题，
+				避免多个线程同时访问静态变量或方法，导致创建多个实例。
+
+作用：
+	保证对象的唯一性：
+		单例模式保证类只有一个实例，并提供一个全局访问点。
+		避免对象的重复创建和销毁，节省资源和内存。
+	实现全局变量：
+		单例模式实现全局变量的功能，即在不同的类或方法中都可以访问同一个对象。
+		方便地共享数据和状态，提高代码的一致性和效率。
+	控制对象的访问权限：
+		单例模式控制对象的访问权限，即只有通过特定的方式才能获取对象的引用。
+		防止对象被随意修改或篡改，增加代码的安全性和可控性。
+
+
+单例模式的实现有多种方式，以下是一些常见的实现方式：
+
+	饿汉式：	在类加载时创建唯一的实例，并存在静态变量中。
+		简单易实现，如果实例没有被使用可能导致资源浪费。
+
+	懒汉式：	在第一次调用静态方法时创建唯一实例，存在静态变量中。可以实现延迟加载，
+		但需要考虑线程安全的问题，可使用同步代码块或双重检查锁定等方式来保证线程安全。
+
+	枚举式：	用枚举类型来定义单例类，并提供一个枚举常量作为唯一的实例。
+		可以避免反射和序列化的攻击，但是不能实现延迟加载。
+
+	静态内部类式：
+		在单例类中定义静态内部类，在该类中创建唯一的实例，并提供一个静态方法来返回该实例。
+		可以实现延迟加载，也可以保证线程安全，利用了类加载机制。
+
+以下是用Java语言实现的单例模式的示例代码：
+
+	// 饿汉式
+	public class Singleton1 {
+	    // 在类加载时就创建唯一的实例
+	    private static final Singleton1 instance = new Singleton1();
+	
+	    // 私有化构造方法
+	    private Singleton1() {}	
+
+	    // 提供一个公共的静态方法来返回唯一的实例
+	    public static Singleton1 getInstance() {
+	        return instance;
+	    }	
+	}
+
+	// 懒汉式（双重检查锁定）
+	public class Singleton2 {
+	    // 声明一个静态变量来存储唯一的实例
+	    private static volatile Singleton2 instance;
+	    // 私有化构造方法
+	    private Singleton2() {}
+	    // 提供一个公共的静态方法来返回唯一的实例
+	    public static Singleton2 getInstance() {
+	        // 第一次检查，如果实例为空，则进入同步代码块
+	        if (instance == null) {
+	            synchronized (Singleton2.class) {
+	                // 第二次检查，如果实例仍然为空，则创建唯一的实例
+	                if (instance == null) {
+	                    instance = new Singleton2();
+	                }
+	            }
+        	}
+        	return instance;
+    		}
+	}
+
+	// 枚举式
+	public enum Singleton3 {
+   		 // 定义一个枚举常量作为唯一的实例
+   		 INSTANCE;
+
+   		 // 可以定义一些其他的属性和方法
+   		 private String name;
+
+   		 public String getName() {
+   		     return name;
+   		 }
+
+   		 public void setName(String name) {
+      		     this.name = name;
+    		 }
+	}
+
+	// 静态内部类式
+	public class Singleton4 {
+    		// 私有化构造方法
+    		private Singleton4() {}
+
+    		// 定义一个静态内部类，并在该类中创建唯一的实例
+    		private static class Inner {
+    		    private static final Singleton4 instance = new Singleton4();
+    		}
+
+    		// 提供一个公共的静态方法来返回唯一的实例
+    		public static Singleton4 getInstance() {
+    		    return Inner.instance;
+    		}
+	}

@@ -6,13 +6,13 @@
 	所以,在创建视图时,主要工作落在sql查询语句中
 
 
-语法:	创建:create [or replace] view 视图名称 as selec语句 [with[casaded]|local] check option]
+语法:	创建:create [or replace] view 视图名称 as selec语句[with[casaded]|local]check option]
 		
 
 	查询:	show create view 视图名;		# 查询创建视图语句
 		select * from 视图名称 where...;	# 查询视图数据
 
-	修改:create or replace view 视图名称 as select语句 [with[casaded]|local] check option];
+	修改:create or replace view 视图名称 as select语句 [with[casaded]|local]check option]
 	     alter view 视图名称[(列表名)] as select语句 [with[casaded]|local] check option];
 
 	删除:	drop view [if exist] 视图名称;

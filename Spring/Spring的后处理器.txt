@@ -7,11 +7,18 @@ Spring的后处理器
 	就是在Bean的创建流程中,穿插一些代码,对bean进行修改...
 
 	主要有两种后处理器
-	BeanFactoryPostProcessor:	
+	BeanFactoryPostProcessor:	 	实例化阶段前,主要是注册bean或动态修改bean
 		Bean工厂后处理器,在BeanDefinitionMap填充完毕,Bean实例化之前执行
 
-	BeanPostProcessor:
+		作用:	可以对Bean的定义（配置元数据）进行修改或者注册，
+			如修改Bean的属性值，添加或删除Bean定义，注册其他Bean工厂后处理器等。
+
+	BeanPostProcessor:			初始化阶段中执行
 		Bean后处理器,在Bean实例化之后,填充到singletonObjects之前执行
+		before方法:	在bean属性注入之前
+		after方法: 	初始化方法执行之后
+
+		作用:	可以对Bean实例进行增强或者修改，如添加代理、修改属性值、执行初始化逻辑等
 
 
 
@@ -20,16 +27,16 @@ BeanFactoryPostProcessor  Bean工厂后处理器:
 	Bean工厂后处理器,在BeanDefinitionMap填充完毕,Bean实例化之前执行
 
 	BeanFactoryPostProcessor是一个接口规范,实现该接口的类只要交给Spring容器管理,
-		那么Spring就会回调该接口的方法,用于对BeanDefinition注册和修改的功能
+		Spring就会回调该接口的方法,用于对BeanDefinition注册和修改的功能
 
 	源码:
 	@FunctionalInterface
 	public interface BeanFactoryPostProcessor {
-  void postProcessBeanFactory(ConfigurableListableBeanFactory var1) throws BeansException;
+  		void postProcessBeanFactory(ConfigurableListableBeanFactory var1) throws BeansException;
 	}
 		
 	实现了 BeanFactoryPostProcessor 接口的类会被容器视为特殊的 bean 处理器。
-	当容器启动时，会先实例化所有实现了 BeanFactoryPostProcessor 接口的类
+	当容器启动时，会优先实例化实现了 BeanFactoryPostProcessor 接口的类
 
 	操作流程:
 		创建一个类实现BeanFactoryPostProcessor接口
@@ -37,7 +44,8 @@ BeanFactoryPostProcessor  Bean工厂后处理器:
 		实现其中的BeanFactoryPostProcessor方法
 		可以用方法参数factory获取想要操作的bean,对bean进行设置修改
 		(这个参数就是底层spring的bean信息对象BeanDefinition存放的地方,删改查都可以操作)
-		其中如果想要新增bean,就要使用BeanFactoryPostProcessor的子接口					BeanDefinitionRegistryProcessor专门用于注册BeanDefinition操作
+		其中如果想要新增bean,就要使用BeanFactoryPostProcessor的子接口					
+		BeanDefinitionRegistryProcessor专门用于注册BeanDefinition操作
 			可以创建一个类实现这个接口
 		写想操作的代码即可
 		
@@ -51,8 +59,7 @@ BeanFactoryPostProcessor  Bean工厂后处理器:
 		自定义后处理器完成注解@MyComponent的解析,解析后最终被Spring管理
 
 
-
-BeanPostProcessor:Bean后处理器
+BeanPostProcessor: Bean后处理器
 		在Bean实例化之后,填充到singletonObjects之前执行
 
 	操作流程

@@ -8,21 +8,51 @@ Application ClassLoader	应用类加载器(默认)classpath		上级为Extension
 
 
 
-双亲委派:	使用类加载器loadClass方法时,查找类的规则
+双亲委派:	一种类加载器的工作机制，可以保证类的加载的有序性和安全性。
+
+	原理:	当类加载器收到类加载的请求时，不会立即加载这个类，而是先将请求委托给它的父类加载器
+		每一个层的类加载器都是如此，直到最顶层的启动类加载器（Bootstrap ClassLoader）。
 	
-		先检查该类是否加载
-		有上级就委派上级
-		没有上级就委派Bootstrap
+		只有当父类加载器无法完成请求时（即在它的搜索范围内没有找到这个类），
+		子类加载器才会尝试自己去加载这个类。
 
-		如果Bootstrap也找不到,会调用findClass方法(每个类加载器自己扩展)来加载
+	优点：
+		可避免重复加载同一个类，因为类只会被它的定义类加载器（成功加载类的类加载器）
+		和所有的祖先类加载器所共享。
+
+		可保护Java核心库的安全，因为这些库都是由启动类加载器加载，
+		其他的类加载器无法替换或修改它们。
+
+	缺点：
+		不利于扩展和更新Java核心库，因为这些库只能由启动类加载器来加载，
+		启动类加载器只能从特定的路径下（如jre/lib）来寻找这些库。
+
+		不符合一些特殊场景的需求，如SPI（Service Provider Interface）机制，
+		需要由子类加载器来加载父类加载器无法访问的接口实现。
 
 
 
+	打破双亲委派的方式:
+		自定义类加载器，重写loadClass方法，改变默认的委派逻辑。
 
-线程上下文类加载器:	
+		用线程上下文类加载器（Thread Context ClassLoader），
+			让父类加载器请求子类加载器完成特定的类加载任务。
+		
+		用反射或字节码操作技术，绕过双亲委派机制，直接调用defineClass方法来定义类。
+
+
+线程上下文类加载器:	用于解决类加载器之间的交互问题的机制，可以让一个线程指定一个类加载器
+			加载特定的类或资源，而不是使用默认的类加载器。
+
+	作用:	为了破坏Java类加载委托机制，使程序可以逆向使用类加载器。 
+		如，Java提供了很多服务提供者接口（Service Provider Interface，SPI），
+		允许第三方为这些接口提供实现。常见的SPI有JDBC、JCE、JNDI、JAXP等。
+		SPI的接口由Java核心库来提供，实现代码则作为Java应用所依赖的jar包包含进类路径里。
+		
+	例:
 		使用jdbc时,需要加载driver驱动,但是不写Class.forName("com.mysql.jdbc.driver")		也可以让com.mysql.jdbc.driver正确加载
 		
-		因为在 JDBC 4.0 之后，引入了一种新的机制，叫做 SPI（Service Provider Interface），			它让 JDBC 驱动自动加载，不需要显式调用 Class.forName() 方法。
+		因为在 JDBC 4.0 之后，引入了一种新的机制，叫做SPI（Service Provider Interface）		它让 JDBC 驱动自动加载，不需要显式调用 Class.forName() 方法。
 		
 		SPI 原理:每个 JDBC 驱动包中，都有一个名为 META-INF/services/java.sql.Driver 
 		的文件，记录了该驱动包中实现了 java.sql.Driver 接口的类的全限定名。
@@ -30,11 +60,13 @@ Application ClassLoader	应用类加载器(默认)classpath		上级为Extension
 		从这些文件中读取驱动类的信息，然后自动加载并注册这些驱动类 。
 
 
-自定义类加载器:		希望加载任意路径文件
+自定义类加载器:	
+	使用需求:
+			希望加载任意路径文件
 			通过接口使用实现,希望解耦时
 			希望隔离,不同应用的同名类都可以加载
 		
-		步骤:	继承ClassLoader父类
+	步骤:		继承ClassLoader父类
 			遵从双亲委派机制,重写findClass方法
 			读取类文件字节码
 			调用父类的defineClasss方法加载类

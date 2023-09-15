@@ -29,12 +29,12 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
        	userService userService= (org.example.userService) 					beanFactory.getBean("userService");
 
 	DI:	bean间调用
-		再创建一个bean:	比如叫empDao
+		创建一个bean:	比如叫empDao
 		在userServiceImpl中写方法
 			private empDao empDao;
 			public void setEmpDao(empDaoImpl empDao) {
-		  System.out.println("BeanFactory调用方法获取userDao设置到此:"+empDao);
-			this.empDao=empDao;
+		  		System.out.println("BeanFactory调用方法获取userDao设置到此:"+empDao);
+				this.empDao=empDao;
 			}
 		//this.empDao=empDao;
 		//这一行是为了给private的这个局部变量赋值,方便以后其他方法调用
@@ -53,16 +53,17 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 
 
 
-	IOC:	控制翻转:	反转的是什么?反转的是Bean的创建权,将bean的创建交给BeanFactory
-	DI:	依赖注入:	注入的是什么?注入的是bean,实现不同bean之间的调用
+	IOC:	控制翻转:	反转的是什么?
+				反转的是Bean的创建权,将bean的创建交给BeanFactory
+	DI:	依赖注入:	注入的是什么?
+				注入的是bean,实现不同bean之间的调用
 				目标是在service层就实现业务逻辑
 
 	
 	总结流程:	定义接口和实现类
-			修改实现类代码,添加setXxx(Xxx xxx)用于接收注入的对象
+			修改实现类代码,添加setXxx(Xxx xxx)方法 用于接收注入的对象
 			修改Beans.xml文件,在要被注入的实现类bean中嵌入<propreity>
-			创建测试代码,获取实现类对象
-				这时,在获取对象时,setXxx方法就被执行了
+			创建测试代码,获取实现类对象,在获取对象时,setXxx方法就被执行了
 
 
 		虽然开发中不怎么使用BeanFactory,但是BeanFactory是底层
@@ -86,13 +87,19 @@ ApplicationContext快速入门
 
 
 	BeanFactory和ApplicationContext关系
+
 		1:BeanFactory是Spring的早期接口,称为Spring的Bean工厂,
 			ApplicationContext是后期更高级接口,称为Spring容器	
-		2:ApplicationContext在Beanfactory基础上对功能进行了扩展,如监听功能,国际化功能等
+
+		2:ApplicationContext在Beanfactory基础上对功能进行了扩展,
+			如监听功能,国际化功能,资源加载,aop配置,同时加载多个配置文件等
 			BeanFactory的API更底层,ApplicationContext的API多是对这些底层API封装
-		3:Bean创建主要逻辑和功能被封装在BeanFactory中,不仅基础了BeanFactory,而且内部还
+
+		3:Bean创建的主要逻辑和功能被封装在ApplicationContext中,不仅优化了BeanFactory,而且内部还
 			维护着BeanFactory的引用,所以既有继承关系,还有融合关系
-		4:Bean初始化时机不同,BeanFactory是在首次调用getBean的时候创建Bean,					而ApplicationContext是配置文件加载,容器已创建时将Bean实例化并初始化了	
+
+		4:Bean初始化时机不同,BeanFactory是在首次调用getBean的时候创建Bean,
+			而ApplicationContext是配置文件加载,容器已创建时将Bean实例化并初始化了	
 	
 
 	
