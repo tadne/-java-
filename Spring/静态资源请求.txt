@@ -16,9 +16,9 @@
 
 解决方式二:
 	在spring的xml中配置静态资源的映射,匹配映射路径指定位匹配资源
-	<mvc:resources mapping="/image/*" location="/img/">
+	<mvc:resources mapping="/image/*" location="/img/"/>
 	mapping:	映射资源虚拟路径
-	location:	匹配映射路径的请求到实际资源
+	location:		匹配映射路径的请求到实际资源
 	
 解决方式三:
 	在spring的xml中配置<mvc:default-servlet-handler> 
@@ -36,8 +36,7 @@
 
 	同样的,如果使用<mvc:resources mapping="/image/*" location="/img/">标签也会这样,
 		这个标签底层同样的注入了SimpleUrlHandlerMapping
-
-	但是,SimpleUrlHandlerMapping是不能解析注解的映射的,最终会导致访问404
+			SimpleUrlHandlerMapping是不能解析注解的映射的,最终会导致访问404
 
 
 

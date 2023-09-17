@@ -10,13 +10,19 @@
 
 请求数据的接收
 
-键值对形式接收数据	请求:	localhost://param/?paramName=value
+键值对形式接收数据	
+				请求:	localhost://param/?paramName=value
 		@RequestParam("paramName") String name		接收请求中的键值对数据
+
 				请求:	localhost://param/?param=value&param=value2
 		@RequestParam("param") String[] params		数组接收请求中同名数据
-		@RequestParam("param") List<String> params	集合接收请求中同名数据
-				请求:	localhost://param/?param1=value&param2=value2
-	@RequestParam("param") Map<String,String> params	map接收请求中不同名数据
+
+		@RequestParam("param") List<String> params	
+				请求:	localhost://param/?param1=value1&param2=value2
+													集合接收请求中同名数据
+
+		@RequestParam("param") Map<String,String> params	map
+													接收请求中不同名数据
 		
 
 		required属性:		要求当前参数是必要的
@@ -32,10 +38,10 @@
 
 
 	配置RequestMappingHandlerAdapter指定消息转换器,然后就直接可以获得对应对象
-	 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+<beanclass="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+         <beanclass="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
             </list>
         </property>
     </bean>
@@ -67,11 +73,14 @@
 
 	加依赖 commons-fileupload
 	配置文件上传解析器
-		    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>	
+	   <bean id="multipartResolver"
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>	
 
-	请求:	@PostMapping("/param")
+	请求:	
+		@PostMapping("/param")
 		public void methodName(@RequestBody MultipartFile myFile){
-			sout(myFile)
+			sout(myFile);
+			//对文件的操作
 		}
 	
 请求头数据信息
@@ -80,11 +89,11 @@
 		
 	@GetMapping("/param")
 	public String param(@RequestHeader Map<String,String> map){}
-
+	
 Cookie数据接收
 	@GetMapping("/param")
 	public String param(@CookieValue("JSESSIONID") String jsessionId){}
-
+	
 	@GetMapping("/param")
 	public String param(@CookieValue Map<String,String> map){}
 	

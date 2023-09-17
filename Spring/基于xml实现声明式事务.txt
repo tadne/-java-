@@ -17,10 +17,10 @@
             			<tx:method name="*"/><!--任意方法-->
         		</tx:attributes>
     		</tx:advice>
-	配置aop引入切入点和通知方法
+		配置aop引入切入点和通知方法
 		<aop:config>
-	<!-- 切点表达式-->
-        <aop:pointcut id="txPointcut" expression="execution(* ltt.service.impl.*.*(..))"/>
+		<!-- 切点表达式-->
+        	<aop:pointcut id="txPointcut" expression="execution(* ltt.service.impl.*.*(..))"/>
         		<!-- 织入关系-->
 			<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     		</aop:config>
@@ -36,17 +36,17 @@
 			只读
 		传播行为:propagation
 			事务嵌套问题
-			reauired:	a调用b,b需要事务,如果a有事务就加入,没有就创建b事务
-			required_new	a调用b,b需要事务,a有事务就挂起,b创建事务
-			supports:	a调用b,a有事务就用,没有就无
+			reauired:			a调用b,b需要事务,如果a有事务就加入,没有就创建b事务
+			required_new		a调用b,b需要事务,a有事务就挂起,b创建事务
+			supports:		a调用b,a有事务就用,没有就无
 			not_suppoorts:	a调用b,b无事务执行,a有事务就挂起
-			never:		a调用b,b用a事务,a没有事务就异常
-			nested:		a调用b,b创建事务,a有事务就嵌套,没有就创建
+			never:			a调用b,b用a事务,a没有事务就异常
+			nested:			a调用b,b创建事务,a有事务就嵌套,没有就创建
 
 
 
-	原理:	就是aop来处理的,内部的事务类实现了MtthodInterceptor接口
-		调用invoke方法,实现动态代理实现
+	原理:	就是aop来处理的,内部的事务类实现了MethodInterceptor接口
+			调用invoke方法,实现动态代理实现
 
 
 

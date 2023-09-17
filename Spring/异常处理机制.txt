@@ -24,9 +24,9 @@ SpringMVC异常处理流程
 
 
 	常用异常解析器:
-		HandlerExceptionResolver  	顶级接口,实现会被标记为异常处理类
-		MyHandlerExceptionResolver	自定义处理类
-		HandlerExceptionResolveComposite异常解析器混合器,内部存有多种异常解析器
-		SimpleMappingExceptionResolver	简单映射异常处理器,可以匹配异常与对应的
-		ExceptionHandlerExceptionResolve异常处理器解析器,默认注册到Spring中,
-						@ExceptionHandler就是它解析
+		HandlerExceptionResolver  				顶级接口,实现会被标记为异常处理类
+		MyHandlerExceptionResolver			自定义处理类
+		HandlerExceptionResolveComposite		异常解析器混合器,内部存有多种异常解析器
+		SimpleMappingExceptionResolver		简单映射异常处理器,可以匹配异常与对应的
+		ExceptionHandlerExceptionResolve		异常处理器解析器,默认注册到Spring中,
+											@ExceptionHandler就是用它解析

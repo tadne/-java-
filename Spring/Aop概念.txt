@@ -17,9 +17,9 @@ AOP技术实现方案
 	实现思路:	
 		可以定义一个目标类作为提供需要被增强的方法
 		将类注入IOC
-		定义一个类实现BeanPostProcessor后处理器接口
-		在after或者before方法中创建proxy对象进行动态代理
-		代理逻辑:	先对bean进行具体判断避免所有bean都被代理
+		定义一个类实现BeanPostProcessor 即spring后处理器接口
+		重写after或者before方法,在其中创建proxy对象进行动态代理
+		代理逻辑:	先对bean进行筛选判断,找到需要代理的bean
 				创建代理对象(类加载器,代理接口,Handler方法)
 				Handle方法参数(proxy:代理对象,method 被增强方法,args:方法参数)
 				method可以调用invoke方法(bean:执行方法对象,args方法参数)
@@ -29,12 +29,12 @@ AOP技术实现方案
 
 
 AOP概念:
-	目标对象:	target:		被增强方法对象
-	代理对象:	Proxy:		对目标对象增强后的对象,客户端实际调用的对象
+	目标对象:		target:		被增强方法对象
+	代理对象:		Proxy:		对目标对象增强后的对象,客户端实际调用的对象
 	连接点:		Joinpoint:	目标对象中可以被增强的方法
-	切入点:		Pointcut:	目标对象中实际被增强的方法
-	通知/增强:	Advice:		增强部分的代码逻辑
-	切面:		Aspect:		增强和切入点的结合
+	切入点:		Pointcut:		目标对象中实际被增强的方法
+	通知:		Advice:		增强部分的代码逻辑
+	切面:		Aspect:		通知和切入点的结合
 	织入:		Weaving:	将通知和切入点动态组合的过程
 
 

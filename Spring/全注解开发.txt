@@ -5,10 +5,10 @@ SpringMVC的全注解开发
 		@ComponentScan("com.ltt.controller")		//组件扫描
 		@EnableWebMvc				
 		//这个注解会注入RequestMappingHandlerMapping	处理器映射器
-		//注入RequestMappingHandlerAdapter等等		处理器适配器
+		//注入RequestMappingHandlerAdapter等等			处理器适配器
 		
 		写一个配置类实现WebMvcConfigurer	加@Component
-		重写addInterceptors方法			拦截器
+		重写addInterceptors方法				拦截器
 		重写configureDefaultServletHandling	激活defaultServlet处理静态资源
 
 
@@ -19,12 +19,13 @@ SpringMVC的全注解开发
 
 	消除web.xml
 		Servlet3环境中,web容器提供了ServletContainerInitializer接口
-		实现这个接口,在对应类加载路径的META-INF/services目录创建一个					ServletContainerInitializer文件,文件内容指定ServletContainerInitializer实现类
+		实现这个接口,在对应类加载路径的META-INF/services目录创建一个										ServletContainerInitializer文件,文件内容指定ServletContainerInitializer实现类
 		那么,当web容器启动时就会运行这个初始化器
 	
 		Spring基于这个定义了SpringServletContainerInitializer实现
 		ServletContainerInitializer接口
 		   
 		SpringServletContainerInitializer会查找WebApplicationInitializer类
-		Spring提供了一个WebApplicationInitializer的基础实现类					AbstractAnnationConfigDispatcherSercletInitializer当我们编写类继承它
-		容器会自动发现我们自己的类,在该类中我们就可以配置Spring和SpringMVC入口
+		Spring提供了一个WebApplicationInitializer的基础实现类										
+			AbstractAnnationConfigDispatcherSercletInitializer,
+		当我们编写类继承它,容器会自动发现我们自己的类,在该类中我们就可以配置Spring和SpringMVC入口

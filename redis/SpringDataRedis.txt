@@ -1,0 +1,45 @@
+SpringData是Spring中数据操作的模块,包含了各种数据库的集成,其中对Redis集成的模块叫SpringDataRedis
+
+	提供了不同Redis客户端的整合
+	提供了RedisTemplate统一API操作Redis
+	支持Redis发布订阅模型
+	支持Redis哨兵和Redis集群
+	支持基于Lettuce的响应式编程
+	支持基于jdk,json,字符串,Spring对象的数据序列以及反序列化
+	支持基于Redis的jdkCollection实现
+
+
+SpringDataRedis提供RedisTemplate工具类,封装了各种对redis的操作,将不同数据类型api封装到不同类中
+	redisTemplate.opsForValue			ValueOperations			操作String类型
+	redisTemplate.opsForHash			HashOperations			操作Hash类型
+	redisTemplate.opsForList			ListOperations			操作List类型
+	redisTemplate.opsForSet			SetOperations			操作Set类型
+	redisTemplate.opsForZset			ZsetOperations			操作SortedSet类型
+	redisTemplate											通用命令
+
+
+
+SpringBoot默认整合了SpringDataRedis,可以直接用springBoot项目测试Redis
+
+
+SpringDataRedis入门:
+		导入依赖		spring-boot-starter-data-redis		:redis依赖
+					commons-pool2					:连接池依赖
+
+		在yml中写配置
+					spring:
+  						redis:
+  						  host: 192.168.101.65
+  						  port: 6379
+  						  password: redis
+  						  lettuce:
+  						    pool:
+  						      max-active: 8
+  						      max-idle: 8
+  						      min-idle: 0
+  						      max-wait: 1000ms
+
+		注入redisTemplate
+				@Autowired
+				private RedisTemplate redisTemplate;
+

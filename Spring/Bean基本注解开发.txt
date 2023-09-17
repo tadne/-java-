@@ -11,20 +11,20 @@ Bean基本注解开发
 
 	
 	@Component			设置当前类为组件
-	@Lazy(true)			懒加载
+	@Lazy(true)				懒加载
 	@Scope("singleton")		单例/多例
 
 
 	@PostConstruct		设置初始化方法
-	@PreDestroy		设置销毁方法
+	@PreDestroy			设置销毁方法
 	
 	
 	
 	由于J2ee开发时分层的，为了每层的Bean表示的注解予以更准确，@Component有三个衍生注解
 	@Component		其他组件
-	@Repository		dao层
-	@Service		service层
-	@Controller		web层
+	@Repository			dao层
+	@Service				service层
+	@Controller			web层
 	
 
 	

@@ -15,7 +15,7 @@
 		<!--    配置前端控制器-->
    	 <servlet>
        		 <servlet-name>DispatcherServlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         	<init-param>
             		<param-name>contextConfigLocation</param-name>
             		<param-value>classpath:spring-mvc.xml</param-value>
@@ -39,11 +39,14 @@
     	</context-param>
 	<!--    监听器-->
    	<listener>
-     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  	 </listener>
+     		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  	</listener>
 
 
 SpringMVC关键组件简析
+	前端控制器:DispatcherServlet
+		捕获来自客户端的请求并调度各个组件
+
 	处理器映射器:	HandlerMapping
 		匹配映射路径对应的Handler,返回可执行的处理器链对象HandlerExecutionChain对象
 		常用:	RequestMappingHandleMapping
@@ -59,7 +62,8 @@ SpringMVC关键组件简析
 	也就是,先用映射器根据路径找处理链对象,再用适配器在处理链对象中匹配对应的适配器调用方法,
 	返回对象,再用视图解析器去处理返回结果,最终返回视图对象
 			
-	流程:	客户端发出请求到前端控制器
+	流程:	
+		客户端发出请求到前端控制器
 		前端控制器通过映射器找到处理器可执行链并返回给前端控制器
 		前端控制器将处理链给适配器去适配对应的可执行处理器并执行Handler,并返回结果数据
 		前端控制器再将结果数据给视图解析器,返回视图对象

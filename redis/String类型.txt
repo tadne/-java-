@@ -1,0 +1,24 @@
+String类型 		即字符串类型,是Redis中最简单的类型,其value也是字符串,不过根据字符串格式不同分3类
+
+	String:		普通字符串
+	int:			整数类型,可以自增自减
+	float:		浮点型,可以自增自减
+
+
+	底层是字节数组形式存储,不过编码方式不同
+
+	字符串类型的最大空间是512m
+
+
+
+String常见命令
+
+set:			添加或修改已经存在的String类型键值对
+get:			根据key获取String类型的value
+mset:		批量添加多个String类型value
+mget:		根据多个key获取多个String类型的value
+incr:			让整数自增
+incrby:		让整数自增并指定步长 
+incrbyloat:	让浮点数自增并指定步长
+setnx:		添加String类型键值对,前提是key不存在,否则不执行
+setex:		添加一个String类型键值对,并指定有效期

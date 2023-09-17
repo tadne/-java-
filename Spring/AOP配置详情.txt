@@ -18,28 +18,28 @@ XML中AOP配置详情:
 			execution(* com.ltt.aop..*.*(..))
 			任意包下的任意参数方法
 			execution(* *..*.*(..))
-
+		
 		
 	通知的类型:
 		前置通知	<aop:before>		目标方法执行前
 		后置通知	<aop:after-returing>	目标方法执行后,方法异常不执行
 		环绕通知	<aop:around>		目标方法执行前后,方法异常则环绕后方法不执行
 		异常通知	<aop:after-throwing>	抛出异常执行
-		最终通知	<aop:after>		无论是否异常都执行
+		最终通知	<aop:after>			无论是否异常都执行
 		
-	
+		
 	通知方法被调用时,Spring可以传递的参数
 		JoinPoint:	连接点对象,任意通知都能使用,可以获取当前目标对象方法等信息
 		ProceedingJoinPoint:
 				JointPoint子类,在环绕通知中执行proceed(),进而执行目标方法
-
+				
 		添加方式:	就是直接在通知方法中添加即可,在被调用时,可以直接使用
-
+		
 		Throwle:	异常对象,在异常通知中,在配置文件中指出异常对象名称
 						
 		添加方式:	在通知方法中传入参数的同时,在通知配置处配置throwing参数
 		
-
+		
 	XML中AOP的配置的两种方式:
 		<advice>配置切面		
 				:通过接口方式确认通知类型

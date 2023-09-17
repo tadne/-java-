@@ -1,0 +1,72 @@
+常用的java的redis的客户端
+
+	jedis		:	以redis命令作为方法名称,学习成本低,简单好用
+					但是, jedis实例是线程不安全的,多线程下要基于连接池使用
+
+
+	lettuce		:	基于Netty实现,支持同步,异步和响应式编程方式,并且是线程安全的.
+					支持哨兵模式,集群模式,管道模式
+
+	Redisson	:	基于redis实现的分布式,可伸缩的java数据结构集合,包含了诸如						
+					Map,Queue,Lock,Semaphore,AutomicLong等功能
+
+
+
+jedis入门:		加入 jedis依赖
+					<dependency>
+      						<groupId>redis.clients</groupId>
+      						<artifactId>jedis</artifactId>
+      						<version>3.7.0</version>
+    					</dependency>
+				创建Jedis对象,建立连接
+					Jedis  jedis=new Jedis("192.168.101.65",6379);//ip 和端口
+      			 		 jedis.auth("redis");//密码
+       					 jedis.select(0);//选择库
+				操作redis
+					 String result = jedis.set("name", "jack");
+        				System.out.println(result);//如果插入成功就返回ok
+        				String name = jedis.get("name");
+      			 		System.out.println(name);
+					.......
+				关闭连接
+					jedis.close();
+
+
+Jedis连接池:		
+				Jedis本身线程不安全,并且频繁创建和销毁连接会带来性能损耗,
+				推荐使用Jedis的连接池代替jedis直连方式			
+   				
+				 JedisPoolConfig poolConfig=new JedisPoolConfig();
+        			poolConfig.setMaxTotal(8);//最大总连接数
+        			poolConfig.setMaxIdle(8);//最大空闲连接
+        			poolConfig.setMinIdle(1);//最小空闲连接
+        			poolConfig.setMaxWaitMillis(1000);//最长等待时间
+    				JedisPool   jedosPool=new JedisPool(poolConfig,"192.168.101.65",6379,1000,"redis");
+    
+
+
+
+SpringData是Spring中数据操作的模块,包含了各种数据库的集成,其中对Redis集成的模块叫SpringDataRedis
+
+	提供了不同Redis客户端的整合
+	提供了RedisTemplate统一API操作Redis
+	支持Redis发布订阅模型
+	支持Redis哨兵和Redis集群
+	支持基于Lettuce的响应式编程
+	支持基于jdk,json,字符串,Spring对象的数据序列以及反序列化
+	支持基于Redis的jdkCollection实现
+
+
+SpringDataRedis提供RedisTemplate工具类,封装了各种对redis的操作,将不同数据类型api封装到不同类中
+	redisTemplate.opsForValue			ValueOperations			操作String类型
+	redisTemplate.opsForHash			HashOperations			操作Hash类型
+	redisTemplate.opsForList			ListOperations			操作List类型
+	redisTemplate.opsForSet			SetOperations			操作Set类型
+	redisTemplate.opsForZset			ZsetOperations			操作SortedSet类型
+	redisTemplate											通用命令
+
+
+
+
+
+

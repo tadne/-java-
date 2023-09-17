@@ -13,7 +13,7 @@ Spring IOC整体流程总结
 
 		
 		BeanDefinitionReader将每一个Bean封装好存入BeanDefinitionMap中
-		在取出对象并通过反射创建对象前,要通过工厂后处理器执行,对Bean进行一些修改,注册等操作
+		在取出对象并通过反射创建对象前,要通过工厂后处理器执行对Bean进行一些修改,注册等操作
 			注册一般用BeanFactoryPostProcessor的子接口
 			BeanDefinitionRegisterPostProcessor来很方便的实现
 

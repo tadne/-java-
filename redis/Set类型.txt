@@ -1,0 +1,17 @@
+Redis的Set结构和java中的HashSet类型,可以看出是一个value为null的HashMap
+
+	特征:	
+			无序,	不重复	查找快	支持交集,并集,差集等功能
+
+
+
+
+常见命令:
+	sadd key member 		向set中添加一个或多个元素
+	srem key member			移除set中的指定元素				成功返回1,失败返回0
+	scard key				返回set中元素个数
+	sismember key member	判断一个元素是否存在于set中		存在就返回1,不存在返回0
+	smembers:				获取set中的所有元素
+	sinter key1 key2 ...	:		求key1与key2的交集
+	sdiff key1 key2...:			求key1与key2的差集
+	sunion key1 key2..:		求key1和key2的并集

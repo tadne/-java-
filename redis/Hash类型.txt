@@ -1,0 +1,24 @@
+Hash类型,也叫散列,其value是一个无序字典,类似HashMap结构
+
+
+String结构是将对象序列化为JSON储存,当需要修改对象某个字段时很不方便
+
+
+Hash可以将对象中的每个字段独立存储,可以针对单个字段crud
+
+
+
+常见命令
+	hSet  key field value 	添加或修改hash类型的key的field的值
+	hGet key field 		获取一个hash类型key的field的值
+	hmSet 				批量添加hash类型key的field的值
+	hmGet 				批量获取hash类型key的field的值
+	hKeys				获取hash类型的key中的所有field
+	hGetAll				获取hash类型的所有key的field和field的值
+	hVals				获取hash类型的所有key的field的值
+	hincrBy				让一个hash类型key的字段值自增并指定步长
+	hsetnx				添加一个hash类型的key的field的值,前提是field不存在,否则不执行
+
+
+
+	其中    hmset 和  hset 几乎没有区别,所以现在新版本已经不使用hmset了

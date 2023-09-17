@@ -1,0 +1,21 @@
+SortedSet是一个可排序的set集合,与TreeSet类似,但是底层数据结构差别很大.
+
+SortedSet中的每一个元素都带有一个score属性,可以基于score属性对元素排序.底层实现是一个跳表加hash表
+
+
+特性:		可排序		不重复		查询快
+
+
+常见命令
+
+zAdd key score member			添加一个或多个元素到sorted set,如果已经存在就更新其score值
+zRem key member				删除sorted set中的一个指定元素
+zScore key member 				获取sorted set中的指定元素的score值
+zcard key 						获取sorted set中的元素个数
+zRank key member				获取指定元素的降序排名		(从0开始)
+zRevRank key member 			获取指定元素的升序排名		(从0开始)
+zCount key min max				统计score值在给定范围内的所有元素的个数
+zIncrBy key increment member		让SortedSet 中指定元素自增.步长为指定的increment
+zRange key min max 				按score排序后,获取指定排名范围内的元素
+zRangeByScore key min max		按score排序后,获取指定score范围元素
+zdiff | zinter |  zunion  				差集,交集,并集		
