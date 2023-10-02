@@ -1,0 +1,53 @@
+可重入锁
+	
+	原理:	计数器来记录获取锁的次数
+			记录线程标识保证是同一线程
+
+	用hash结构		用key记录锁名称 , 用field记录线程标识 , 用value记录重入次数
+	
+实现流程			每次获取锁,     判断锁名称来确定锁是否存在
+						判断线程标识来确定是不是同一个线程
+						判断可重入次数是不是0
+
+
+	获取锁:
+		开始==>判断锁是否存在
+			==>不存在==>获取锁并添加线程标识==>设置锁的有效期==>执行业务
+			==>存在==>判断锁的线程标识是不是自己
+					==>不是==>获取锁失败
+					==>是==>锁计数+1==>设置锁的有效期==执行业务
+
+		
+	释放锁:
+		执行完业务==>开始==>判断是否是自己
+				==>否==>锁已经释放
+				==>是==>计数器-1==>判断计数器是否为0
+							否==>重置锁有效期==>执行业务
+							是==>释放锁
+
+	
+	由于步骤的增多,导致redis操作异常的可能性增大,所以一定要确保原子性
+
+	即要用lua脚本做.redisson底层也是如此做的
+
+		local key =KEYS[1];		--锁标识
+		local threadId=ARGV[1];	--线程标识
+		local releaseTime=ARGV[2];	--锁的自动释放时间
+		--判断锁是否存在
+		if(redis.call("exists",key)==0) then	
+			redis.call("hset",key,threadId,'1');	--不存在,获取锁
+			redis.call("expire",key,releaseTime);	--设置有效期
+			return 1;	--返回
+		end;
+		--锁已经存在,判断threadId是否是自己
+		if(redis.call('hexists',key ,threadId)==1) then 
+			redis.call('hincrby',key,threadId,'1');	--不存在,获取锁,重入次数+1
+			redis.call('expire',key,releaseTime);	--设置有效期
+			return 1;	--返回
+		end
+		return 0;
+
+
+
+
+

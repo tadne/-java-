@@ -1,0 +1,129 @@
+通用语法:
+
+	SQL可以单行或多行书写,分号结尾
+	SQL语句可以用空格/缩进增强语句可读性
+	SQL语句不区分大小写,关键字建议大写
+	注释:	单行注释:  -- 或 # 
+			多行注释:  /**/
+
+
+SQL分类:
+	DDL: 	data definition language		数据定义语言			定义数据库对象(数据库,表,字段)
+	DML:	data manipulation language	数据操作语言			对数据库表增删改
+	DQL:	data query language			数据查询语言			查询数据库记录查询
+	DCL:	data control language			数据控制语言			创建用户,控制权限
+
+mysql中数据类型:	
+	数值类型	
+		tinyint 		:   类似byte				smallint		:   类似short
+		mediumint	:   占用3字节				int/integer	:   类似int
+		bigint		:   类似long
+		float		:   类似float,单精度浮点数	double		:   类似double,双精度浮点数
+	字符串类型
+		char			定长字符串0~255			varchar		变长字符串0~65535
+		tinytext:		二进制数据0~255			blob:		二进制长文本
+		text:			长文本					mediumBlob:中等长度二进制数据
+		mediumText:	中等长度长文本			longBolob:	二进制大文本数据
+		longText:	大文本数据
+	日期类型
+		date	: 		yyyy-mm-dd				日期值
+		time:		hh:mm:ss				时间值
+		year:		yyyy						年份
+		datetime:	yyyy-mm-dd hh:mm:ss	 	混合日期
+		timestamp:	yyyy-mm-dd hh:mm:ss		混合日期,时间戳
+	
+
+DDL:	
+		操作数据库
+			show databases;			# 查询所有数据库
+			select database();			# 查询当前数据库
+			create database [not exist] 数据库名 [default charse 字符集] [collate 排序规则]
+									# 创建数据库
+			drop database [if exists] 数据库名
+									# 删除数据库
+			use 数据库名;				#切换当前数据库
+
+		操作表
+			show tables;				# 查询当前数据库所有表
+			desc 表名;				# 查询表结构
+			show create table 表名		# 查询指定表的建表语句		
+			
+			创建表结构
+				create table 表名(
+					字段1 字段1类型 [comment 字段1注释],
+					.....
+				)[comment 表注释];		# 创建表
+
+			修改表结构	
+				alter table 表名 add 字段名 类型 [commit 字段注释] [约束];		
+										# 添加字段
+				alter table 表名 modify 字段名 新数据类型;
+										# 修改数据类型
+				alter table 表名 change 旧字段名 新字段名 类型[commit 字段注释] [约束];
+										# 修改字段名和字段类型
+				alter table 表名 drop 字段名;	
+										# 删除字段
+				alter table 表名 rename to 新表名;
+										# 修改表名
+			
+			删除表	
+				drop table [if exist] 表名;		# 删除表
+				trancate table 表名;			# 删除表并重新创建表结构,即删除所有表数据
+
+DML:	
+		添加数据(insert):
+			给指定字段添加数据	insert into 表名(字段1,字段2...) values(值1,值2...)			
+			给全部字段添加数据	insert into 表名 values(值1,值2...)
+			
+			批量添加
+				insert into 表名 (字段1,字段2..) values (值1,值2..),(值1,值2)..;			
+				insert into 表名(值1,值2,..),(值1,值2..);
+			
+				注意:	插入数据时,字段顺序要和值顺序一致
+						字符串和日期类型要在引号中
+						插入数据大小,应该在字段规定范围
+
+		修改数据(update)
+			update 表名 set 字段1=值1,字段2=值2... (where 条件);
+			
+				注意:	如果修改不指定条件,会修改整张表的所有数据
+			
+		删除数据	(delete)
+			delete from table [where 条件];
+
+				注意:	如果删除不指定条件,会删除整张表的数据
+						delete不能删除某个字段的值
+
+
+
+DQL(select):
+		select 		字段列表
+			from		表名列表
+			where		条件列表    
+		group by 	分组字段列表
+			having 		分组后条件列表
+		order by 		排序字段列表
+		limit 		分页参数
+		
+		条件列表:		  >,>=,<=,=, <>/!=
+					between .. and..:		含最大最小值范围
+					in(..)					在in后的列表中的值,多选1
+					like 占位符			模糊匹配( _ 匹配单个字符, % 匹配任意字符)	
+					is null				
+					and / &&			且
+					or / || 				或
+					not / !				非
+			
+		聚合函数	count ,max ,min,avg 
+			语法:	select  聚合函数(字段列表) from 表名;
+
+		分组查询:   select 字段列表 表名 [where 条件] group by 分组字段名[having 条件];
+			where和having的区别:
+				执行时机不同:		where是分组前过滤,不参与分组.having是分组后对结果过滤
+				判断条件不同:		where中不能对聚合函数进行判断,而having可以;
+			
+	
+		
+
+
+

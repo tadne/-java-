@@ -1,0 +1,119 @@
+分布式锁:		满足在分布式系统和集群模式下多线程可见并且互斥的锁
+
+
+	要满足:		多线程可见,互斥,高性能,高可用,安全性
+	其他:		公平锁,是否阻塞
+
+
+	实现方案	:	mysql				redis					zookeeper	
+
+	互斥			用事务实现互斥		setnx互斥命令				利用节点的唯一性和有序性实现互斥
+	
+	高可用		好					好						好
+	
+	高性能		一般					好						一般
+	
+	安全性		断开连接自动释放		用锁的超时时间,到期释放	临时节点,断开连接自动释放
+
+
+
+
+Redis实现分布式锁
+	
+	获取锁:
+		互斥:	确保只有一个线程获取锁		setnx操作实现互斥
+		非阻塞:	尝试一次,成功就返回true,失败返回false
+	释放锁:
+		手动释放:		
+		超时释放:		到期自动删除
+		
+		
+ 		开始==> 尝试获取锁==>判断结果==>nil==>获取锁失败
+									==>ok==>获取锁成功==>执行业务==>释放锁
+
+
+问题:
+	如果业务阻塞时间过长,会导致redis锁的超时释放,这是会导致任务并行发生
+
+	
+		解决方案:		获取锁前,要先判断锁的标识,避免并行发送
+
+		
+		开始==>尝试获取锁并存入线程标识==>判断结果
+				==>nil==>获取锁失败
+				==>ok==>获取锁成功==>执行业务
+						==>业务超时或宕机==>自动释放锁
+						==>顺利执行完毕==>判断锁标识是否是自己==>释放锁
+
+
+
+	分布式锁的原子性问题
+		如果在释放锁前的判断标识时,进行了FUllGC等操作垃圾回收,导致线程阻塞
+		这时就可能导致锁的超时释放,导致任务并行运行
+
+		解决方案:		Redis提供了Lua脚本功能,可以一个脚本编写多条redis命令
+					确保命令的原子性
+					redis提供了命令调用脚本
+					eval "脚本" "参数"
+
+				如果脚本中的key和value不想写死,可以作为参数传递,key类型参数会放入keys数组,
+				其他参数放入argv数组,在脚本中可以从keys和argv数组获取这些参数
+			以下就是一段lua脚本,KEYS和ARGV是参数集合
+				if(redis.call('get',KEYS[1])==ARGV[1]) then 
+				--释放锁 del key
+					return redis.call('del',ARGV[1])
+				end
+				return 0
+
+			如何调用lua脚本
+		    	private StringRedisTemplate template;
+			UNLOCK_SCRIPT=new DefaultRedisScript<>();
+       			UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
+       			UNLOCK_SCRIPT.setResultType(Long.class);
+			template.execute(
+               				UNLOCK_SCRIPT,//脚本
+               				 Collections.singletonList(KEY_PREFIX+name),//键
+                			ID_PREFIX+Thread.currentThread().getId());//值
+    			};
+
+
+
+
+redis分布式锁总结:
+	实现
+		用set nx ex获取锁,并设置过期时间,保存线程标识
+		释放锁时先判断线程标识是否与自己一致,一致则删除锁
+
+	特性:
+		set nx满足互斥
+		set ex保证故障时锁依然可以释放,避免死锁,提高安全性
+		redis集群保证高可用和高并发
+		
+		还可以用lua脚本保证redis操作的原子性
+
+
+
+
+redis分布式锁的优化
+
+	问题:	
+			锁不可重入,同一个线程无法多次获取同一把锁
+			
+			锁不可重试,获取锁只尝试一次就返回,就没有重试机制
+			
+			超时释放,锁超时释放虽然避免了死锁,但是如果业务执行比较耗时,也会导致锁释放,存在安全风险
+			
+			主从一致性问题,
+						如果redis提供了主从集群主从同步存在延迟,
+						当主宕机时,如果从还没同步主中的锁数据,则可能会出现锁被多线程获取
+			
+
+
+
+
+
+
+
+
+
+

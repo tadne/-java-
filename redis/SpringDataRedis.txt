@@ -43,3 +43,33 @@ SpringDataRedis入门:
 				@Autowired
 				private RedisTemplate redisTemplate;
 
+
+redis存储java对象
+	java对象自动转json配置
+		@Bean
+    		public RedisTemplate<String ,Object> redisTemplate(RedisConnectionFactory 
+			redisConnectionFactory){
+        		//创建RedisTemplate对象
+        		RedisTemplate<String ,Object> template=new RedisTemplate<>();
+        		//设置连接工厂
+        		template.setConnectionFactory(redisConnectionFactory);
+        		//设置json序列化工具
+        GenericJackson2JsonRedisSerializer jsonRedisSerializer=new GenericJackson2JsonRedisSerializer();
+        		//设置key用String序列化
+        		template.setKeySerializer(RedisSerializer.string());
+       	 		template.setHashKeySerializer(RedisSerializer.string());
+        		//设置value用json序列化
+        		template.setValueSerializer(jsonRedisSerializer);
+        		template.setHashValueSerializer(jsonRedisSerializer);
+        		//返回
+        		return template;
+    		}
+	
+	但是,但是用json序列化java对象会导致redis数据中会保存对象的类名来确保查找到对应对象.
+	所以一般不直接使用SpringDataRedis提供的json序列化
+	一般是用工具先将对象转为json,在用String序列化到redis中来节约空间
+	
+
+
+
+
