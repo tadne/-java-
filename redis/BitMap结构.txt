@@ -1,0 +1,11 @@
+Redis利用String类型数据结构实现BitMap.最大上限是512M,转换为bit则是2^32bit位
+
+
+操作命令:
+	SETBIT:			向指定位置存入一个0或1
+	GETBIT:			获取指定位置的bit值
+	BITCOUNT:		统计BitMap中值为1的bit位的数量
+	BITFIELD:			操作(查,改,自增)BitMap中数组中的指定位置的值
+	BITFIELD_RD:		获取BitMap中bit数组,并以十进制形式返回
+	BITOP:			将多个BitMap的结果做位运算(与或异或)
+	BITPOS:			查找bit数组中指定范围内第一个0或1出现的位置

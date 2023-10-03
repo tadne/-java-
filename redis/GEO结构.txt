@@ -1,0 +1,17 @@
+GEO: 	Geolocation的简写,代表地理坐标
+
+
+	常用命令:
+		GEOADD:	添加一个地理空间左边,包含:	经度(longitude),纬度(latitude),值(member)
+		GEODIST:	计算指定的两个点间的距离并返回
+		GEOHASH:	将指定member的左边转为hash字符串形式返回
+		GEOPOS:		返回指定member的坐标
+		
+	redis6.2废弃
+		GEORADIUS:	指定圆心,半径,找到该圆内所有的member,并按照与圆心间距离排序后返回
+		
+	redis6.2新功能
+		GEOSEARCH:	在指定范围内搜索member,按照与指定点间距离排序后返回.范围可以是圆形或矩形
+		GEOSEARCHSTORE:	与GEOSEARCH功能一致,但是可以将结果储存到一个指定的key中
+
+	

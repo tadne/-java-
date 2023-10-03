@@ -1,0 +1,23 @@
+UV:		UniqueVistor,也叫独立访客量,指通过互联网访问榴莲这个网页的自然人.
+		一天内同一个用户多次访问该网站只记录一次
+
+
+PV:		PageView,也叫页面访问量或点击量,用户每访问网站的一个页面,记录一次PV,用户多次打开页面
+		则多次记录PV.用来衡量网站流量
+
+
+	UV统计在服务端比较麻烦,因为要判断用户是否已经统计,要将统计的用户信息保存
+	但是如果每一个访问的用户保存到redis中,数据量会很大
+
+
+
+HyperLogLog:	从LogLog算法派生的概率算法,用于确定非常大的集合的基数,而不用存其所有值
+		
+		Redis中HLL是基于String结构实现的,单个HLL的内存永远小于16k,内存占用低,导致其测量结果有概率性
+		有小于0.81%的误差.
+
+
+常用命令
+		PFADD 	key element [element..]			添加元素
+		PFCOUNT key [key ..]						统计key中数据(重复不计)
+		PFMERGE destkey sourcekey [sourcekey ...] 	合并key
