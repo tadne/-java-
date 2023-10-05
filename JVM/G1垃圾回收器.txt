@@ -1,27 +1,26 @@
 Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 
-		在jdk中进程	2009 JDK 6u14体验
+	在jdk中进程	2009 JDK 6u14体验
 				2012 JDK 7u4 官方支持
 				2017 JDK 9   默认
 
-		适用场景
-			同时注重吞吐量和低延迟,默认的暂停目标是200ms
-			超大堆内存,会将堆划分为多个大小相等的Region
-			整体上是标记+整理算法,两个区域之间是复制算法
+	适用场景
+		同时注重吞吐量和低延迟,默认的暂停目标是200ms
+		超大堆内存,会将堆划分为多个大小相等的Region
+		整体上是标记+整理算法,两个区域之间是复制算法
 
-		相关参数	
-			-XX:+UseG1GC			开关
-			-XX:G1HeapRegionSize=size	G1堆中的Region大小
-	-		-XX:MaxGCPauseMills=time	
-
+	相关参数	
+		-XX:+UseG1GC				开关
+		-XX:G1HeapRegionSize=size	G1堆中的Region大小
+		-XX:MaxGCPauseMills=time	
 
 	
 	阶段
-		young Collection:			新生代垃圾回收
+		young Collection:						新生代垃圾回收
 	
-		Young Collection+Concurrent Mark:	新生代垃圾回收+并发标记
+		Young Collection+Concurrent Mark:		新生代垃圾回收+并发标记
 		
-		Mixed Collection:			混合收集
+		Mixed Collection:						混合收集
 
 	
 		先新生代垃圾收集
@@ -46,9 +45,10 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 				如果card中有对象引用新生代对象,会对这个card标记为脏card
 				新生代对象空间会记录引用它的脏card地址,减少标记GCRoot的时间
 		
-				然后minorgc时,新生代清理复制算法,引用变更的时候,
+				就是说MinorGc时,新生代采用复制算法,引用变更的时候,
 					通过post-writer barrier + dirty carf queue队列
 					用线程concurrentRefinementThreads更新RememberedSet
+					
 
 		Young Collection + Concurrent Mark:	
 			新生代垃圾收集时对根对象GCRoot初始标记
@@ -65,7 +65,7 @@ Garbage First垃圾回收器 G1		jdk9取代了CMS垃圾回收器
 		
 		Mixed Collection:
 				进行最终标记(防止并发下的引用改变)	会STW暂停用户线程
-				拷贝存活	(如上)			会STW
+				拷贝存活	(如上)					会STW
 
 
 
