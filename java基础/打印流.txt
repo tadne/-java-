@@ -5,35 +5,66 @@
 		特有的写出方法可以实现数据的原样写出		
 		特有的写出方法可以实现自动刷新,自动换行		写出换行刷新
 
+		自动刷新:		自动刷新输出缓存区,在调用方法时,会将缓存区的中的数据写入输入流中
+					可以确保数据及时写入文件或网络套接字
 	
 字节打印流	
 	构造方法
-		PrintStream(OutputStream/File/String)		关联字节输出流/文件/文件路径
-		PrintStream(String fileName,Charset charset)	指定字符编码
+		PrintStream(OutputStream/File/String)				关联字节输出流/文件/文件路径
+		PrintStream(String fileName,Charset charset)			指定字符编码
 		PrintStream(OutputStream out,boolean autpFlush)	自动刷新
 		PrintStream(OutputStream out,boolean autoFlush,String encoding)
-								指定字符编码且自动刷新
+														指定字符编码且自动刷新
 
 		字节打印流底层没有缓冲区,开不开无所谓
 
 	成员方法
 		write(int b)
-		println(XXX xx)				打印任意数据,自动刷新,换行
-		print(XXX xx)				打印任意数据,不换行
+		println(XXX xx)					打印任意数据,自动刷新,换行
+		print(XXX xx)						打印任意数据,不换行
 		printf(String format,Object...args)	带有占位符的打印语句,不换行
 
 	
 字符打印流		细节:字符打印流自动刷新是需要手动开启的
 	构造方法
-		PrintWriter(OutputStream/File/String)		关联字节输出流/文件/文件路径
-		PrintWriter(String fileName,Charset charset)	指定字符编码
-		PrintWriter(OutputStream out,boolean autpFlush)	自动刷新
+		PrintWriter(OutputStream/File/String)				关联字节输出流/文件/文件路径
+		PrintWriter(String fileName,Charset charset)			指定字符编码
+		PrintWriter(OutputStream out,boolean autpFlush)		自动刷新
 		PrintWriter(OutputStream out,boolean autoFlush,String encoding)
-								指定字符编码且自动刷新
+														指定字符编码且自动刷新
 
 
 		成员方法
 		write(int b)
-		println(XXX xx)				打印任意数据,换行
-		print(XXX xx)				打印任意数据,不换行
+		println(XXX xx)					打印任意数据,换行
+		print(XXX xx)						打印任意数据,不换行
 		printf(String format,Object...args)	带有占位符的打印语句,不换行
+
+
+
+
+		%d				有符号十进制整数
+		%u				无符号十进制整数
+		%o				无符号八进制整数
+		%x				无符号十六进制整数（小写）
+		%X				无符号十六进制整数（大写）
+		%f				十进制浮点数（小写）
+		%e				科学计数法（小写）
+		%E				科学计数法（大写）
+		%g				自动选择 %f 或 %e 格式
+		%c				单个字符
+		%s				字符串
+
+		-				左对齐
+		+				在正数前面添加 + 号
+		(空格)			在正数前面添加空格
+		#				对于 %o、%x 或 %X，输出时加上 0、0x 或 0X 前缀
+
+
+
+
+
+
+
+
+

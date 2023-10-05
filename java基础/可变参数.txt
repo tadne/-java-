@@ -6,7 +6,7 @@
 	例:	public static int getSum(int...args){}
 		
 		调用:	getSum(1,2,3,4);
-			getSum(1,2,3,4,6,0,9);
+				getSum(1,2,3,4,6,0,9);
 
 
 	底层:	可变参数底层就是java创建的一个数组

@@ -1,8 +1,8 @@
 异常
 	常用方法
 	String getMessage()		返回此throwable的详细消息字符串
-	String toString()		返回此可抛出的简短描述
-	void   printStackTrace()	把异常的错误消息输出在控制台
+	String toString()			返回此可抛出的简短描述
+	void   printStackTrace()		把异常的错误消息输出在控制台
 
 
 	jvm默认处理

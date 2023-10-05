@@ -6,11 +6,12 @@ Stream流
 	
 		单列集合		default Stream<E> stream()		Collection中的默认方法
 		双列集合		无					无法直接使用stream流
-		数组		static<T> Stream<T> stream(T[] array)	Arrays工具类中静态方法
+		数组			static<T> Stream<T> stream(T[] array)	Arrays工具类中静态方法
 		零散数据		static<T> Stream<T> of(T...values)	Stream接口中静态方法
 			零散数据要求是同种类型的
 			Stream.of(...)
-			细节:	这个方法是可以传递数组,但是数组内不能是基本数据类型,						不然就会把数组当做一个元素
+			细节:	这个方法是可以传递数组,但是数组内不能是基本数据类型,	
+					不然就会把数组当做一个元素
 
 	
 	中间方法        

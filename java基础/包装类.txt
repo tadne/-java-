@@ -28,8 +28,8 @@
 	成员方法
 
 		static String toBinaryString()		二进制
-		static String toOctalString()		八进制
-		static String toHexString()		十六进制
-			为什么返回String?	因为进制的长度不确定,可能很长,超过int范围
+		static String toOctalString()			八进制
+		static String toHexString()			十六进制
+			为什么返回String?		因为进制的长度不确定,可能很长,超过int范围
 
 		static int parseXxx(String s)		将字符串转换为int类型

@@ -15,7 +15,6 @@ Object.clone()方法
 
 浅克隆：	就是直接拷贝，并没有创建新对象，地址值不变，克隆对象一旦被修改，原对象也修改了
 深克隆：	就是创建新对象，地址值不同
-
 		如果是基本数据类型，会直接拷贝变量数据类型
 		如果是引用数据类型，就会再new一个新对象，将原来对象的数据拷贝来
 
@@ -23,25 +22,26 @@ Object.clone()方法
 Object类中的clone方法是浅克隆
 
 如果要深克隆，就要重写clone方法
-下面是数组要重写的深克隆
-protected Object clone() {
-	int[] data =this.data;
-	int[] newData=new int[data.length];
-	fori{newData[i]=data[i];}
-	Object o=(Object)super.clone();
-	o.data=newData;
-	return o;
-}
+	下面是数组要重写的深克隆
+		protected Object clone() {
+			int[] data =this.data;
+			int[] newData=new int[data.length];
+			fori{newData[i]=data[i];}
+			Object o=(Object)super.clone();
+			o.data=newData;
+			return o;
+		}
+	其实就是重新new一个空对象,然后填充数据
 
-
+	
 
 当然一般是使用工具类来克隆
-gson或者jekson工具类就能很好解决这个问题
-	举个栗子:
-		创建Gson对象			Gson gson=new Gson();
-		把对象变成一个字符串		String str=gson.toJson(user);
-		再将字符串转换为对象即可		gson.fromJson(str,User.class);
-		这样得到的就是深克隆的对象
+	gson或者jekson工具类就能很好解决这个问题
+		举个栗子:
+			创建Gson对象					Gson gson=new Gson();
+			把对象变成一个字符串			String str=gson.toJson(user);
+			再将字符串转换为对象即可		gson.fromJson(str,User.class);
+			这样得到的就是深克隆的对象
 
 
 

@@ -3,8 +3,8 @@ IO字节流
 
 	分类:		
 
-			字节流		:操作所有文件
-			字符流		:纯文本文件	底层用了缓冲区,效率高
+			字节流Stream				:操作所有文件
+			字符流Reader/Writer		:纯文本文件	底层用了缓冲区,效率高
 
 	
 	字节输出流:
@@ -17,7 +17,7 @@ IO字节流
 		写数据
 		void write(int a)			一次写一个字节数据
 		void write(byte[] b)			一次写一个字节数组数据
-		void  write(byte[]b,int off,int len)	一次写一个字节数组的部分数据
+		void write(byte[]b,int off,int len)	一次写一个字节数组的部分数据
 
 			细节:	write方法的参数是整数,实际上写到本地文件中是整数在ASCII上对应字符
 

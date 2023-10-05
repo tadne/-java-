@@ -10,7 +10,7 @@
 	创建对象：	String name="";
 		构造方法：	
 			public String();				空参
-			public String(String original);		传入字符串创建
+			public String(String original);	传入字符串创建
 			public String(char[] chars);		字符数组创建
 			public String(byte[] bytes);		字节数组创建
 
@@ -28,7 +28,7 @@
 
 	String str="abc";
 	change(str);		//str=str+"d"
-	sout(str);	//结果是abc
+	sout(str);			//结果是abc
 	
 	
 

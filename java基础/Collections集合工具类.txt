@@ -5,10 +5,10 @@ Collections		集合工具类
 
 	public static <T> boolean addAll(Collection<T> c,T...elements)	批量添加元素
 	public static void shuffle(List<?> list)			打乱List集合元素的顺序
-	void sort(List<T> list) 			排序
-	void sort(List<T> list,Compartor<T> c) 		指定规则排序
-	int  binarySearch(List<T> dest,T key)		以二分查找查找元素	
-	void copy(List<T> dest,List<T> src)		拷贝集合中的元素
-	void fill(List<T> list,T obj)			使用指定的元素填充元素
-	void max/min(Collection<T> coll)		根据默认的自然排序获取最大/小值
-	void swap(List<?> list,int i,int j)		交换集合中指定位置的元素
+	void sort(List<T> list) 							排序
+	void sort(List<T> list,Compartor<T> c) 			指定规则排序
+	int  binarySearch(List<T> dest,T key)				以二分查找查找元素	
+	void copy(List<T> dest,List<T> src)				拷贝集合中的元素
+	void fill(List<T> list,T obj)						使用指定的元素填充元素
+	void max/min(Collection<T> coll)				根据默认的自然排序获取最大/小值
+	void swap(List<?> list,int i,int j)					交换集合中指定位置的元素

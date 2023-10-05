@@ -12,7 +12,7 @@
 
 	例:	        Arrays.stream(arr).forEach(System.out::println);
 			System.out	对应类
-			"::" 		方法引用符
+			"::" 			方法引用符
 			println		要调用的方法
 
 
@@ -26,6 +26,6 @@
 			格式,		对象::方法名
 				其他类:	  其他类对象::方法名
 				本类:	  this::方法名
-				父类:	    super::方法名
-
+				父类:	  super::方法名
+	
 	

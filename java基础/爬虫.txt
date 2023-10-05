@@ -1,49 +1,47 @@
 爬虫
 
-	爬虫就是从一段文本上爬取符合条件的文本
+		爬虫就是从一段文本上爬取符合条件的文本
 
 
-	Pattern:	表示正则表达式
-	Matcher:	文本匹配器，按照正则表达式的规则取读取字符串，从头开始读取
+		Pattern:	表示正则表达式
+		Matcher:	文本匹配器，按照正则表达式的规则取读取字符串，从头开始读取
 
 
-	String str="一段文本";
+		String str="一段文本";
 
-	//获取正则表达式对象
-	Pattern p = Pattern.compile("正则表达式");
-	//获取文本匹配器对象
-	Matcher m=p.matcher(str);
-	//文本匹配器用正则表达式搜索，如果有，就返回true。底层记录了目标字符串的起始索引和结束索引+1
-	boolean b=m.find();
-	//find方法读取一个满足条件的子串
-	while(m.find()){
-		//根据find方法记录的索引进行字符串截取,底层就是subString截取
-		String s1=m.group();
-	}
+		//获取正则表达式对象
+		Pattern p = Pattern.compile("正则表达式");
+		//获取文本匹配器对象
+		Matcher m=p.matcher(str);
+		//文本匹配器用正则表达式搜索，如果有，就返回true。底层记录了目标字符串的起始索引和结束索引+1
+		boolean b=m.find();
+		//find方法读取一个满足条件的子串
+		while(m.find()){
+			//根据find方法记录的索引进行字符串截取,底层就是subString截取
+			String s1=m.group();
+		}
 
 
 带条件的数据爬取
 
 
 
-
-
-贪婪爬取		在爬取数据的时候尽可能的多获取数据
-		ab+		就是获取abbbbbbbbbbbbb..这样
-		ab+?		非贪婪爬取
+	贪婪爬取		在爬取数据的时候尽可能的多获取数据
+			ab+		就是获取abbbbbbbbbbbbb..这样
+			ab+?		非贪婪爬取
 		
 
-替换		str.replaceAll(String regex,String replacement);
+	替换		str.replaceAll(String regex,String replacement);
 
-分隔		str.splid(String regex)
-		将字符串以正则表达式来分割开，返回一个字符串数组	
+	分隔		str.splid(String regex)
+			将字符串以正则表达式来分割开，返回一个字符串数组	
 
 
 捕获分组		正则表达式是按照()来分组的	
 		规则1：	每组有组号，从1开始
 		规则2：	以左括号位基准，第一个左括号位第一组，第二个位第二组...
 
-		\\	\\表示组号，\\1表示第一组
+		\\	\\表示组号，\\1 表示第一组
 	
 		可以用分组的形式来解决 如：
 			判断一个字符串开始部分和结束部分是否一致
@@ -62,8 +60,8 @@
 
 非捕获分组
 
-	(?:正则)		获取所有				java(?:8|11)
-	(?=正则)		获取前面部分			java(?=8|11)
+	(?:正则)		获取所有						java(?:8|11)
+	(?=正则)		获取前面部分					java(?=8|11)
 	(?!正则)		获取不是指定内容的前面部分		java(?!8|11)
 
 

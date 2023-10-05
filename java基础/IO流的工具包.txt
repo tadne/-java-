@@ -5,32 +5,32 @@ Commons-io工具包
 	工具类都是静态方法,方便调用
 
 	IOUtils类(流相关方法)
-	int 	copy(InputStream input,OutputStream output)		复制文件
-	int 	copyLarge(Reader input,Writer ouput)			复制大文件
-	String 	readLines(Reader input)					读取数据
+	int 		copy(InputStream input,OutputStream output)	复制文件
+	int 		copyLarge(Reader input,Writer ouput)			复制大文件
+	String 	readLines(Reader input)						读取数据
 	void 	write(String data,OutputStream output)			写出数据
 
 
 	FileUtils类(文件/文件夹相关方法)
-	void	copyFile(File srcFile,File destFile)			复制文件
+	void	copyFile(File srcFile,File destFile)						复制文件
 	void 	copyDirectory(File srcDir,File destDir)			复制文件夹
-		细节:直接拷贝文件夹的内容
+					细节:直接拷贝文件夹的内容
 	void 	copyDirectoryToDirectory(File srcDir,File destDir)	复制文件夹
-		细节:拷贝文件夹,并且在新文件夹中放内容
-	void	deleteDirectory(File directory)				删除文件夹
-	void	cleanDirectory(File directory)				清空文件夹
+					细节:拷贝文件夹,并且在新文件夹中放内容
+	void	deleteDirectory(File directory)						删除文件夹
+	void	cleanDirectory(File directory)						清空文件夹
 	String	readFileToString(File File,Charset encoding)		读取文件中数据变成字符串
-	void	write(File File,CharSequence data,String encoding)	写出数据
+	void	write(File File,CharSequence data,String encoding)		写出数据
 
 
 Hutool工具包		
-	IOUtil,				流操作
-	FileUtil,			文件读写操作
-	FileTypeUtil,			文件类型判断
+	IOUtil,					流操作
+	FileUtil,					文件读写操作
+	FileTypeUtil,				文件类型判断
 	WatchMonitor,			目录,文件监听
 	ClassPathResource,		对classpath中资源的访问封装
-	FileReader,			封装文件读取
-	FileWriter,			封装文件写入	
+	FileReader,				封装文件读取
+	FileWriter,				封装文件写入	
 	
 	官网:		https://hutool.cn/
 	API文档:		https://apidoc.gitee.com/dromara/hutool/

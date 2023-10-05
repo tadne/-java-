@@ -33,12 +33,12 @@ List系列集合:		有序,可重复,有索引
 			额外有一个方法,可以在遍历的过程中添加元素
 			ListIterator<Integer> it1 = list.listIterator();//获取列表迭代器对象
        			 while (it1.hasNext()){
-           		 System.out.println(it1.next());
+           		 	System.out.println(it1.next());
         		}
 
 		遍历删除元素:		迭代器
 		遍历添加元素:		列表迭代器
-		增强for,Lambda:		只想遍历
+		增强for,Lambda:	普通遍历
 		普通for:			操作索引
 
 
@@ -55,6 +55,6 @@ List系列集合:		有序,可重复,有索引
 		底层是双向链表
 		
 		特有方法
-		addFirst 	在开头插入元素		addLast		在结尾插入元素
-		getFirst	获取第一个元素		getLast		获取最后一个元素
+		addFirst 		在开头插入元素		addLast		在结尾插入元素
+		getFirst		获取第一个元素		getLast		获取最后一个元素
 		removeFirst	删除第一个元素		removeLast	删除最后一个元素

@@ -3,7 +3,6 @@
 	对象如果代码太多,就可以用代理转移部分职责(代码)
 
 
-
 什么是动态代理?
 	
 	直接修改原代码叫做侵入式修改,可能会对代码造成破坏
@@ -24,18 +23,16 @@
 
 	java.lang.reflect.Proxy类:	提供了为对象产生代理对象的方法
 		
-public static Object newProxyInstance
-			(ClassLoader loader,Class<?>[] interf	aces,InvocationHandler h)
+public static Object newProxyInstance(ClassLoader loader,Class<?>[] interfaces,InvocationHandler h)
 
-	参数一:	指定哪个类加载器,去加载生成的代理类
+	参数一:	指定类加载器,去加载生成的代理类
 			自定义类的加载器一般都是Application loader，写自定义类都行
+	参数二:	指定接口,接口指定生成的代理有哪些方法
+	参数三:	指定生成的代理对象要干什么:	一个内部类
 
-	参数二:	指定接口,接口指定生成 的代理有哪些方法
-	参数三:	指定生成的代理对象要干什么
-			一个内部类
 	new InvocationHandler() {
-              @Override
-         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable 		{
+              	@Override
+         	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable 	{
                         return null;
         	}    
 	}
@@ -48,7 +45,68 @@ public static Object newProxyInstance
 		根据参数写被代理方法前后要实现的逻辑即可
 
 
+使用流程:
+	先写一个接口方法										代表真实接口
+	用一个类实现这个接口方法								代表真实对象
+	再调用Proxy类的静态方法newProxyInstance创建代理对象		获取代理对象
+		其第一个参数是目标类的类加载器
+		第二个参数是代理需要实现的接口列表
+		第三个参数就是你想要实现的代理逻辑,叫做InvocationHandle,翻译后就叫调用处理器
+			它是一个函数式接口,创建它后要实现它的invoke方法
+			invoke方法有三个参数:
+				第一个参数是目标类的对象
+				第二个参数是目标类中要被代理的方法
+				第三个参数是被代理方法的参数列表
+					用第二个参数调用它的invoke方法就是运行它的意思,你可以再这段代码前后加你想要的代码
+		
+		最后用获得的代理对象调用你要代理的方法即可		
 
+
+		其中你可以自己写一个类实现InvocationHandle
+		还可以自己写一个ProxyFactory类写一个getProxy方法	反正就是按照面向对象设计的原则实现就好
+
+	
+		
+
+//真实接口
+interface SendService {
+    String send(String message);
+}
+//真实对象
+class SendServiceImpl implements SendService{
+    @Override
+    public String send(String message) {
+        System.out.println("发送信息："+message);
+        return message;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        //创建真实对象
+        SendService sendService = new SendServiceImpl();
+        //传入
+        SendService proxy = (SendService)Proxy.newProxyInstance(
+                sendService.getClass().getClassLoader(), 	// 目标类的类加载
+                sendService.getClass().getInterfaces(),  	// 代理要实现的接口列表 :new Class[]{SendService.class}
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        //调用方法之前，我们可以添加自己的操作
+                        System.out.println("before method " + method.getName());
+                        Object result = method.invoke(sendService, args);
+                        //调用方法之后，我们可以添加自己的操作
+                        System.out.println("after method " + method.getName());
+                        return result;
+                    }
+                }
+        );
+        String result = proxy.send("hello world");//调用代理后的方法
+    }
+}
+
+		动态代理是在程序运行时动态生成代理类的,不存在代理类的字节码文件
+		动态代理只有在运行的时候才会知道代理的是什么
+		而且关键是动态代理可以代理一个接口的多个实现类,方便了代码的维护升级
 
 
 

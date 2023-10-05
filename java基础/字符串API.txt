@@ -29,7 +29,7 @@ StringJoiner	//jdk8后出现
 	StringJoiner就能很好解决这个问题
 
 	如	int[] arr={1,2,3};
-		 StringJoiner sj = new StringJoiner(",","[",""]);
+		 StringJoiner sj = new StringJoiner(",","[","]");
 		fori{
 			sj.add(arr[i]+"");
 		}
@@ -70,7 +70,7 @@ StringJoiner	//jdk8后出现
 				
 		底层会预估字符串长度，一个数组来装字符串变量，然后直接创建对象
 		
-		但是，预估也是要消耗性能的，最好是再拼接的时候就用STringBuilder
+		但是，预估也是要消耗性能的，最好是拼接的时候就用StringBuilder
 
 			
 		
