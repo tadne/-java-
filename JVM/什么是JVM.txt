@@ -3,8 +3,8 @@ JVM是什么?
 	Java Virtual Machine:		java 程序的运行环境(java二进制字节码运行环境)
 			
 	好处: 
-	      一次编译,到处运行:   	屏蔽了字节码文件和底层操作系统差异,对外提供一致的运行环境
-	       自动内存管理,垃圾回收:	
+	        一次编译,到处运行:   	屏蔽了字节码文件和底层操作系统差异,对外提供一致的运行环境
+	       自动内存管理,垃圾回收:	方便维护和简化开发
 	       数组下标越界检查:		在执行书序元素访问时,自动检查下标是否在合法范围(c++代码)
 	       多态:			
 			提供虚方法表和方法重载重写
@@ -19,14 +19,14 @@ JVM是什么?
 		
 	比较:	jvm,jre,jdk
 	
-		JVM 虚拟机:			屏蔽java文件和底层的操作系统的差异	
-		JRE java运行环境:		JVM+基础类库	
+		JVM 虚拟机:				屏蔽java文件和底层的操作系统的差异	
+		JRE java运行环境:			JVM+基础类库	
 		JDK java开发工具包:		JVM+基础类库+编译工具
 
-		即:	jre= 	jvm	+基础类库
-			jdk= 	jvm	+基础类库	+编译工具
+		即:	jre= 	jvm	+基础类库				:	java运行所必须的环境
+			jdk= 	jvm	+基础类库	+编译工具	    :	java开发所必须的开发工具包
 			Javase=	jvm	+基础类库	+IDE工具
-			Javaee=	jdk	+应用服务器	+IDE工具
+			Javaee=	jdk	+应用服务器 +IDE工具
 		
 
 
@@ -45,8 +45,8 @@ JVM是什么?
 
 
 路线:	内存结构		方法区,Heap堆,JVM虚拟机栈,程序计数器,本地方法栈
-	执行引擎		interpreter解释器,JIT即时编译器,GC垃圾回收
-	类加载器		ClassLoader		
+		执行引擎		interpreter解释器,JIT即时编译器,GC垃圾回收
+		类加载器		ClassLoader		
 		
 	
 	
