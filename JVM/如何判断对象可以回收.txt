@@ -8,14 +8,14 @@
 	可达性分析算法:	先统一扫描,确定一系列根对象,(根对象:一定不能被垃圾回收的对象)
 			如果一个对象没有被根对象  直接或者间接  的使用,就会被垃圾回收
 
-		哪些对象可以作为根对象?
+		
 			分析方式:
 				可以用  jmap 和内存分析工具Memory Analyzer(MAT)来分析
 			
 				jmap -dump:format=b,live,file=1.bin 线程id
 				用jmap将当前线程信息抓取个快照,变成文件1.bin,然后用MAT分析
 
-
+		哪些对象可以作为根对象?
 			根对象:	System.class	核心类加载器等系统类
 					:Object,String,HashMap等类
 				Native Stack	本地方法类
