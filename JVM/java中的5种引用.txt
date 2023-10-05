@@ -1,4 +1,5 @@
 java中的5种引用
+
 	强引用 		不会回收
 		指创建一个对象并把这个对象赋给一个引用变量。
 		被GCRoot对象引用的对象是强引用对象
@@ -25,7 +26,7 @@ java中的5种引用
 				可以通过本地方法接口（JNI）访问虚拟机内部数据或操作系统资源。
 	
 
-	软引用 		一次gc后,内存任然不足,即回收软引用对象
+	软引用 		一次gc后,内存依然不足,即回收软引用对象
 
 		被SoftReference对象所引用的对象称为软引用对象，
 		SoftReference对象调用get方法就会获取到它所软引用的那个对象。
@@ -33,18 +34,19 @@ java中的5种引用
 		软引用 用来描述一些有用但非必须的对象， 当JVM进行垃圾回收时内存空间足够，
 		垃圾回收器就不会回收软引用对象；但是当内存不够时会对软引用对象进行回收。
 
-		软引用可用来实现内存敏感的高速缓存,比如网页缓存、图片缓存等。
+		软引用对象可以用于缓存那些非必需但仍有用的对象，如图片、文件等。
+				当系统内存不足时，这些对象会被回收，以响应内存需求.
 
-		当然,当内存被gc后,就无法get访问到了
-
-		也有些软引用数据,可以实时清理,就可以配合引用队列来清理,(先进先出)
+		例:	开发一个Web应用程序，该应用程序要从数据库中检索大量的数据并将其缓存到内存中。
+			如果使用强引用来缓存这些数据，可能会导致内存泄漏或OutOfMemoryError。
+			但是，如果用软引用来缓存这些数据，则当内存不足时，数据将被回收，以响应内存需求.
 
 		例:	
 		List<SoftReference<byte[]>> list=new ArrayList<>();
 		创建引用队列
 		ReferenceQueue<byte[]> queue=new ReferenceQueue<>{};
 		//关联软引用和引用队列
-SoftRefef=rence<byte[]> ref=new softReference<>(new SoftReference<>(new byte[_1MB],queue));
+        SoftReference<byte[]> ref=new softReference<>(new SoftReference<>(new byte[1MB],queue));
 		list.add(ref);
 		//提取并清除无用软引用对象
 		while(queue.poll()!=null){
@@ -60,12 +62,13 @@ SoftRefef=rence<byte[]> ref=new softReference<>(new SoftReference<>(new byte[_1M
 
 		它和完全没有引用的区别是，在垃圾回收之前可以通过get访问到它。 
 
-		弱引用在threadlocal中有实际应用场景
+		弱引用在ThreadLocal中有实际应用场景
 	
 		同样代码中也可以结合弱引用
 
 		
 		典型应用场景:
+			java中有一个集合 WeakHashMap就是采用了弱引用
 			缓存可以提高程序的性能和效率，但也会占用内存空间。
 			弱引用来存一些不重要但是常用的数据
 
@@ -102,3 +105,10 @@ SoftRefef=rence<byte[]> ref=new softReference<>(new SoftReference<>(new byte[_1M
 		再用优先级别很低的线程finaliz handle线程来查询引用队列中有没有终结器引用
 		如果有,该线程就会调用finaliz()方法,执行终结方法
 		第二次 GC 时才回收被引用的对象。
+
+
+	
+
+	
+
+
