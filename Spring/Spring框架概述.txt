@@ -6,11 +6,17 @@ Spring概述和入门
 		jsp开发
 		MVC+三层架构
 		EJB重量级框架
-		SPring,SSH
-		Spring,SSM
+		Spring,SSH=Spring+SpringMVC+Hibernate
+		Spring,SSM=Spring+SpringMVC+Mybatis
 		SpringBoot	
 		SpringCloud	
 
+BeanFactory 
+		一个工厂类（接口），用于管理 Bean 的生产和管理。
+		 IOC 容器的核心接口，负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。
+		除被容器管理外，Bean 在应用程序中没有任何特殊之处。
+		IOC负责实例化、配置、组装 Bean，
+				通过读取为应用程序定义的配置元数据获取有关实例化、配置和管理对象的信息
 
 BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 	导入spring的jar包,maven
@@ -43,11 +49,10 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 			<bean id="userService" class="org.example.userServiceImpl">
         			<property name="empDao" ref="empDao"></property>
     			</bean>
-			//ref是引用的意思,这里就是你引用的bean的id
-			//name就是set方法后面的Xxx,和参数名相同,注意这个方法的名字不能改,
-					改了就会找不到这个方法了
+			//ref是引用的意思,这里就是引用的bean的id
+			//name是set方法后面的Xxx,和参数名相同,注意:	这个方法的名字不能改,改了会导致找不到方法
 		
-		这样就实现了DI依赖注入,底层会在获取userService的时候,执行好setEmpDao方法
+		这样实现了DI依赖注入,底层会在获取userService时,执行好setEmpDao方法
 			一次提供好需要的bean
 
 
@@ -65,14 +70,13 @@ BeanFactory快速入门:	程序代码==>第三方===>配置清单==>bean
 			修改Beans.xml文件,在要被注入的实现类bean中嵌入<propreity>
 			创建测试代码,获取实现类对象,在获取对象时,setXxx方法就被执行了
 
-
 		虽然开发中不怎么使用BeanFactory,但是BeanFactory是底层
 
 			
 
 	
 ApplicationContext快速入门
-	ApplicationContext称为Spring容器,内部封装BeanFactory,但比BeanFactory更强大
+	ApplicationContext称为Spring容器,内部封装BeanFactory,比BeanFactory更强大
 	用Spring容器开发,配置文件习惯写成:	applicationContext.xml
 
 	Service代码
