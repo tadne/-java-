@@ -1,53 +1,47 @@
 Spring xml方式整合第三方框架
 
-	
-
 两种整合方式:
 	
-	方式一:	不需要自定义命名空间,不用使用Spring的配置文件第三方框架本身内容,如Mybatis
-		步骤:	导入mybatis依赖
-			编写mapper和mapper.xml
-			配置SqlSeeionFactoryBean和MapperScannerConfiger这两个bean
-				SqlSeeionFactoryBean:		提供SqlSessionFactory
-				MapperScannerConfiger:	将mapper对象存到Spring容器中
-			编写测试代码
+方式一:	不需要自定义命名空间,不用使用Spring的配置文件,全部使用第三方框架本身内容,如Mybatis
+	步骤:	导入mybatis依赖
+		编写mapper和mapper.xml
+		配置SqlSeeionFactoryBean和MapperScannerConfiger这两个bean
+			SqlSeeionFactoryBean:		提供SqlSessionFactory
+			MapperScannerConfiger:	将mapper对象存到Spring容器中
+		编写测试代码
 				
-方式一整合原理(源码解析):
-	整合包中提供了SqlSessionFactoryBean和一个扫描Mapper的配置对象,
-	SqlSessionFactoryBean一旦被实例化,
-	就开始扫描Mapper并通过动态代理产生实现类储存到Spring容器中.
+	方式一整合原理(源码解析):
+		整合包中提供了SqlSessionFactoryBean和一个扫描Mapper的配置对象,
+		SqlSessionFactoryBean一旦被实例化,
+		就开始扫描Mapper并通过动态代理产生实现类储存到Spring容器中.
 	
-	相关的有四个类
-		SqlSessionFactoryBean:		要配置,用于提供SqlSessionFactory给spring容器
-		MapperScannerConfigurer:		要配置,用于扫描mapper注册BeanDefinition
-		MapperFactoryBean:			Mapper的FactoryBean,获得指定Mapper时调用getObject方法
-		ClassPathMapperScanner:		definition.setAutowireMode(2) 修改自动注入状态,
-									MapperFactoryBean的setSqlSessionFactory会自动注入
+		相关的有四个类
+			SqlSessionFactoryBean:		要配置,用于提供SqlSessionFactory给spring容器
+			MapperScannerConfigurer:		要配置,用于扫描mapper注册BeanDefinition
+			MapperFactoryBean:			用于获得指定Mapper时调用getObject方法获取代理
+			ClassPathMapperScanner:		definition.setAutowireMode(2) 修改自动注入状态,
+										MapperFactoryBean的setSqlSessionFactory会自动注入
 	
 	
-	SqlSessionFactoryBean实现初始化接口,用after..方法赋值
-	实现FactoryBean接口,用getObject方法获取当前成员SqlSessionBean
-
-	
-	MapperScannerConfigurer实现Bean工厂后处理器,(在实例化之前,BeanDefinitionMap放入元素后)
-	其中ClassPathMapperScanner继承调用ClassPathBeanDefinitionScanner的scan方法扫描mapper
-	将mapper注册到BeanDefinitionMap中,并将BeanDefinitionMap返回ClassPathMapperScanner
-	(但是由于mapper是个接口,不能反射,spring是通过反射创建对象)
-	所以,调用了setBeanClass方法里面传递一个MapperFactoryBean参数覆盖这个Bean的class属性
-	(也就是说,其实创建的是MapperFactoryBean的Bean对象,也就是mapper的工厂bean代替mapper)
-	MapperFactoryBean中有getObject方法,它可以调用SQLSession获取Mapper
-	SqlSession通过SqlSessionFactory获取,SqlSessionFactoryBean获取SqlSessionFactory
-	获取mapper对象后,需要注入到spring中,这里通过调用setAutowireMode(2) 修改自动注入状态
-	将mapper对象注入到Spring容器中
+		SqlSessionFactoryBean实现了初始化接口,用after..方法来赋值
+		实现FactoryBean接口,用getObject方法获取当前成员SqlSessionBean
+		MapperScannerConfigurer实现Bean工厂后处理器,(实例化之前,BeanDefinitionMap放入元素后执行)
+		其中ClassPathMapperScanner继承调用ClassPathBeanDefinitionScanner的scan方法扫描mapper
+		将mapper注册到BeanDefinitionMap中,并将BeanDefinitionMap返回ClassPathMapperScanner
+		由于mapper是个接口,不能反射,spring是通过反射创建对象,其实就是动态代理
+		所以,调用了setBeanClass方法并传递MapperFactoryBean参数覆盖这个Bean的class属性
+		(也就是说,最终代理创建的是MapperFactoryBean的Bean对象,也就是mapper的工厂bean代替mapper)
+		MapperFactoryBean中有getObject方法,可以调用SQLSession获取Mapper
+		SqlSession通过SqlSessionFactory获取,SqlSessionFactoryBean获取SqlSessionFactory
+		获取mapper对象后,要注入到spring中,这里是通过调用setAutowireMode(2) 修改自动注入状态
+		将mapper对象注入到Spring容器中
 
 
-
-
-	方式二:	需要引入第三方框架命名空间,要使用Spring的配置文件配置第三方框架本身内容,如Dubbo
+方式二:	需要引入第三方框架命名空间,要使用Spring的配置文件配置第三方框架本身内容,如Dubbo
 		
 	大致流程:
 
-		将自定义标签的约束与 物理约束文件和网络约束名称的约束 以键值对方式存到
+		将自定义标签的约束 与 物理约束文件和网络约束名称的约束 以键值对方式存到
 		spring.schemas文件中,该文件存在类加载路径的META-INF里,spring会自动加载
 
 		将自定义命名空间的名称和自定义命名空间的处理器映射关系 以键值对形式存到							spring.handlers文件中,该文件也在类加载路径的META-INF里,spring会自动加载
@@ -59,7 +53,7 @@ Spring xml方式整合第三方框架
 		命名空间处理器会调用各种职责的处理解析器来处理各种标签,
 		为每一个标签都配置有相应的BeanDefinitionParser
 		命名空间处理器会将这些BeanDefinition分配给对应处理器
-		
+		(这一段注解开发的原理有些类似)
 
 
 
