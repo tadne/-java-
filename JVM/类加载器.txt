@@ -1,16 +1,17 @@
-Bootstrap ClassLoader	启动类加载器	JAVA_HOME/jre/lib	顶级类加载器
-Extension ClassLoader	扩展类加载器	JAVA_HOME/jre/lib/ext	上级为Bootstrap,显示为null
-Application ClassLoader	应用类加载器(默认)classpath		上级为Extension
-自定义类加载器				自定义			上级为Application
+Bootstrap   ClassLoader	启动类加载器	     JAVA_HOME/jre/lib		顶级类加载器
+Extension   ClassLoader	扩展类加载器	     JAVA_HOME/jre/lib/ext	上级为Bootstrap,显示为null
+Application ClassLoader	应用类加载器(默认)  classpath			    上级为Extension
+自定义类加载器			    自定义								    上级为Application
 
 
 从自定义类加载器开始,逐级向上加载
 
 
 
-双亲委派:	一种类加载器的工作机制，可以保证类的加载的有序性和安全性。
+双亲委派:		一种类加载器的工作机制，可以保证类的加载的有序性和安全性。
 
-	原理:	当类加载器收到类加载的请求时，不会立即加载这个类，而是先将请求委托给它的父类加载器
+	原理:	当类加载器收到类加载的请求时，不会立即加载，而是先将请求委托给它的父类加载器
+		
 		每一个层的类加载器都是如此，直到最顶层的启动类加载器（Bootstrap ClassLoader）。
 	
 		只有当父类加载器无法完成请求时（即在它的搜索范围内没有找到这个类），
@@ -35,24 +36,26 @@ Application ClassLoader	应用类加载器(默认)classpath		上级为Extension
 	打破双亲委派的方式:
 		自定义类加载器，重写loadClass方法，改变默认的委派逻辑。
 
-		用线程上下文类加载器（Thread Context ClassLoader），
-			让父类加载器请求子类加载器完成特定的类加载任务。
+		用线程上下文类加载器, 让父类加载器请求子类加载器完成特定的类加载任务。
 		
-		用反射或字节码操作技术，绕过双亲委派机制，直接调用defineClass方法来定义类。
+		用反射或字节码操作技术，绕过双亲委派机制，直接调用defineClass方法定义类。
 
 
-线程上下文类加载器:	用于解决类加载器之间的交互问题的机制，可以让一个线程指定一个类加载器
+线程上下文类加载器:	
+			用于解决类加载器之间的交互问题的机制，可以让一个线程指定一个类加载器
 			加载特定的类或资源，而不是使用默认的类加载器。
 
-	作用:	为了破坏Java类加载委托机制，使程序可以逆向使用类加载器。 
+	作用:	破坏Java类加载委托机制，使程序可以逆向使用类加载器。 
 		如，Java提供了很多服务提供者接口（Service Provider Interface，SPI），
 		允许第三方为这些接口提供实现。常见的SPI有JDBC、JCE、JNDI、JAXP等。
 		SPI的接口由Java核心库来提供，实现代码则作为Java应用所依赖的jar包包含进类路径里。
 		
 	例:
-		使用jdbc时,需要加载driver驱动,但是不写Class.forName("com.mysql.jdbc.driver")		也可以让com.mysql.jdbc.driver正确加载
+		使用jdbc时,需要加载driver驱动,但是不写Class.forName("com.mysql.jdbc.driver")
+		也可以让com.mysql.jdbc.driver正确加载
 		
-		因为在 JDBC 4.0 之后，引入了一种新的机制，叫做SPI（Service Provider Interface）		它让 JDBC 驱动自动加载，不需要显式调用 Class.forName() 方法。
+		因为在 JDBC 4.0 之后，引入了一种新的机制，叫做SPI（Service Provider Interface）
+		它让 JDBC 驱动自动加载，不需要显式调用 Class.forName() 方法。
 		
 		SPI 原理:每个 JDBC 驱动包中，都有一个名为 META-INF/services/java.sql.Driver 
 		的文件，记录了该驱动包中实现了 java.sql.Driver 接口的类的全限定名。
