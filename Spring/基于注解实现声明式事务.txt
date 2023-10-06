@@ -10,37 +10,21 @@
 	@Configuration								//配置类
 	@ComponentScan("ltt")						//文件扫描
 	@MapperScan("ltt.mapper")					//mapper扫描
-	@PropertySource("classpath:jdbc.properties")	//数据库配置文件
-	@EnableTransactionManagement				//开启注解驱动
+	@PropertySource("classpath:jdbc.properties")//数据库配置文件
+	@EnableTransactionManagement				//开启注解驱动,并且会注入平台事务管理器和SqlSessionFactoryBean
 
+//以下三个都不强制要求手动配置,都可以通过注解解决
+	@Bean
+    public DataSource dataSource//数据库
 
 	@Bean
-        public DataSource dataSource//数据库
+    public SqlSessionFactoryBean sqlSessionFactoryBean//数据库工厂
 
 	@Bean
-        public SqlSessionFactoryBean sqlSessionFactoryBean//数据库工厂
-
-	 @Bean
-        public DataSourceTransactionManager dataSourceTransactionManager//平台事务管理器
+    public DataSourceTransactionManager dataSourceTransactionManager//平台事务管理器
 
 
-什么情况下Spring的事务会失效?
 
-如果要让spring控制事务,
-			1:	方法要加@Transactional注解
-			2:	传播行为问题
-			3:	用代理对象去调用方法
-
-		1:	在方法中捕获异常没有捕捉到
-		2:	非事务方法调用事务方法(如果不使用代理对象调用会导致失效)
-		3:	事务方法内部调用事务方法(被调用的方法的事务不会生效)
-		4:	@Transactional注解标记的方法不是public就会失效
-		5:	抛出的异常和rollbackFor指定的异常不匹配,默认rollbackFor指定的异常为RuntimeException
-		6:	数据库表不支持事务,如MyISAM引擎等
-		7:	事务传播行为导致事务失效
-
-
-	
 
 
 
