@@ -1,8 +1,6 @@
 Spring注解方式整合第三方框架
 	
-	第三方框架与Spring整合xml方式很多用自定义标签完成
-	
-	第三方框架与Spring整合注解方式很多用@Import完成
+	第三方框架与Spring整合xml方式很多用自定义标签和@Import完成
 	@Import可以导入:
 		普通配置类
 		实现ImportSelector接口的类
