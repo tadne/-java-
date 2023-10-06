@@ -1,14 +1,14 @@
 SpringBean的配置详情
 	id="" class=""		Bean的id和全限定名
-	name=""			通过name设置bean的别名,可以通过别名获取bean实例
-	scope			bean的作用范围,BeanFactory作为容器取值singleton和prototype
+	name=""				通过name设置bean的别名,可以通过别名获取bean实例
+	scope				bean的作用范围,BeanFactory作为容器取值singleton和prototype
 	lazy-init=""		延迟加载/懒加载,默认容器创建就加载,但当BeanFactory作为容器时无效
-					启用后调用getBean方法的时候加载
+						启用后调用getBean方法的时候Bean才会被加载
 	init-method=""		实例化后自动执行初始化方法,method指定方法名
 	destory-method=""	销毁后自动执行初始化方法,method指定方法名
 	autowire="byType"	设置自动注入模式,常用是按照类型byType,按照名字byName
-	factory-bean="factory-method"	
-				指定Bean的创建方法工厂
+	factory-bean="factory-method"		
+						指定Bean的创建方法工厂
 			
 	id		id是bean的配置文件中bean的唯一标识,
 			如果不设置,底层会提供一个id,就是当前实现类的全限定名
@@ -19,14 +19,14 @@ SpringBean的配置详情
 			底层是用map集合 ,使用别名映射id来获取bean对象
 
 	scope		bean的作用范围:	Singleton和Prototype
-			Singleton: 单例,spring创建的时候,进行Bean实例化,储存到单例池中,
-					每次getBean都是从单例池中获取相同Baen
-			Prototype: 原型,多例.
-					spring初始化时不会创建Bean实例,只有调用getBean时,才实例化Bean,
-					每次都会创建一个新的Bean实例
+
+		Singleton:  单例,
+		            spring创建的时候,进行Bean实例化,储存到单例池中,每次getBean都是从单例池中获取相同Baen
+		Prototype: 原型,多例.
+					spring初始化时不会创建Bean实例,调用getBean时,才实例化Bean,每次都会创建一个新的Bean实例
 
 	lazy-init	设置为true为延迟加载
-			默认是在启动容器的时候,将所有的singletonbean提前创建
+			默认是在启动容器的时候,将所有的singletonBean提前创建
 			设置了懒加载后,启用后调用getBean方法的时候加载
 
 			提升系统的启动速度，按需要加载  Bean 节约了内存
@@ -35,7 +35,7 @@ SpringBean的配置详情
 			
 	init-method	构造方法完成后,就执行初始化方法
 			要在实现类中写一个初始化方法,然后在xml中指定
-			也可以实现InitalizingBean,重写afterPropertiesSet方法实现
+			也可以实现InitializingBean,重写afterPropertiesSet方法实现
 
 	
 Bean的实例化配置
@@ -47,18 +47,19 @@ Bean的实例化配置
 		
 	工厂方式实例化factory-bean(主要是自定义bean的创建过程,而不是通过反射创建)
 		静态工厂实例化		用constructor-arg来传递参数
-			<bean id="stage" class="com.staticfactory.Stage" factory-method="getInstance"></bean>
-			表示调用com.staticfactory.Stage类的getInstance静态方法来创建一个stage的bean。
+	<bean id="stage" class="com.staticFactory.Stage" factory-method="getInstance"></bean>
+			表示调用com.staticFactory.Stage类的getInstance静态方法来创建一个stage的bean。
 				如果静态方法需要参数，可以使用constructor-arg标签来指定
 			作用:	bean创建前后不会操作,如果bean创建前/后想要写些代码可以用它
 		实例工厂实例化		用constructor-arg来传递参数
 			先配置工厂对象
-			<bean id="serviceFactory" class="com.linjie.instancefactory.ServiceFactory"></bean>
-<bean id="userService" factory-bean="serviceFactory" factory-method="createUserService"></bean>
-			表示调用serviceFactory这个bean的createUserService实例方法来创建userService的bean。
-				如果实例方法需要参数，可以使用constructor-arg标签来指定1。
+		    <bean id="serviceFactory" class="com.linjie.instancefactory.ServiceFactory"></bean>
+		    <bean id="userService" factory-bean="serviceFactory" factory-method="createUserService"></bean>
+			表示调用serviceFactory这个bean的createUserService方法创建userService的bean。
+				如果实例方法需要参数，可以使用constructor-arg标签来指定。
 			作用:	bean创建前后不会操作,如果bean创建前/后要实现一些代码可以用它
-				第三方的一些bean需要方法来构建
+					也有第三方的一些bean需要用它来构建
+
 		实现FactoryBean规范延迟实例化
 			工厂类实现FactoryBean<UserService>接口
 			实现方法getObject方法,返回需要创建的对象
@@ -67,14 +68,14 @@ Bean的实例化配置
 
 	Bean的注入方式
 		通过Bean的set方法注入		<property name="useDao" ref="useDao"/>
-						<property name="useDao" value="haohao"/>
+								<property name="useDao" value="haohao"/>
 		通过构造Bean的方法注入		<constructor-arg name="" value="">
-						<constructor-arg name="" ref="">
+								<constructor-arg name="" ref="">
 		
 	Bean的依赖注入配置property
-		普通数据类型		String,int..				用value属性指定
+		普通数据类型		String,int..			用value属性指定
 		引用数据类型		UserDaoImpl,DataSource	用ref属性指定
-		集合数据类型		List,Map					用property的list/map子标签即可
+		集合数据类型		List,Map				用property的list/map子标签即可
 							其中还有value/entry子标签注入数据
 	
 
@@ -84,7 +85,7 @@ Bean的实例化配置
 		byName:		要求set方法名字得和bean的name属性一致
 		byType:		要求class唯一,不能有相同class的bean
 	
-		可以通过自动装配来省去Bean的依赖注入配置,少写了些property
+		可以通过自动装配来省去Bean的依赖注入配置,少写些property
 
 
 
