@@ -8,8 +8,8 @@
 			 <dependency>
            	 		<groupId>org.aspectj</groupId>
            	 		<artifactId>aspectjweaver</artifactId>
-            			<version>1.9.6</version>
-		        </dependency>
+            		<version>1.9.6</version>
+		     </dependency>
 
 		准备目标类,增强类,并配置给Spring
 			<bean id="userService" class="ltt.service.impl.UserServiceImpl" />
