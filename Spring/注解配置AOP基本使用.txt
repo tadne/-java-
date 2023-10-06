@@ -1,15 +1,13 @@
 注解实现aop
 	
-
+半注解形式:
 	给目标类和通知类加@Component注解
 	在通知类加@aspect注解
 	在对应切入点上加@Before等指定通知类型的注解,并加参数,参数是切面表达式指定目标方法
 	在Spring的xml文件中加组件扫描标签<context:component-scan base-package="">
 	在Spring的xml文件中加<aop:aspectj-autoproxy>开启aop的组件扫描
 
-	
 	指定通知类型的注解:@Before,@After,@After-returing,@Throwing,@After-throwing
-
 
 	注解方式下切点表达式的抽取和引用
 
@@ -21,7 +19,7 @@
 
 
 
-注解解决配置文件的扫描,采用全注解开发
+注解解决配置文件的扫描,即采用全注解开发
 	
 	创建一个配置类,替代xml文件
 	加@Configuration注解,替代xml的Bean文件扫描
