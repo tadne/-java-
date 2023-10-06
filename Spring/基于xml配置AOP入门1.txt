@@ -2,8 +2,6 @@
 		
 		指定需要被增强的包或类或方法,实现解耦合
 		配置目标方法被哪些通知方法增强,在执行前还是执行后
-		
-
 
 操作流程:	
 		导入AOP依赖
@@ -19,7 +17,7 @@
 		配置切点表达式
 		<aop:config>
 		<!--切点表达式指定被增强方法-->
- <aop:pointcut id="myPointcut" expression="execution(void ltt.service.Userservice.show1())"/>
+        <aop:pointcut id="myPointcut" expression="execution(void ltt.service.UserService.show1())"/>
 			<!--指定织入方式,切点与通知结合-->
         		<aop:aspect ref="myAdvice">
             			<aop:before method="before" pointcut-ref="myPointcut"/>
