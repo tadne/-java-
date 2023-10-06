@@ -6,19 +6,19 @@
 		处理器最终就是在Spring容器中注入AbstractAdvisorAutoProxyCreator
 		这个类的继承体系中实现了Bean后处理器
 		在处理器方法中判断是否需要生产代理对象
-		就创建代理对象,并存储到单例池中
+		需要就创建代理对象,并存储到单例池中
 
 
 两种aop实现动态代理的方式:
 	
 	jdk动态代理技术:		目标类有接口,基于接口动态生成实现类的代理对象
-				目标类有接口的情况下,默认使用该方式
+						目标类有接口时,默认使用该方式
 	
-	cglib动态代理技术:目标类无接口且不能被final修饰,基于被代理对象动态生成子对象为代理对象				目标类无接口,默认使用该方式
+	cglib动态代理技术:	目标类无接口且不能被final修饰,基于继承动态生成被代理对象子类
+						目标类无接口时,默认使用该方式
 			目标类有接口,手动配置<aop:config proxy-target-class="true">强制使用
 
 	
-
 	jdk方式都是代理接口,动态生成实现类注册为Bean实例
 	cglib是直接代理类本身,动态生成其子类注册为Bean对象
 
@@ -37,20 +37,20 @@ cglib代理实现步骤:
 
 
 	代码
-		 MyAdvice myAdvice=new MyAdvice();
-		 Target target=new Target();
-        	Enhancer enhancer=new Enhancer();
-        	enhancer.setSuperclass(Application.class);
-        	enhancer.setCallback(new MethodInterceptor() {
-        	    @Override
-        	    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-      		          	myAdvice.before();
-                		Object invoke = method.invoke(application, objects);
-                		myAdvice.after();
-                		return invoke;
-            			}
-        		});
-      	  	Target o = (Target)enhancer.create();
+	    MyAdvice myAdvice=new MyAdvice();
+	    Target target=new Target();
+        Enhancer enhancer=new Enhancer();
+        enhancer.setSuperclass(Application.class);
+       	enhancer.setCallback(new MethodInterceptor() {
+       	    @Override
+       	    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+     	          	myAdvice.before();
+               		Object invoke = method.invoke(application, objects);
+               		myAdvice.after();
+               		return invoke;
+           			}
+       		});
+      	Target o = (Target)enhancer.create();
 		//这是因为cglib生成的代理对象就是目标类的子类,可以直接强转,多态嘛
 
 
