@@ -3,7 +3,7 @@ Spring配置非自定义Bean
 	如:	UserDaoImpl等,都是自己定义的Bean
 
 	实际开发中,会有一些功能类不是自己定义的,而是用的第三方jar包
-	要让Bean要想让Spring进行管理,也要配置
+	要是Bean也要想让Spring进行管理,也要配置
 
 	
 	考虑:
