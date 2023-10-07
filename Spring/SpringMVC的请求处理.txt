@@ -16,11 +16,11 @@
 
 				请求:	localhost://param/?param=value&param=value2
 		@RequestParam("param") String[] params		数组接收请求中同名数据
+				
+				请求:	localhost://param/?param=value1&param=value2
+		@RequestParam("param") List<String> params	集合接收请求中同名数据
 
-		@RequestParam("param") List<String> params	
 				请求:	localhost://param/?param1=value1&param2=value2
-													集合接收请求中同名数据
-
 		@RequestParam("param") Map<String,String> params	map
 													接收请求中不同名数据
 		
@@ -38,10 +38,10 @@
 
 
 	配置RequestMappingHandlerAdapter指定消息转换器,然后就直接可以获得对应对象
-<beanclass="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	<beanclass="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>
-         <beanclass="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <beanclass="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
             </list>
         </property>
     </bean>
