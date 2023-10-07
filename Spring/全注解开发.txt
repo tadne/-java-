@@ -1,11 +1,11 @@
 SpringMVC的全注解开发
 	
 	spring-mvc.xml中组件转换为注解形式
-		@Configuration							//设置配置类
+		@Configuration							    //设置配置类
 		@ComponentScan("com.ltt.controller")		//组件扫描
 		@EnableWebMvc				
 		//这个注解会注入RequestMappingHandlerMapping	处理器映射器
-		//注入RequestMappingHandlerAdapter等等组件		处理器适配器
+		//注入RequestMappingHandlerAdapter等等组件	处理器适配器
 		//这个注解和<mvc-annotation-driven/>效果类似
 
 		写一个配置类实现WebMvcConfigurer		加@Component注解
