@@ -9,50 +9,54 @@
 
 代码实现
 	创建线程池
-		构造方法static静态
-		ExecutorService newCachedThreadPool()	
-			(最多是int最大值)					没有上限的线程池
-			
-		ExecutorService newFixedThreadPool(int nThreads)
-									有上限的线程池
-		ExecutorService newCachedThreadPool(): 				
-				一个可缓存线程池，灵活的创建/回收线程，若无可回收，则新建线程。
+		FixedThreadPool：
+				包含固定数量的线程，
+				任务提交时:	有空闲线程则立即执行，否则该任务会暂存到队列等待。
+				线程数固定的，不存在线程数量过多导致系统资源耗尽的问题
 
-		ExecutorService newSingleThreadExecutor(): 			
-				初始化一个具有一个线程的线程池
-		
-		ScheduledExecutorService newSingleThreadScheduledExecutor(): 
-				一个具有一个线程的线程池，支持定时及周期性任务执行
-									
+		CachedThreadPool：
+				不包含固定数量的线程，
+				任务提交时:	有空闲线程则立即执行，否则会创建新的线程执行任务。
+				线程数不固定，可以根据需要创建大量的线程来处理任务。
 
-		线程池中线程方法
-			Future<?> submit(Runnable task)：	提交任务
-			void shutdown()：			关闭线程池
-				
+		SingleThreadExecutor：
+				只包含一个线程
+				所有任务都在该线程中串行执行
+				只有一个线程执行任务，不存在多线程之间的竞争问题。
 
-	提交任务
+		ScheduledThreadPool：
+				只包含一个线程
+				所有任务都在该线程中串行执行
+				可用来执行定时任务和周期性任务。可以指定延迟时间和周期时间来执行任务。
 
-	任务执行完毕,关闭线程池(实际中,线程池一般不关)
+		WorkStealingPool：
+				Java 8中新增加线程池实现。使用工作窃取算法来提高并行度。
+					在工作窃取算法中，每个线程都维护一个双端队列，
+					某线程完成自己队列中的所有任务后，会从其他线程的队列中窃取一些任务执行
 
+	线程池中线程方法
+		Future<?> submit(Runnable task)：		提交任务
+		void shutdown()：					关闭线程池
 
 
 自定义线程池
 	ThreadPoolExector()
 	自定义线程池的构造方法,七个参数解释
 	corePoolSize：   		核心线程的最大值，不能小于0
-	maximumPoolSize：	最大线程数，不能小于等于0，maximumPoolSize>= corePoolSize
+	maximumPoolSize：	最大线程数，>=核心线程最大值，maximumPoolSize>= corePoolSize
 	keepAliveTime：  		空闲线程最大存活时间,不能小于0
-	unit：           		时间单位
+	unit：           			时间单位
 	workQueue：      		任务队列，不能为null
 	threadFactory：  		创建线程工厂,不能为null      
-	handler：        		任务的拒绝策略,不能为null    
-			一般用的是
-			Executors.defaultThreadFactory()	底层就是new个Thread,加设置
-	任务的拒绝策略(ThreadPoolExector中的静态内部类)
-			AbortPolicy		丢弃任务并抛出RejectedExecution异常
-			DiscardPolicy		丢弃任务但是不抛出异常
+			(常用)Executors.defaultThreadFactory()	
+			底层就是new个Thread,然后在方法体力加设置
+
+	handler：        		任务的拒绝策略,不能为null    	
+		任务的拒绝策略(ThreadPoolExector中的静态内部类)
+			AbortPolicy			丢弃任务并抛出RejectedExecution异常
+			DiscardPolicy			丢弃任务但是不抛出异常
 			DiscardOldestPolicy	抛弃队列中等待最久的任务,把当前任务加入队列
-			CallerRunsPolicy	调用任务的run()方法绕过线程池直接执行
+			CallerRunsPolicy		调用任务的run()方法绕过线程池直接执行
 
 
 
