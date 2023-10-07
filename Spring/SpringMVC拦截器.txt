@@ -1,13 +1,13 @@
 拦截器Interceptor
 
 拦截器简介
-	SpringMVC的拦截器Interceptor是一个接口规范,主要是对Controller资源访问时进行拦截操作的技术
+	SpringMVC的拦截器Interceptor是一个接口规范,是对Controller资源访问时进行拦截操作的技术
 	拦截后可以进行权限控制,功能增强等,类似Web中的Filter
 
 	拦截器和过滤器的区别
 		客户端请求先经过过滤器到前端控制器,再被分发到各个Servlet,再经过拦截器到Controller
 	
-		过滤器是web的技术,对请求过滤包括Servlet,jsp等资源
+		过滤器是web的技术,对请求过滤,包括Servlet,jsp等资源
 		拦截器是SpringMVC技术,只对MVC管辖范围才拦截,主要拦截Controller请求
 		晚于前端控制器执行
 	
@@ -33,8 +33,6 @@
 		
 	在mvc的xml中配置拦截器
 
-	
-
 执行顺序
 	多个拦截器执行顺序:默认为mvc的配置顺序
 	方法顺序:
@@ -45,10 +43,6 @@
 			其他的拦截器的方法都不会执行,包括它后面拦截器的preHandler也不执行
 			所有的postHandler都不执行
 		
-		
-
-
-
 执行原理
 	客户端发出请求到前端控制器
 	前端控制器通过处理器映射器来找到对应的可以被执行的Interceptor拦截器和对应的Controller
