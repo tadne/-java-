@@ -3,7 +3,7 @@ Semaphore
 	Semaphore字面意思是信号量
 
 	作用:		控制访问特定资源的线程数目。
-		类似synchronized,只不过synchronized值能一个线程,Semaphore可以两个线程
+		类似synchronized,只不过synchronized只能一个线程,Semaphore可以两个线程
 
 
 	常用方法
@@ -11,6 +11,8 @@ Semaphore
  		void acquire() 					表示获取许可
  		void release()					表示释放许可
 	
+	使用起来类似lock锁	
+
 	例:	
 		private Semaphore semaphore = new Semaphore(2) ;
 
@@ -33,7 +35,7 @@ Semaphore
     	}
 	public static void main(String[] args) {
         // 创建线程任务类对象
-        CarThreadRunnable carThreadRunnable = new CarThreadRunnable() ;
+        CarThreadRunnable = new CarThreadRunnable() ;
        	 	// 创建5个线程对象，并启动。
        	 	for(int x = 0 ; x < 5 ; x++) {
         	    new Thread(carThreadRunnable).start();
