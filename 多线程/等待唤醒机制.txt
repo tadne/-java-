@@ -13,14 +13,14 @@
 	
 
 	阻塞队列实现
-		static String take();		从阻塞队列中获取数据		
+		static String take();		    从阻塞队列中获取数据
 		static void   put(String str);	将数据存在队列中
 		这两个方法底层有锁和wait方法,天然就是用来实现等待唤醒机制的
 
 		顶层接口Iterable,Collection,Queue,BlockingQueue
 		实现类:	ArrayBlockingQueue	LinkedBlockingQueue
-		ArrayBlockingQueue:	底层数组,有界
-		LinkedBlockingQueue:	=底层是链表,无界,最大值是int最大值
+		ArrayBlockingQueue:	    底层数组,有界
+		LinkedBlockingQueue:	底层是链表,无界,最大值是int最大值
 
 		ArrayBlockingQueue queue=new ArrayBlockingQueue<>(1);
 		其中参数是队列中能存放的最大值,
