@@ -2,7 +2,8 @@ CountDownLatch
 
 	允许一个或多个线程等待其他线程完成操作以后，再执行当前线程；
 		如主线程需要开启2个子线程，当子线程执行完毕后再去执行主线程，
-		针对这个需求就可用CountDownLatch实现。CountDownLatch中count down是倒着数数的意思；
+		针对这个需求就可用CountDownLatch实现。
+		CountDownLatch中count down是倒着数数的意思,实际就是个线程计时器
 
 		CountDownLatch是通过一个计数器来实现的，
 
@@ -10,8 +11,8 @@ CountDownLatch
 
 		成员方法
 
-		CountDownLatch(int count)		// 创建指定大小的CountDownLatch对象
+		CountDownLatch(int count)			        // 创建指定大小的CountDownLatch对象
 		void await() throws InterruptedException	// 让当前线程等待
-		void countDown()				// 计数器减1
+		void countDown()						       // 计数器减1
 
 
