@@ -8,7 +8,7 @@ web三大组件
 		单例对象,启动就创建,创建完执行init方法
 		核心是doFilter方法
 	
-	Listener			监听器,对域对象创建和属性变化监听
+	Listener		监听器,对域对象创建和属性变化监听
 		根据类型和作用不同,可分为监听域对象创建销毁和域对象属性内容变化的
 		根据监听的域不同,可分为监听Request,Sesson,ServtContext等
 
