@@ -41,6 +41,7 @@
 			return user;
 		}
 		//直接返回实体对象,浏览器页面就会获得对应json数据
+		//因为会底层会对响应数据处理,来将数据转为json数据,或将json数据转为对象
 		
 	
 	@RestController=@Controller+@RequestBody
