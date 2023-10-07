@@ -1,30 +1,31 @@
 注解驱动<mvcannotation-driven/>
 
-
 问题:
-	由于访问静态资源需要配置<mvc:default-servlet-handler> 
-	或者<mvc:resources mapping="/image/*" location="/img/">
-
+	由于访问静态资源要配置
+		<mvc:default-servlet-handler/> 或<mvc:resources mapping="/image/*" location="/img/">
 
 	这导致要配置handlerMapping,还要配置消息转换器
 
 	<!--    配置消息转换器-->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
-            <list>     <beanclass="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
             </list>
         </property>
     </bean>
 
 
-	比较繁琐.
+	非常繁琐.
 
 
 解决:
 	注解驱动<mvcannotation-driven/>标签
 
-	这个标签在不同的版本中,会注册不同的组件.
+	这个标签在不同的版本中,会自动注册不同的组件.
 	Spring3.0.x版本注册的是DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter
 	Spring3.1.x开始注册组件变为RequestMappingHandlerMapping和RequestMappingHandlerAdapter
 
 	在注册适配器的时候,会自动注入消息转换器
+
+	一个配置解决问题,非常方便
