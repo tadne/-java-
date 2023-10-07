@@ -68,9 +68,9 @@ yield()方法
 
 join()方法	
 	
-	Thread.join()			合并线程,让当前线程执行完后,其他线程再执行
+	Thread.join()			合并线程,让调用方法的线程执行完后,其他线程再执行
 
-	了解就好,少用,会让其他线程阻塞
+	了解就好,不常用,会让其他线程阻塞
 
 
 setPriority(int num)方法
@@ -106,7 +106,7 @@ setDaemon(Boolean b)
 
 	Thread.setDaemon(Boolean b)		将线程设置为守护线程
 
-	thread.setDaemon(true)		将线程设置为守护线程	
+	thread.setDaemon(true)			将线程设置为守护线程	
 	java中线程分为用户线程和守护线程
 
 	守护线程:	为其他线程提供服务的线程,如垃圾回收器GC
