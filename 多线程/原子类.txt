@@ -9,18 +9,18 @@ JDK5后提供了java.util.concurrent.atomic包(简称Atomic包)
 
 	AtomicBoolean： 原子更新布尔类型
 
-	AtomicInteger： 原子更新整型
+	AtomicInteger： 	原子更新整型
 	
-	AtomicLong： 原子更新长整型
+	AtomicLong：	 原子更新长整型
 
 	构造方法
-		public AtomicInteger()	   			默认值为0的原子型Integer
+		public AtomicInteger()	   					默认值为0的原子型Integer
 		public AtomicInteger(int initialValue) 		指定值的原子型Integer
 	成员方法(都是原子方式操作)
-		int get():   			 		获取值
+		int get():   			 		        获取值
 		int getAndIncrement():      			将当前值加1,返回自增前的值。
-		int incrementAndGet():     			将当前值加1,返回自增后的值。
-		int addAndGet(int data):			与输入值相加，返回结果。
+		int incrementAndGet():     			    将当前值加1,返回自增后的值。
+		int addAndGet(int data):			    与输入值相加，返回结果。
 		int getAndSet(int value):   			设置值，并返回旧值。
 
 	
@@ -32,7 +32,7 @@ JDK5后提供了java.util.concurrent.atomic包(简称Atomic包)
 		CAS可以将read-modify-write转换为原子操作，这个原子操作直接由处理器保证。
 		CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。
 			当且仅当旧预期值A和内存值V相同时，将内存值V修改为B并返回true，
-			否则什么都不做，并返回false。\
+			否则什么都不做，并返回false。
 
 
 
