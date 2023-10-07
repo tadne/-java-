@@ -4,7 +4,7 @@ web三大组件
 		每一个Servlet有一个service方法,每次访问都执行
 		缺点是业务要配置Servlet
 	
-	filter			过滤器,对客户端请求过滤
+	Filter			过滤器,对客户端请求过滤
 		单例对象,启动就创建,创建完执行init方法
 		核心是doFilter方法
 	
@@ -18,8 +18,8 @@ web三大组件
 
 传统web开发的问题:
 	问题:	每个业务功能请求对应一个Servlet	
-	问题:	每个Servlet的业务操作繁琐
-	问题:	Servlet获得Spring容器组件只能通过客户端代码获取,不能整合
+			每个Servlet的业务操作繁琐
+			Servlet获得Spring容器组件只能通过客户端代码获取,不能整合
 
 mvc开发解决
 		解决:	根据业务模块划分Controller	
