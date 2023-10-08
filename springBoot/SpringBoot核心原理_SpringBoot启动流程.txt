@@ -1,11 +1,10 @@
-	SpringBoot启动流程
+SpringBoot核心原理		<==>		SpringBoot启动流程
 	
-包括的一些需求
+整体流程:		核心:		初始化和创建容器
 	1:	初始化各种属性,加载成对象.
 			读取环境属性(Environment)
 			系统配置(spring,Factories)
 			参数(Arguement,application,properties)
-
 	2:	创建spring容器对象ApplicationContext,加载配置
 	3:	创建容器前,通过监听机制,应对不同阶段加载数据和更新数据的需求
 	4:	容器初始化中追加的各种功能,如日志,统计时间
@@ -13,17 +12,17 @@
 
 
 工作流程:
-SpringBoot30StartupApplication中===> 							pringApplication.run(SpringBoot30StartupApplication.lass,args)调用run方法执行
-  也就是在SpringApplication类中调用run(new Class<?>[] {primarySource},args);
-     SpringApplication中===>return new SpringApplication(primarySources).run(args);
+SpringBootStartupApplication中  ===> 	SpringApplication.run(SpringBootStartupApplication.class,args)调用run方法执行
+    #   也就是在SpringApplication类中调用run(new Class<?>[] {primarySource},args);
+     在SpringApplication中===> return new SpringApplication(primarySources).run(args);
 	
 
 1==>	SpringApplication(primarySources):		加载各种初始化信息,初始化各种配置对象
 	   SpringApplication===>this(null,primarySources);
-	     	this.resourceLoader=resourceLoader;//初始化资源加载器
-	     	...//初始化配置类类名信息
+	     	this.resourceLoader=resourceLoader;//初始化资源加载器读取资源
+	     ...//初始化配置类类名信息
 		...//确认当前容器加载的类型
-		...//获取系统配置引导信息
+		...//获取SpringBoot本身需要的系统配置引导信息
 		...//获取ApplicationContextInitializer.class对应的实例
 		...//监听,SpringBoot没有给每一个初始化位置加接口监听
 			而是用监听器监听,要监听哪个位置就加对应的监听器
