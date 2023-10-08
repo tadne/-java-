@@ -1,0 +1,51 @@
+SpringBoot属性以依赖配置
+	业务bean的属性可以为其设置一些默认值
+	当需要设置属性时尽量通过配置文件传递属性
+	业务bean应尽量避免设置强制加载,而是根据需要导入后加载降低spring管理bean的强度
+
+@ConfigurationProperties		:	这个注解就可以自动装配配置文件中的数据
+
+	这个注解可以用在类上,也可以用在方法上
+	比如用来绑定第三方bean属性
+	用来注入对象属性等等
+
+例:
+	#  yml配置文件
+	services:
+	    port: 8080
+
+	@ConfigurationProperties(prefix="services")//将配置文件中属性引入类中
+	@Data
+	@Component
+	public class ServletConfig(){
+		private int port;
+	}
+
+
+@EnableConfigurationProperties(xxx.class):		将对应的配置类加载到spring容器中
+
+	与@Component注解有区别,它避免了将当前类强制加载为bean,如果没有对应配置类不影响运行
+
+	这个注解支持松散绑定:	配置文件中的名称忽略大小写
+			支持大小写各种模式
+			"-"连接,"."连接等等都支持
+			
+
+@Value注解:				可以将单个配置引入类中,但是不支持松散绑定
+
+
+单位设置
+	@DurationUnit(CHronUnit.MINUTES)	//时间单位配置
+	private Duration serverTimeout
+
+
+	@DataSizeUnit(DataUnit.MEGABYTES)	//文件大小单位
+	private DataSize dataSize;
+	
+
+
+
+
+
+	
+
