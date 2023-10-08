@@ -1,0 +1,14 @@
+springBoot默认读取bootstrap和application配置文件，且前者优先级更高。
+
+application配置文件分为3种:		.properties	.yml 	.yaml
+		这三者的优先级别是  	 .properties   >   .yml    >  .yaml
+
+开发人员:	类路径			在Resources文件下创建的配置文件		
+
+开发组长:	类路径/config	在Resources文件下创建config文件,再写一个配置类,优先级更高
+
+运维人员:	文件路径			直接把配置文件放到jar包的同级目录
+		
+运维组长:	文件路径/config	jar包的同级目录创建config目录,然后创建配置文件
+
+

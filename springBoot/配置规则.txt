@@ -1,7 +1,0 @@
-springBoot默认读取bootstrap和application配置文件，且前者优先级更高。
-
-在执行命令的目录下建config文件夹，然后把配置文件放到这个文件夹下。
-		(在jar包的同一个目录下建config文件夹，执行命令需要在jar包所在目录下才行)
-直接把配置文件放到jar包的同级目录
-在classpath下建一个config文件夹，然后把配置文件放进去。
-在classpath下直接放配置文件。
