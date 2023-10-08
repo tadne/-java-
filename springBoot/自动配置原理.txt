@@ -7,36 +7,42 @@
 	设置技术集b默认配置加载
 	开放技术集b默认配置覆盖接口
  
+	也就是提前做好了常用配置并提供了配置开关,也就是一些依赖等等
+	提前将配置做好,(约定大于配置),手动修改配置时就覆盖默认配置
+
 
 原理:	
 	@SpringBootApplication注解
 		是一个组合注解,主要包含了
-		@SpringBootConfiguration,@EnableAutoConfiguration,@ComponentScan
+		@SpringBootConfiguration,		配置类:		表示注入SpringBoot本身的配置
+		@EnableAutoConfiguration,		自动配置开关
+		@ComponentScan				    组件扫描
 	
 	其中:	
 		@SpringBootConfiguration=@Configuration+@Component+@Indexed+..
 		@EnableAutoConfiguration=@AutoConfigurationPackage+...
 	
-	其他都是常见的,以下是一些不常见的
-
+	其他都是常见的,以下是不常见的
 	@Indexed:	SpringBoot运行时加速启动的
 	
-其中最主要的两个:
 
+以上配置中主要需要理解的是以下两个:
+
+@AutoConfigurationPackage中的
 	**@Import(AutoConfigurationPackages.Registrar.class)
 		主要是两个作用:
-		一:	ImportBeanDefinitionRegister:导入BeanDefinition注册器
-		二:	DeterminableImports: 设置当前启动类所在包为扫描包,后续针对当前包扫描
+		一:	ImportBeanDefinitionRegister:	导入BeanDefinition注册器去注册bean
+		二:	DeterminableImports: 			设置当前启动类所在包为扫描包,后续针对当前包扫描
 
 
 	@Import(AutoConfigurationImportSelector.class)
-		实现了很多接口,分三部分
+		实现了很多接口,分三类
 		Aware类:		当bean实现了该接口,可以在当前bean中获取对象
-			比如BeanFactoryAware:就是可以获取对应的BeanFactory对象,
+				比如BeanFactoryAware:	就是可以获取对应的BeanFactory对象,
 				在bean所在类中,操作BeanFactory,并随着bean的加载执行
 
-		Orderd:				这个接口可以指定bean加载的顺序
-		DeferedImportSelector:		推迟导入选择器,
+		Ordered:						可以指定bean加载的顺序
+		DeferredImportSelector:		推迟导入选择器,
 			识别@EnableAutoConfiguration中要导入和不导入的技术集,
 			调用loadFactoryName方法,获取类加载器,用类加载器获取spring的web资源
 			"META-INF/spring.factories",其中就是spring的工厂类名
@@ -45,15 +51,13 @@
 			导入配置文件的写的参数,可以用来覆盖默认配置
 
 
-
-
 自定义自动配置实现
 	加依赖
 	在"META-INF/spring.factories"文件中写入要加载的自动配置类即可
 	
 	
 	还可以在配置文件中排除
-		spring.autpconfigure.exclude=..
+		spring.autoconfigure.exclude=..
 
 
 
