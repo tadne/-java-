@@ -23,9 +23,9 @@
 以下是一些常见的实现方式：
 
 	静态代理：	
-		编译时就确定代理类和真实类的关系，代理类需要实现和真实类相同的接口，
-			并持有一个真实类的引用。
+		编译时就确定代理类和真实类的关系，代理类要实现和真实类相同的接口，并持有一个真实类的引用。
 		简单易用，但不够灵活，如果需要增加新的真实类或接口，就要修改或增加新的代理类。
+		其实就是接口多态的应用
 
 	动态代理：
 		在运行时动态地创建代理类和真实类的关系，代理类不需要实现和真实类相同的接口，
@@ -140,7 +140,7 @@
 	        this.target = target;
 	    }
 
-	    // 通过静态方法创建并返回代理对象
+	    // 通过静态方法newProxyInstance创建并返回代理对象
 	    public static Object getProxy(Object target) {
 	        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
                 	target.getClass().getInterfaces(),
