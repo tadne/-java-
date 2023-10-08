@@ -88,3 +88,16 @@
 	}
 
 
+给测试类加事务注解@Transactional,默认为不再提交事务
+
+
+测试类随机测试数据:
+	例:	test:
+		   book:
+		      id=${random.int}
+	       	      name=${random.value}
+
+	@ConfigurationProperties(prefix="test.book")//类注解,给javabean类注入数据
+
+
+
