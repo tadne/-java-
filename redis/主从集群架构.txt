@@ -1,0 +1,25 @@
+单点redis并发能力有上限,要进一步提高并发能力,就要搭建主从集群,实现读写分离
+
+主从集群:
+	主节点:		master			负责写操作 
+	从节点:		slave/replica		负责读操作
+
+	保证数据一致性,所以每次写操作都要进行数据同步
+	
+	一台机器开多个redis:	需要准备3个redis,然后修改配置,主要是修改端口
+		还要修改每个redis的声明ip
+		即在redis.conf中加==>			replica-announce -ip 172.0.0.1  #设置声明ip
+
+搭建步骤:
+	开启多个redis实例
+	配置主从,使用repicaof或者slaveof(5.0前)命令
+		有临时和永久两种模式:	
+			修改配置文件(永久有效):
+					在redis.conf中添加配置:		slaveof <masterip> <masterport>
+			使用redis-cli客户端连接到redis服务,执行slaveof命令(重启后失效)
+				例:		SLAVEOF 172.0.0.1 6379    
+				即		SLAVEOF   ip   端口
+	
+
+
+例:		让实例B作为A的从节点,要在B实例上执行:	SLAVEOF  A的ip  A的端口
