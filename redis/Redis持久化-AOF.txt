@@ -1,0 +1,28 @@
+AOF全称:		Append only File(追加文件).
+			Redis处理的每一个写命令都会记录在AOF文件,可以看做命令日志文件
+
+	AOF:	默认是关闭的,要修改redis.conf文件来开启:	
+	
+		appendonly yes					# 是否开启AOF功能,默认no
+		appendfilename "appendonly.aof"	# AOF文件的名称
+
+	AOF命令记录的频率也可以配置
+
+		appendfsync always 		# 表示每执行一次写命令,立即记录到AOF文件
+		appendfsync everysec		# 默认:写命令执行完,先放AOF缓冲区,每隔1秒将缓冲区数据写到AOF文件
+		appendfsync no			# 写命令执行完,先放AOF缓冲区,操作系统来决定何时将缓冲区内容写回磁盘
+
+		配置项:							优点						缺点
+		always		同步刷盘			可靠性高,不丢数据			但是性能影响过大
+		everysec		每秒刷盘			性能适中					最多丢失1秒数据(常用)
+		no			操作系统控制		性能最好					可靠性差,可能丢失大量数据
+
+	
+
+	AOF是记录命令,AOF文件会比RDB文件大很多.
+		AOF会记录对同一个key的多次写操作,但只有最后一次写操作才有意义.
+		可以执行bgrewriteaof命令,可以让AOF执行重写命令,用最少的命令达到相同效果
+
+	配置自动重写,也就是出发阈值执行bgrewriteaof命令
+		auto-aof-rewrite-percentage 100	# AOF比上次文件增长超过多少百分比触发重写
+		auto-aof-rewrite-min-size 64mb	# AOF文件体积最小多大以上触发重写
