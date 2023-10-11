@@ -1,0 +1,62 @@
+主从数据同步原理
+	
+	概念:
+		全量同步:		slave与master第一次建立连接时执行,将整个master发送给slave
+		增量同步:		不是第一次连接时,就进行增量同步,将差异数据发送给slave
+		ReplicationId :	简称replid	
+			数据集的标记,id一致则是同一数据集.每一个master都有唯一的replid,slave会继承master的replid
+			
+		offset:			偏移量
+			随着记录在repl_baklog中数据的增大,slave完成同步时也会记录当前同步的offset
+			如果slave的offset小于master的offset.说明slave数据落后于master.需要更新
+
+		因此slave做数据同步,必须向master声明自己的replid和offset,master才可以判断需要同步哪些数据
+			
+
+	同步过程:
+		当slave和master建立连接,从节点发送数据同步请求,并传递自己的replid和offset
+			master判断是否是第一次数据同步,即判断replid是否相同
+			如果不相同:
+				进行全量同步
+				master 返回master的 replid 和 offset , slave保存replid和offset
+				此时,master开始执行bgsave,生成RDB文件,在记录RDB文件的期间,
+					master所有修改命令都被记录在一个叫reopl-baklog缓冲区中
+					然后将RDB文件发送给slave
+				此时slave再清空本地数据,加载RDB文件	
+				master再将reopl-baklog文件发送给从节点
+					从节点接受到reopl-baklog文件中,执行其中所有命令
+				如果之后还有写操作,依然是记录在和reopl-baklog文件中,由后台线程发送给从节点并加载
+			如果相同
+				master回复continue
+				然后master根据offset对比判断是否slave是否需要更新数据以及需要更新多少数据
+				然后master从reopl-baklog文件通过offset找到对应的数据和版本信息发送给slave
+				slave再执行对应命令,和重写自己的offset和replid
+
+	reopl-baklog文件:	
+		本质是一个数组,大小固定,如果满了,那么会覆盖之前的数据
+		offset就是一个索引位置,slave和master的offset之间的数据就是要slave要被更新的数据
+		只要slave和master的offset变动速度相当,就可以一直做增量同步
+
+		如果,slave宕机,master继续记录新命令,最后master里的offset都被覆盖了,就导致无法进行增量同步
+		
+		
+
+主从同步的优化:
+	在master中配置reopl-diskless-sync yes启动无磁盘复制,避免全量同步时的磁盘io
+			其实就是在全量同步时,不再写到磁盘中了,而是写到网络中,直接发送给slave
+			当然如果网速不好的话,就不建议使用,因为会阻塞
+
+	Redis单节点的内存占用不要太大,减少RDB导致的过多磁盘io
+
+	适当提供reopl-baklog文件的大小,发现slave宕机时,尽快实现那故障恢复,尽可能避免全量同步
+
+	限制一个master的slave节点数量,如果slave太多,可以采用主-从-从链式结构,减少master压力
+			也就是让从已经同步的从节点给 链后面的节点进行同步
+			实现:	就是让从节点用SLAVEOF指向另一个从节点
+
+
+
+
+
+
+
