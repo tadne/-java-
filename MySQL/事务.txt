@@ -6,13 +6,13 @@
 事务操作:
 	查看事务提交方式		select @@autocommit;
 	设置事务提交方式		set @@autocommit=0;//手动提交
-	提交事务			commit;
-	回滚事务			rollback;
-	手动开启事务		start transaction  或  begin
+	提交事务				commit;
+	回滚事务				rollback;
+	手动开启事务			start transaction  或  begin
 	
 四大特性:
 	原子性:atomicity		:不可分割的最小操作单元,要么都成功要么都失败
-	一致性:consistency	:事务完成必须使所有时间保持一致
+	一致性:consistency	:事务完成必须使所有数据保持一致
 	隔离性:isolation		:数据库系统提供隔离机制,保证事务不受外部并发影响独立运行
 	持久性:durablity		:一旦提交或回滚,对数据库的改变是永久的
 
@@ -22,24 +22,26 @@
 	幻读:		一个事务按条件查询,没有数据,但插入数据时,该数据已经存在
 
 	脏读:		事务a执行更新还没提交的时候,事务b执行查询,导致b读到a还没提交的事务
-			如果此时a回滚就导致b读的数据变成脏数据了
+				如果此时a回滚就导致b读的数据变成脏数据了
 
 	不可重复读:	在同⼀个事务中执⾏同⼀个读取操作,但是结果不⼀致。
-			其实就是查询时插入导致数据不一致			
+				事务b执行插入，事务a查询发现没有数据，b提交，a再次查询发现有数据
+				因为脏读被解决，不能读取未提交修改，其实就是查询时插入导致数据不一致			
 						
-	幻读:		事务a读取,事务b插入,事务a也插入,但是b已经插入.导致插入报错
-			a再次读取,依然读不到,因为不可重复读被解决
+	幻读:		事务a读取无数据,事务b插入,事务a也插入,但是b已经插入.导致插入报错
+				a再次读取,依然读不到,因为不可重复读被解决，同一个事务的两次查询要一致
 
 
-	不可重复读和幻读两者有些相似。但不可重复读重点在于update和delete，而幻读的重点在于insert。
+	不可重复读和幻读两者有些相似。
+			但不可重复读重点在于update和delete，而幻读的重点在于insert。
 			
 			
 
 事务的隔离级别:
-	读未提交		read uncommitted	什么都不做
-	读已提交		read commited		解决	脏读
-	可重复读	(默认)	repeatable read		解决	脏读    不可重复读
-	序列化		serializable		解决	脏读    不可重复的    幻读
+	读未提交			read uncommitted	什么都不做
+	读已提交			read commited		解决		脏读
+	可重复读	(默认)	repeatable read		解决		脏读    不可重复读
+	序列化			serializable		解决		脏读    不可重复的    幻读
 
 
 	查看事务的隔离级别:	select @@trannsaction_isolation;
