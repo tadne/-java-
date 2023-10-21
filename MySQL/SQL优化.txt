@@ -19,7 +19,8 @@ insert优化:	插入多条数据时,如果逐条插入,那么频繁的与数据�
 		#设置全局参数local_infile为1,开启本地加载文件导入数据的开关
 			set global local_infile=1
 		#执行load指令将数据加载到表中
-			load data local infile '文件路径' into table '表名' fields 				terminated by '字段间隔' lines terminated by '行间隔';
+			load data local infile '文件路径' into table '表名' fields 	
+			terminated by '字段间隔' lines terminated by '行间隔';
 
 	
 
@@ -92,9 +93,9 @@ count优化:
 
 	(innodb)用法:	count(*)	:遍历表,不取值,直接按行累加(mysql底层优化)
 			count(主键)	:遍历表,取出所有主键id,返回给服务层,按行累加
-			count(1)	:遍历表,不取值,服务层对返回行置1,按行累加
+			count(1)		:遍历表,不取值,服务层对返回行置1,按行累加
 			count(字段)	:若没有notnull,取字段值,返回服务层,判断null,按行累加
-					:若有,取字段值,返回服务层,按行累加
+						:若有,取字段值,返回服务层,按行累加
 		
 			其中效率		count(字段)<count(主键)<count(1)<count(*)
 
@@ -111,15 +112,22 @@ update优化:
 		尽量使用覆盖索引,遵循最左前缀法则
 
 
-总结:	插入数据:	insert建议批量插入,手动控制事务,主键顺序插入,
-			大批量用load data local infile
-	主键优化:	主键长度尽量短	建议使用主键自增
+总结:	
+	插入数据:			insert建议批量插入,手动控制事务,主键顺序插入,
+					大批量用load data local infile
+
+	主键优化:			主键长度尽量短	建议使用主键自增
+
 	order by优化:	using index:	通过索引返回数据,性能高
-			using filesort:	要将返回结果在排序缓冲区排序
+					using filesort:	要将返回结果在排序缓冲区排序
+
 	group by优化:	索引,多字段分组遵循最左前缀法则
-	limit优化:	覆盖索引+子查询
-	count优化:	自己计数		count(字段)<count(主键)<count(1)<count(*)
-	updata优化:	根据索引字段更新避免行锁升级表锁	
+
+	limit优化:		覆盖索引+子查询
+
+	count优化:		自己计数		count(字段)<count(主键)<count(1)<count(*)
+
+	updata优化:		根据索引字段更新避免行锁升级表锁	
 
 
 
