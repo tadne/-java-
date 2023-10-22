@@ -3,9 +3,13 @@ Spring IOC整体流程总结
 
 	Bean的创建大体流程
 		通过BeanDefinitionReader读取xml文件,解析bean标签,转换成BeanDefinition对象
+		有bean的工厂后处理器来对bean注册bean或者动态修改bean
 		并将BeanDefinition对象存入BeanDefinitionMap集合中存储
 		Spring遍历BeanDefinitionMap,取出每一个BeanDefinition,
-		通过反射创建对象,将创建好的对象存入SingletonObjects单例池中
+		通过反射创建对象,
+		进行bean的初始化阶段,执行各种初始化方法,属性填充等等
+		再有bean的后处理器实现aop等操作
+		将创建好的对象存入SingletonObjects单例池中
 		
 	Spring的后处理器	
 		BeanFactoryPostProcessor: Bean工厂后处理器和BeanPostProcessor: Bean后处理器
