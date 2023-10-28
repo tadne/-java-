@@ -1,0 +1,30 @@
+				RabbitMQ 		ActiveMQ		RocketMQ		Kafka
+
+社区				rabbit			apache			阿里				apache
+
+开发语言			Erlang			java				java				scale&java
+
+协议支持			AHQP，XMPP	OpenWire		自定义协议		自定义协议
+				SMTP，STOMP	XMPP，AMQP
+
+可用性			高				一般				高				高			
+	
+单机吞吐			一般				差				高				非常高
+
+消息延迟			微秒级			毫秒级			毫秒级			毫秒内
+
+消息可靠性		高				一般				高				一般
+
+
+
+速度上kafka最快，每秒百万
+
+rabbitMQ
+		支持各种协议，
+		速度快每秒几万，
+		消息延迟最低，
+		可靠性高:	支持消息的确认，确保消息不丢失
+
+消息可靠性用rabbitMq或rocketMq
+
+日志处理一般用kafka
