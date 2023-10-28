@@ -1,0 +1,87 @@
+MQ有Publisher Confirm和Publisher Return两种确认机制.
+
+
+开启确认机制后,MQ成功收到消息后会返回确认消息给生产者
+
+	返回结果:
+		1:	消息发给MQ,但是路由失败. 
+			此时会通过Publisher Return机制生效,返回路由异常原因,然后返回ACK,投递成功
+
+		2:	临时消息发黑MQ,并且入队成功,返回ACK,投递成功
+
+		3:	持久消息投递到MQ,并且入队并持久化,返回ACK,投递成功
+
+		4:	其他情况会返回NACK,投递失败
+
+	如何处理生产者确认消息?
+		生产者确认要额外网络和系统资源开销,尽量不使用
+		如果一定要用,不用开启Publisher-Return机制,因为一般路由失败是代码有误
+		对应nack消息可以有限次重试,依然失败就记录异常
+
+
+实现生产者确认机制:
+
+	spring:
+		rabbitmq:
+			publisher-confirm-type: correlated # 开启Publisher confirm机制并设置confirm类型
+			Publisher-returns: true # 开启Publisher Return机制
+
+	
+	publisher-confirm-type有三种:	
+		none:	关闭confirm机制
+		simple:	同步阻塞等待MQ的回执消息
+		correlated: 异步回调方式返回回执消息
+
+
+因为Publisher-returns是基于回调机制,所以需要回调函数
+
+	每个RabbitTemplate只能配置一个ReturnCallback.因此要在项目启动过程中配置:
+	
+			
+	@Test
+    void testConfirmCallback() throws InterruptedException {
+        CorrelationData cd = new CorrelationData(UUID.randomUUID().toString());
+        cd.getFuture().addCallback(new ListenableFutureCallback<CorrelationData.Confirm>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                log.error("消息回调失败",ex);
+            }
+            @Override
+            public void onSuccess(CorrelationData.Confirm result) {
+                log.debug("收到确认回执");
+                if (result.isAck()){
+                    log.debug("消息发送成功,收到ack");
+                }else {
+                    log.error("消息发送失败,收到nack,原因:{}",result.getReason());
+                }
+            }
+        });
+        rabbitTemplate.convertAndSend("it.direct","red1","hello",cd);
+    }
+
+@Configuration
+public class MqConfirmConfig implements ApplicationContextAware {
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        RabbitTemplate rabbitTemplate=applicationContext.getBean(RabbitTemplate.class);
+        //接收回调信息,配置回调
+        rabbitTemplate.setReturnsCallback(new RabbitTemplate.ReturnsCallback() {
+            @Override
+            public void returnedMessage(ReturnedMessage returnedMessage) {
+                log.debug("收到消息的returnCallback,exchange:{},msg:{},reCode:{},text:{}" ,returnedMessage.getExchange(),
+                        returnedMessage.getMessage(),
+                        returnedMessage.getReplyCode(),
+                        returnedMessage.getReplyText());
+            }
+        });
+
+    }
+}
+
+
+
+	
+
+
+
