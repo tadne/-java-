@@ -1,0 +1,7 @@
+AMQP：		Advanced Message Queuing Protocol   高级消息队列协议
+
+		用于应用程序间业务消息的开放标准。该协议与语言和平台无关，更符合做服务中独立性的要求
+
+
+SpringAMQP：	基于AMQP协议定义的一套api，提供模版发送和接收消息，
+				包含两部分，spring-amqp是基础抽象，spring-rabbit是底层默认实现
