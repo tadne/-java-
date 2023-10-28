@@ -1,0 +1,20 @@
+消费者异常后,消息默认会不断地重新入队,再发送给消费者,如果再次异常会无限重试,导致mq压力
+
+
+可以用spring的retry机制,消费者出现异常时用本地重试,不是无限制的重复入队到mq队列
+
+
+失败消息处理策略
+	开启重试机制后,重试次数耗尽,如果消息依然失败,要有MessageRecoverer接口处理.
+		三种不同实现:
+			RejectAndDontRequeueRecoverer:		重试耗尽,直接reject丢弃消息.默认就是这种方式
+			ImmediateRequeueMessageRecoverer:	重试耗尽,返回nack,消息重新入队
+			RepublishMessageRecoverer:			重试耗尽,将失败消息投递到指定交换机
+
+
+
+消费者如何保证消息一定被消费?
+
+	开启消费者确认机制为auto,spring确认消息处理成功后返回ack,异常就返回nack
+
+	开启消费者失败重试机制,并设置MessageRecoverer,多次重试失败后将消息发送到异常交换机,给人工处理
