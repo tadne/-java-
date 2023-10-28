@@ -1,0 +1,21 @@
+消息转换器
+
+	有的时候,消息需要使用java对象操作,这个时候jdk默认的消息转换器会将消息序列化为乱码,并且有被修改的风险
+
+	此时就需要自定义消息转换器,比如导入jackson包,用json格式来转换
+
+	
+
+
+
+	<dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
+
+	 //自定义消息转换器
+    	@Bean
+    	public MessageConverter jacksonMessageConvertor(){
+      	 	return new Jackson2JsonMessageConverter();
+   	 }
