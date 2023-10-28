@@ -1,0 +1,19 @@
+Topic交换机
+
+	Topic与Direct类似，区别在于routingKey可以是多个单词的列表，并且以 . 分割
+	Queue与交换机指定的BindingKey可以使用通配符
+
+		#：	代表0个或多个单词
+		*：	代表一个单词
+
+	Topic和Direct功能一致，但Topic在发送消息的时候方便一些
+
+	就是可以给每一个标签下的队列发送消息
+
+
+Direct与Topic的差异？
+
+	Topic接受的消息RoutingKey可以是多个单词，以  . 分割
+	Topic交换机与队列绑定时的BindingKey可以指定通配符
+	# :  表示0个或多个单词	
+	*  :  表示1个词
