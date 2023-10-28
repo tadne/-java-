@@ -1,0 +1,9 @@
+Direct交换机		定向路由
+
+
+	DirectExchange会将接受的消息根据规则路由到指定queue
+		每一个queue都与exchange设置一个BindingKey
+		发布者发送消息时，指定消息的RoutingKey
+		Exchange将消息路由到BindingKey与消息RoutingKey一致的队列
+
+	就是按照需求投放消息，交换机绑定队列的时候，给队列加标签来分类，这样就可以将消息发给某一类队列
