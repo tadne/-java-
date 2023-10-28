@@ -1,0 +1,52 @@
+publisher：		消息发送者
+consumer：		消息的消费者
+queue：			队列，储存消息
+exchange：		交换机，负责路由消息
+
+publisher==》exchange==》queue==》consumer
+
+
+
+入门流程
+
+	创建队列，创建交换机，让队列绑定交换机，向交换机发送消息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
