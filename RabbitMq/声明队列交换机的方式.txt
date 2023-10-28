@@ -1,0 +1,29 @@
+Bean方式声明队列,交换机和绑定关系:
+
+		Queue
+		FanoutExchange,DirectExchange,TopicExchange
+		Binding
+
+		@Bean
+  		  public FanoutExchange fanoutExchange(){
+       			return new FanoutExchange("fanout");
+    		  }
+    		@Bean
+    		public Queue fanoutQueue(){
+        		return new Queue("fanout.queue");
+    		}
+   		 @Bean
+    		public Binding fanoutBinding(Queue fanoutQueue,FanoutExchange fanoutExchange){
+        		return BindingBuilder.bind(fanoutQueue).to(fanoutExchange);
+    		}
+
+基于@RabbitListener注解声明队列和交换机的常见注解
+
+		@Queue
+		@Exchange
+
+		@RabbitListener(bindings = @QueueBinding(
+            		value = @Queue(name ="direct.queue"),
+            		exchange = @Exchange(name = "direct",type = ExchangeTypes.DIRECT),
+            		key = {"red","blue"}
+    		))
