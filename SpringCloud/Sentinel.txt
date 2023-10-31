@@ -1,0 +1,81 @@
+微服务保护的技术有很多，但在目前国内使用较多的还是Sentinel
+
+
+Sentinel是阿里巴巴开源的一款服务保护框架，目前已经加入SpringCloudAlibaba中
+
+使用：
+	分为两个部分:
+	- 核心库（Jar包）：不依赖任何框架/库，能运行于 Java 8 及以上的版本的运行时环境，
+			对 Dubbo / Spring Cloud 等框架也有较好的支持。
+			在项目中引入依赖即可实现服务限流、隔离、熔断等功能。
+	- 控制台（Dashboard）：Dashboard 主要负责管理推送规则、监控、管理机器信息等。
+
+
+整合：		下载启动sentinel
+			导入依赖spring-cloud-starter-alibaba-sentinel
+			配置地址
+					spring:
+					  cloud: 
+ 					   sentinel:
+					      transport:
+					        dashboard: localhost:8090
+			
+		请求限流：	在簇点链路后面点击流控按钮，即可对做限流配置
+				QPS ：单位时间内，请求接口次数限制
+
+		线程隔离：	让openFeign整合sentinel  
+				配置：	feign.sentinel.enabled = true # 开启feign对sentinel的整合
+					点击该FeignClient对应的簇点资源后面的流控按钮
+					点击并发线程数，并设置阈值即可
+
+		
+	服务降级：	线程隔离对查询购物车业务进行隔离，保护了调用者服务的其他接口，
+			但是超出QPS上限的请求就只能抛出异常导致调用失败，
+			而触发限流或熔断后的请求不一定要报错，也可以返回默认数据或者友好提示，提高用户体验
+
+		降级逻辑实现：有两种方式
+			- 方式一：FallbackClass，无法对远程调用的异常做处理
+			- 方式二：FallbackFactory，可以对远程调用的异常做处理，一般选择这种方式
+
+		方式二实现：
+			定义降级类 UserClientFallbackFactory，实现FallbackFactory接口并传递泛型为<UserClient>
+			重写create方法，返回new的UserClient，重写其中的方法的降级逻辑即可
+				比如直接返回空集合，返回请求失败请刷新等提示信息
+			再在openFeign的配置类将降级类注册为Bean
+			最后，在UserClient的@FeignClient注解中声明fallbackFactory=UserClientFallbackFactory.class
+			
+			
+	服务熔断		对于不太健康的（延迟较高）接口，应该直接停止调用，走降级逻辑，
+				避免影响到当前服务，也就是将商品查询接口熔断。
+			
+			实现方式：	
+				Sentinel中的断路器可以统计某个接口的慢请求比例，还可以统计异常请求比例。
+				当比例超出阈值时，就会熔断该接口，即拦截访问该接口的一切请求，降级处理；
+				当该接口恢复正常时，再放行对于该接口的请求。	
+
+			断路器原理：
+				断路器的工作状态切换有一个状态机来控制
+				- closed：	关闭状态，放行所有请求，并统计异常比例、慢请求比例。
+							超过阈值就切换到open状态
+				- open：		打开状态，服务调用被熔断，访问被熔断服务的请求会被拒绝，直接降级。
+							Open状态持续一段时间后进入half-open状态
+				- half-open：半开状态，放行一次请求，根据执行结果判断接下来的操作。 
+  							- 请求成功：则切换到closed状态
+  							- 请求失败：则切换到open状态
+
+			实现：	在控制台通过点击簇点后的熔断按钮来配置熔断策略
+				按照慢调用比例来做熔断，配置含义：
+					最小请求数5，统计时长1000ms，比例阈值0.5，最大RT 200ms
+					- RT超过200毫秒的请求调用就是慢调用
+					- 统计最近1000ms内的最少5次请求，如果慢调用比例不低于0.5，则触发熔断
+					- 熔断持续时长20s
+
+
+
+
+
+
+
+
+
+				
