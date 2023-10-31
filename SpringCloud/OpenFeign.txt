@@ -1,0 +1,98 @@
+由于RestTemplate实现远程调用太复杂,和不好用
+
+
+所以可以使用新组件openFeign,
+		
+		它利用SpringMVC的相关注解来声明 请求方式,请求路径,请求参数,返回值类型.
+		基于动态代理生成远程调用的代码,无需手动编写
+
+		
+
+使用:
+
+	导入依赖
+		openfeign		spring-cloud-starter-openfeign	
+		负载均衡器		spring-cloud-starter-loadbalancer
+
+
+	加注解
+		在启动类上加注解 @EnableFeignClients
+
+	编写OpenFeign客户端
+		写一个client接口,加注解@FeignClient("serviceName")
+				只需要声明接口方法，无需实现方法
+				
+
+			- @FeignClient("item-service") ：声明服务名称
+			- @GetMapping ：声明请求方式
+			- @GetMapping("/items") ：声明请求路径0
+			- @RequestParam("ids") Collection<T> params ：声明请求参数
+			- List<T> ：返回值类型
+
+	然后直接在业务代码中注入调用即可,Feign会自动完成服务拉取,负载均衡,发送http请求等工作
+
+
+
+
+连接池:
+
+	Feign底层发起http请求,依赖与其他框架.底层支持http客户端实现包括:
+		HttpURLConnection:		默认实现,不支持连接池
+		Apache HttpClient:		支持连接池
+		OKHttp:					支持连接池
+
+	通常会使用有连接池的客户端来代替默认HttpURLConnection
+
+	例:	使用OKHttp,
+	
+			导入依赖:		feign-okhttp
+			加配置:		feign:
+  							okhttp:
+    								enabled: true # 开启OKHttp功能
+
+
+
+最佳实践:
+
+		避免重复编码的办法就是抽取,两种抽取思路,
+			1:	抽取到微服务之外的公共module
+			2:	每个微服务自己抽取一个module
+	
+			所以一般微服务架构,可以将openFeignClient统一抽取出来作为一个module提供服务,
+				如果想要调用其他服务,就导入这个module的依赖即可
+
+
+
+日志配置
+
+	OpenFeign只会在FeignClient所在包的日志级别为DEBUG时，才会输出日志。而且其日志级别有4级：
+		- NONE：不记录任何日志信息，这是默认值。
+		- BASIC：仅记录请求的方法，URL以及响应状态码和执行时间
+		- HEADERS：在BASIC的基础上，额外记录了请求和响应的头信息
+		- FULL：记录所有请求和响应的明细，包括头信息、请求体、元数据。
+		Feign默认的日志级别就是NONE，所以默认我们看不到请求日志。
+
+
+
+	使用:
+		新建一个配置类，定义Feign的日志级别：
+
+			public class DefaultFeignConfig {
+    				@Bean
+   				 public Logger.Level feignLogLevel(){
+        				return Logger.Level.FULL;
+   				 }
+			}
+
+		让日志级别生效，还需要配置这个类。有两种方式：
+			- 局部生效：在某个FeignClient中配置，只对当前FeignClient生效
+					@FeignClient(value = "item-service", configuration = DefaultFeignConfig.class)
+			- 全局生效：在@EnableFeignClients中配置，针对所有FeignClient生效。
+					@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
+
+
+
+
+
+
+
