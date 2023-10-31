@@ -1,0 +1,34 @@
+有些业务是比较复杂的，请求到达微服务后还需要调用其它多个微服务
+
+这个时候如果每个微服务都去找ThreadLocal拿用户信息是不可取的,因为是不同线程了.
+
+如何微服务间传递信息
+	微服务获取用户信息通过拦截器在请求头中读取，要想实现微服务之间的用户信息传递，
+	必须在微服务发起调用时把用户信息存入请求头
+
+	微服务间的调用是用OpenFeign实现,
+	OpenFeign基于Http请求实现,只要让OpenFeign请求头也携带用户信息即可
+
+	Feign中提供的一个拦截器接口：feign.RequestInterceptor
+
+	实现这个接口，实现apply方法，用RequestTemplate类添加请求头，将用户信息保存到请求头中。
+		这样，每次OpenFeign发起请求的时候都会调用该方法，传递用户信息。
+
+
+实现:	在openFeign的配置类中添加Bean,
+
+			@Bean
+			public RequestInterceptor userInfoRequestInterceptor(){
+			    return new RequestInterceptor() {
+			        @Override
+			        public void apply(RequestTemplate template) {
+			            	// 获取用户信息
+			            	Long userId = UserContext.getUser();
+			            	if(userId == null) {
+		        	        	return;
+			            	}
+        				// 如果不为空则放入请求头中，传递给下游微服务
+        		    		template.header("user-info", userId.toString());
+       					 }
+   				 };
+			}
