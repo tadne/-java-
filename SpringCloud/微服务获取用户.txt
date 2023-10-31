@@ -1,0 +1,21 @@
+微服务获取用户
+	网关可以完成登录校验并获取登录用户身份信息。但网关将请求转发到微服务时，微服务如何获取用户身份？
+
+	方案:	网关发送请求到微服务依采用Http请求，可以将用户信息以请求头的方式传递到下游微服务。
+			微服务可以从请求头中获取登录用户信息。考虑到微服务内部可能很多地方要用到登录用户信息，
+			可以利用SpringMVC的拦截器来实现登录用户信息获取，并存入ThreadLocal，方便后续使用。
+
+	
+
+	拦截器代码
+		写个类实现HandlerInterceptor接口,重写preHandle方法
+		重写preHandler方法,获取其中用户信息请求头,封装到ThreadLocal中即可
+		重写afterCompletion方法,删除ThreadLocal中的用户信息请求头
+   		最后写一个mvc的配置类注册拦截器即可
+		@Configuration
+		public class MvcConfig implements WebMvcConfigurer {
+		    @Override
+		    public void addInterceptors(InterceptorRegistry registry) {
+		        registry.addInterceptor(new UserInfoInterceptor());
+		    }
+		}	
