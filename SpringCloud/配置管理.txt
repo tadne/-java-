@@ -1,0 +1,151 @@
+现在依然还有几个问题需要解决：
+	- 网关路由在配置文件中写死，变更必须重启微服务
+	- 某些业务配置在配置文件中写死，每次修改都要重启服务
+	- 每个微服务都有很多重复的配置，维护成本高
+
+这些问题可以通过统一的配置管理器服务解决。而Nacos不仅仅具备注册中心功能，也具备配置管理的功能：
+
+	微服务共享的配置可以统一交给Nacos保存管理，在Nacos控制台修改配置后，Nacos会将配置变更推送
+			给相关的微服务，并且无需重启即可生效，实现配置热更新。
+			网关路由同样是配置，同样可基于这个功能实现动态路由功能，无需重启网关即可修改路由配置。
+
+
+
+配置共享
+	可以把微服务共享的配置抽到Nacos中统一管理，就不需要每个微服务都重复配置了。分为两步：
+		- 在Nacos中添加共享配置
+		- 微服务拉取配置
+
+	添加共享配置:		
+			比如:	jdbc配置,日志配置,openfeign配置,swagger配置等等
+			在nacos的页面中, 
+				配置管理->配置列表中点击+新建一个配置
+				弹出的表单中填写信息：配置id,配置分组等
+				将代码中的yml配置直接剪切到nacos中
+
+
+	 微服务拉取配置	
+		要在微服务拉取共享配置。
+		将拉取到的共享配置与本地的application.yaml配置合并，完成项目上下文的初始化。
+
+			注意:	 读取Nacos配置是SpringCloud上下文初始化时处理的，发生在项目的引导阶段。
+					然后才会初始化SpringBoot上下文，读取application.yaml。
+
+		也就是此时application.yaml文件尚未读取，不知道 nacos 地址，该如何加载nacos中的配置文件呢？
+				
+			SpringCloud初始化上下文时会先读取一个名为bootstrap.yaml或bootstrap.properties文件，
+			如果将nacos地址配置到bootstrap.yaml中，那在项目引导阶段就可以读取nacos中的配置
+			
+
+		实现:
+			引入依赖： 	nacos配置管理: 		spring-cloud-starter-alibaba-nacos-config
+						读取bootstrap文件:	spring-cloud-starter-bootstrap
+		
+			resources目录新建一个bootstrap.yaml文件:
+				spring:
+				  application:
+				    name: serviceName # 服务名称
+				  profiles:
+				    active: dev
+				  cloud:
+				    nacos:
+				      server-addr: yourNacosIP # nacos地址
+				      config:
+				        file-extension: yaml	# 文件后缀名
+				        shared-configs: 		# 共享配置
+				          - dataId: shared-jdbc.yaml 	# 共享mybatis配置
+        				  - dataId: shared-log.yaml 		# 共享日志配置
+        				  - dataId: shared-swagger.yaml # 共享日志配置
+
+
+配置热更新
+		很多的业务相关参数，将来可能会根据实际情况临时调整
+		
+	这就要用到Nacos的配置热更新能力了，分为两步：
+		- 在Nacos中添加配置
+		- 在微服务读取配置
+
+	实现:
+		在Nacos中添加配置:		
+			注意文件的dataId格式:		[服务名]-[spring.active.profile].[后缀名]
+	
+		写一个配置类来做属性读取,
+	
+			@Data
+			@Component
+			@ConfigurationProperties(prefix = "project.serviceName")
+			public class CartProperties {
+			    private Integer maxAmount;
+			}
+			
+			再在业务代码中加载该类,调用该类参数即可
+
+	
+动态路由:
+	网关路由配置是由org.springframework.cloud.gateway.route.CompositeRouteDefinitionLocator
+		在项目启动的时候加载，且一经加载就会缓存到内存中的路由表内（一个Map），不会改变。
+		也不会监听路由变更，所以，无法利用配置热更新来实现路由更新。
+
+	因此，必须监听Nacos的配置变更，然后手动把最新路由更新到路由表中。
+		有两个难点：
+			- 如何监听Nacos配置变更？
+			- 如何把路由信息更新到路由表？
+
+		监听Nacos配置变更:	
+			在Nacos官网中给出了手动监听Nacos配置变更的SDK：
+				希望 Nacos 推送配置变更，可以使用 Nacos 动态监听配置接口来实现
+				//dataId: 	配置ID
+				//group: 	配置分组
+				//listener:	监听器,配置变更进入监听器的回调函数
+				public void addListener(String dataId, String group, Listener listener)
+
+		
+			核心的步骤有2步：
+				- 创建ConfigService，目的是连接到Nacos
+				- 添加配置监听器，编写配置变更的通知处理逻辑
+		
+					只要导入了 spring-cloud-starter-alibaba-nacos-config依赖,会自动装配ConfigService
+					其中NacosConfigManager中是负责管理Nacos的ConfigService的
+					然后只要拿到NacosConfigManager就可以直接获取ConfigService
+
+
+			实现:		
+					写一个组件类来做路由配置加载
+					注入NacosConfigManager和添加监听器方法所需的参数dataId和group
+						注意：	监听方式不支持yaml，只支持json格式！！
+					写一个方法来实现监听器
+					用NacosConfigManager调用getConfigAndSignListener方法
+						就能拉取路由表和添加监听器
+						要先进行拉取
+						addListener方法的监听器有两个方法重写,
+							getExcutor线程池
+							receiveConfigInfo监听nacos配置变更的方法
+
+				但是要注意,写的这个方法需要在NacosConfigManager加载后才加载
+					方案是用@PostConstruct注解实现后置
+	
+					更新路由表：	路由表更新需要使用到RouteDefinitionWriter接口
+								其中有save方法和delete方法用来添加和删除
+								先在receiveConfigInfo方法中解析Json格式参数configInfo
+								 JSONUtil.toList(configInfo, RouteDefinition.class);
+								RouteDefinition就是专门用来存路由的，解析json获得配置对象
+								定义一个Set集合存路由
+								清空set集合，用RouteDefinitionWriter删除旧路由，调用subscribe上传
+								判断新路由是否为空，
+								最后RouteDefinitionWriter用save新路由，再调用subscribe上传
+									
+			
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
