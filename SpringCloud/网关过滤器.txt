@@ -1,0 +1,100 @@
+网关过滤器
+	
+	登录校验必须在请求转发到微服务前做，否则就失去了意义。
+
+	网关请求转发是Gateway内部代码实现，想在请求转发前做登录校验，必须了解Gateway内部工作的基本原理。
+
+
+	网关请求原理:
+		
+		1. 	客户端请求进入网关后, 由HandlerMapping对请求判断，找到与当前请求匹配的路由规则Route，
+			然后将请求交给WebHandler去处理。
+		2.	WebHandler会加载当前路由下需要执行的过滤器链，按照顺序逐一执行过滤器。
+		3.	Filter内部的逻辑分为pre和post两部分，分别会在请求路由到微服务之前和之后被执行。
+		4.	只有所有Filter的pre逻辑都依次顺序执行通过后，请求才会被路由到微服务。
+		5. 	微服务返回结果后，再倒序执行Filter的post逻辑。
+		6. 	最终把响应结果返回。
+
+		最终请求转发是一个叫NettyRoutingFilter的过滤器执行，这个过滤器是整个过滤器链中顺序最后一个。
+		如果能够定义一个过滤器，实现登录校验逻辑，并且将过滤器执行顺序定义到NettyRoutingFilter之前
+		就能满足需求
+
+	
+	如何实现一个网关过滤器呢？
+		网关过滤器链中的过滤器有两种：
+		- GatewayFilter：	路由过滤器，作用范围灵活，可以是任意指定的路由Route. 
+		- GlobalFilter：	全局过滤器，作用范围是所有路由，不可配置。
+
+			注意:	过滤器链外还有一种过滤器，HttpHeadersFilter，用来处理传递到下游微服务的请求头。
+				如org.springframework.cloud.gateway.filter.headers.XForwardedHeadersFilter
+				可以传递代理请求原本的host头到下游微服务。
+
+		GatewayFilter和GlobalFilter这两种过滤器的方法签名完全一致：
+			/**
+ 			* 处理请求并将其传递给下一个过滤器
+ 			* @param exchange 当前请求的上下文，其中包含request、response等各种数据
+ 			* @param chain 过滤器链，基于它向下传递请求
+ 			* @return 根据返回值标记当前请求是否被完成或拦截，chain.filter(exchange)放行。
+ 			*/
+			Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain);
+
+
+		FilteringWebHandler处理请求时，
+				会将GlobalFilter装饰为GatewayFilter，放到同一个过滤器链中，排序后依次执行。
+
+
+		Gateway中内置很多的GatewayFilter，
+			Gateway内置的GatewayFilter过滤器使用起来非常简单，无需编码，只要在yaml文件中简单配置。
+				而且其作用范围很灵活，配置在哪个Route下，就作用于哪个Route.
+
+			例:	过滤器叫做AddRequestHeaderGatewayFilterFacotry，就是添加请求头的过滤器，
+				可以给请求添加一个请求头并传递到下游微服务。
+				使用只需要在application.yaml中这样配置：
+				spring:
+				  cloud:
+				    gateway:
+				      routes:
+				      - id: test_route
+				        uri: lb://test-service
+				        predicates:
+				          -Path=/test/**
+				        filters:
+				          - AddRequestHeader=key, value # 逗号前是请求头的key，逗号后是value
+
+			如果想要让过滤器作用于所有的路由，则可以配置 default-filter：
+				spring:
+				  cloud:
+				    gateway:
+				      default-filters: 		# default-filters下的过滤器可以作用于所有路由
+				        - AddRequestHeader=key, value
+				      routes:
+				      - id: test_route
+				        uri: lb://test-service
+				        predicates:
+				          -Path=/test/**
+		
+		自定义过滤器
+				无论是GatewayFilter还是GlobalFilter都支持自定义，只不过使用方式略有差别。
+
+			自定义GatewayFilter
+				自定义GatewayFilter不是直接实现GatewayFilter，而是实现AbstractGatewayFilterFactory。				实现:		就是写一个类继承AbstractGatewayFilterFactory
+							注意,这个类一定要以GatewayFilterFactory为后缀!!
+							重写apply方法,new一个GatewayFilter类重写其中的filter方法即可
+							filter方法的参数和普通过滤器参数一致,实现自己的逻辑即可
+							然后在yaml配置：
+								spring:
+								  cloud:
+								    gateway:
+								      default-filters:
+								            - PrintAny # 此处以自定义GatewayFilterFactory类名声明过滤器
+
+				这种过滤器还支持动态配置参数，不过实现起来比较复杂 , 
+						其实就是写个配置类,在yml里导入,和自定义过滤器差不多
+				第二种配置方式是可以直接在yml配置类的- PrintAny参数下面加 -args参数来加配置
+							
+			自定义GlobalFilter, 简单很多，直接实现GlobalFilter和Order即可：
+				就是自己写一个类实现GlobalFilter接口和Order接口,
+				重写filter方法来过滤,重写getOrder方法来设定过滤器执行顺序(越小优先级越高)
+					
+			
+
