@@ -1,0 +1,48 @@
+解决分布式事务的方案很多，但实现都比较复杂，因此一般会使用开源的框架解决分布式事务问题。
+
+
+在众多的开源分布式事务框架中，功能最完善、使用最多的就是阿里巴巴在2019年开源的Seata。
+
+
+分布式事务产生的一个重要原因，就是参与事务的多个分支事务互相无感知，不知道彼此的执行状态。
+
+
+因此解决分布式事务的思想非常简单：
+	就是找一个统一事务协调者，与多个分支事务通信，检测每个分支事务的执行状态，保证全局事务下，
+	每一个分支事务同时成功或失败即可。大多数的分布式事务框架都是基于这个理论实现。
+
+
+Seata事务管理中有三个重要的角色：
+	-  TC (Transaction Coordinator) - 事务协调者：
+				维护全局和分支事务的状态，协调全局事务提交或回滚。 
+	-  TM (Transaction Manager) - 事务管理器：
+				定义全局事务的范围、开始全局事务、提交或回滚全局事务。 
+	-  RM (Resource Manager) - 资源管理器：
+				管理分支事务，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。
+
+	其中，TC 服务是事务协调中心和Gateway类似，是一个独立的微服务，要单独部署。
+	TM 和 RM 可以理解为 Seata 的客户端部分，引入到参与事务的微服务依赖中即可。
+	将来 TM 和 RM 就会协助微服务，实现本地分支事务与 TC 之间交互，实现事务的提交或回滚。 
+	 TM用来设定全局事务的范围，RM来管理分支事务
+
+	部署TC：
+		要配置相关数据库：
+			 branch_table 	分支事务表,
+			distributed_lock	分布式锁,
+			global_table,		全局锁
+			lock_table		普通锁
+
+		在网上找docker的seata的部署方案
+		引入依赖	seata		spring-cloud-starter-alibaba-seata	
+				bootstrap	spring-cloud-starter-alibaba-sentinel
+				nacos		spring-cloud-starter-alibaba-nacos-config
+				sentinel		spring-cloud-starter-alibaba-sentinel
+		
+		。。。。。不细说了，就是一顿子按教程部署。。。。
+
+
+
+
+
+
+		
