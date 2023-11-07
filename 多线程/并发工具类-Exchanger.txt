@@ -10,6 +10,7 @@ Exchanger
 		public V exchange(V x)	// 进行交换数据的方法,参数x为本方数据,返回值v为对方数据
 
 		
+	当一个线程调用exchange类的时候,它会阻塞,直到另一个线程也调用exchange方法,然后两个线程交换数据
 	讲究一个交换,左右两边都要给数据,不想给就传null
 		
 
