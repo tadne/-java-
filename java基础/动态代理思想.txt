@@ -49,21 +49,21 @@ public static Object newProxyInstance(ClassLoader loader,Class<?>[] interfaces,I
 	先写一个接口方法										代表真实接口
 	用一个类实现这个接口方法								代表真实对象
 	再调用Proxy类的静态方法newProxyInstance创建代理对象		获取代理对象
-		其第一个参数是目标类的类加载器
+		第一个参数是目标类的类加载器
 		第二个参数是代理需要实现的接口列表
-		第三个参数就是你想要实现的代理逻辑,叫做InvocationHandle,翻译后就叫调用处理器
-			它是一个函数式接口,创建它后要实现它的invoke方法
+		第三个参数就是你想要实现的代理逻辑,叫做InvocationHandle,翻译后叫调用处理器
+			是一个函数式接口,创建后要实现它的invoke方法
 			invoke方法有三个参数:
-				第一个参数是目标类的对象
+				第一个参数是目标类对象
 				第二个参数是目标类中要被代理的方法
 				第三个参数是被代理方法的参数列表
-					用第二个参数调用它的invoke方法就是运行它的意思,你可以再这段代码前后加你想要的代码
+					第二个参数可以调用invoke方法来运行该方法,在这段代码前后加想要的代码
 		
 		最后用获得的代理对象调用你要代理的方法即可		
 
 
-		其中你可以自己写一个类实现InvocationHandle
-		还可以自己写一个ProxyFactory类写一个getProxy方法	反正就是按照面向对象设计的原则实现就好
+		其中可以自己写一个类实现InvocationHandle
+		还可以自己写一个ProxyFactory类写一个getProxy方法	反正就是按照面向对象设计的原则实现即可
 
 	
 		
