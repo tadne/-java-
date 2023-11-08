@@ -57,13 +57,13 @@
 			单独线程内的内存溢出不会导致其他线程因此停止
 	
 	相关vim参数
-		堆初始大小:	-Xms
-		堆最大大小:	-Xms或-XX:MaxHeapSize=
-		新生代大小:	-Xmm或(-XX:NewSize=size+-XX:MaxNewSize=size)
+		堆初始大小:		-Xms
+		堆最大大小:		-Xms或-XX:MaxHeapSize=
+		新生代大小:		-Xmm或(-XX:NewSize=size+-XX:MaxNewSize=size)
 		幸存区比例(动态):	-XX:InitialSurvivorRatio=ratio和-XX:+UseAdaptiveSizePolicy
-		幸存区比例:	-XX:SurvivoRatio=ratio(默认为8m)
-		晋升阈值:	-XX:MaxTenuringThreshold-threshold
-		晋升详情:	-XX:+PrintTenuringDistribution
-		GC详情:		-XX:+PrintGCDetial -verbose:gc
+		幸存区比例:		-XX:SurvivoRatio=ratio(默认为8m)
+		晋升阈值:			-XX:MaxTenuringThreshold-threshold
+		晋升详情:			-XX:+PrintTenuringDistribution
+		GC详情:			-XX:+PrintGCDetial -verbose:gc
 		FullGC前MinorGC:	-XX:+ScavengeBeforeFullGC
 
