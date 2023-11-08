@@ -39,8 +39,22 @@
 
 
 
+常见异常:
+	
+	编译时异常	IOException				输入输出流异常
+				FileNotFoundException	文件找不到的异常
+				ClassNotFoundException	类找不到的异常
+				DataFormatException		数据格式化异常
+				NoSuchFieldException		没有匹配的属性异常
+				NoSuchMethodException	没有匹配的方法异常
 
+	运行时异常	NullPointerException				空指针异常
+				ArithmeticException				算术异常
+				ArrayIndexOutOfBoundsException	数组越界异常
+				IllegalArgumentException			非法参数异常
+				NumberFormatException			数字格式化异常
 
-
-
+	Error		OutOfMemoryError				内存不足错误
+				StackOverflowError				堆栈溢出错误
+				NoClassDefFoundError			类定义找不到错误
 		
