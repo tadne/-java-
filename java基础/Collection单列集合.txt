@@ -11,13 +11,13 @@ Collection单列集合
 	HashSet的子类:	LinkedHashSet
 
 
-	常用方法:	boolean add(E e)		添加元素
-			void clear()			清空所有元素
-			boolean remove(E e)		把给定对象在当前集合中删除
-			boolean contains(Object o)	判断当前集合中是否包含给定对象
-				如果是引用数据类型,那要重写equals和hash方法
-			boolean isEmpty()		判断当前集合是否为空
-			int size()			返回当前集合中元素的个数
+	常用方法:	boolean add(E e)				添加元素
+			void clear()					清空所有元素
+			boolean remove(E e)			    把给定对象在当前集合中删除
+			boolean contains(Object o)		判断当前集合中是否包含给定对象
+						引用数据类型要重写equals和hash方法
+			boolean isEmpty()				判断当前集合是否为空
+			int size()						返回当前集合中元素的个数
 
 
 
@@ -35,9 +35,9 @@ Collection单列集合
 		
 	迭代器遍历
 		Iterator<E> iterator()		获取一个迭代器对象
-		boolean hasNext()		判断当前指向的位置是否有元素
-		E next()			获取当前指向的元素并移动指针
-		remove()			迭代器删除,将指针返回一位
+		boolean hasNext()		    判断当前指向的位置是否有元素
+		E next()					获取当前指向的元素并移动指针
+		remove()					迭代器删除,将指针返回一位
 
 		Collection<Integer> list=new ArrayList<>();
         	Iterator<Integer> it=list.iterator();
@@ -62,8 +62,8 @@ Collection单列集合
 		所有单列集合和数字才能用它
 
 		for (Integer s : list) {
-            		sout(s);
-        	}
+        	sout(s);
+        }
 
 	Lambda表达式遍历
 		list.forEach(s->sout(s));
