@@ -1,0 +1,63 @@
+基本操作:
+	初始化RestHighLevelClient (也就是根据ip端口创建对象)
+	创建XXXRequest,XXX:Index,Get,Update,Delete
+	准备参数(新增和更新时需要)
+	发送请求,调用client.XXX方法,XXX: index,get,update,delete
+	解析响应结果(get查询时需要)
+
+
+	private RestHighLevelClient client;
+
+  	  //新增文档
+	    @Test
+	    void testAddDocument() throws IOException {
+	        // 准备JSON
+	        //String json = JSON.toJSONString(DocName);
+	
+	        // 1.准备Request
+	        IndexRequest request = new IndexRequest("IndexName").id(id);
+	        // 2.准备请求参数DSL，其实就是文档的JSON字符串
+	        request.source(json, XContentType.JSON);
+	        // 3.发送请求
+	        client.index(request, RequestOptions.DEFAULT);
+	    }
+
+	    //查询文档
+	    @Test
+	    void testGetDocumentById() throws IOException {
+	        //准备请求
+	        GetRequest request=new GetRequest("hotel","id");
+	        //发送请求
+	        GetResponse response = client.get(request, RequestOptions.DEFAULT);
+	        //解析响应
+	        String sourceAsString = response.getSourceAsString();
+	         //JSON.parseObject(sourceAsString, Doc.class);
+	    }
+	
+
+	    //更新文档
+	    @Test
+	    void testUpdateDocument() throws IOException {
+	        //创建请求
+	        UpdateRequest request=new UpdateRequest("hotel","id");
+	        //准备请求参数
+	        request.doc(
+	                "属性名1","属性值1",
+	                "属性名2","属性值2"
+	        );
+	        //发送请求
+	        client.update(request,RequestOptions.DEFAULT);
+	    }
+
+
+
+	    //删除文档
+	    @Test
+	    void testDeleteDocument() throws IOException {
+	        //创建请求
+	        DeleteRequest request=new DeleteRequest("hotel","id");
+	        //发送请求
+	        client.delete(request,RequestOptions.DEFAULT);
+	    }
+
+

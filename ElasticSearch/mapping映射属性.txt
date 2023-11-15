@@ -1,0 +1,27 @@
+mapping属性
+
+	mapping是对索引库中文档的约束,
+
+
+常见mapping属性包括:
+
+	type:			字段数据类型,常见的简单类型有:
+
+	Index:		是否创建索引,默认为true		决定是否可以被搜索
+
+	analyzer:		使用什么分词器
+
+	properties:	该字段的子字段				
+
+
+type常见的有:
+
+		字符串:	text (可分词的文本) , keyword(精确值,如: 品牌,国家,ip地址等)
+
+		数值:	long, Integer , byte ,short , double, float 
+
+		布尔:	boolean
+
+		日期:	date
+
+		对象:	object

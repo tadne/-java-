@@ -1,0 +1,62 @@
+RestClientAPI
+
+	其中构建DSL是通过HighLevelRestClient中的resource()实现,其中包含了查询,排序,分页,高亮等所有功能
+
+				SearchRequest request=new SearchRequest("IndexName");
+
+	其中构建查询条件的核心部分是由一个叫QueryBuilders的工具类提供,包含了各种其他方法:
+
+			比如matchAll,rangeQuery等
+
+
+	基本步骤:			创建SearchRequest对象
+					准备request.source(),也就是准备DSL语句
+							QueryBuilder来构建查询条件
+							传入Request.source()的query方法
+					发送请求,得到结果
+					解析结果(参考json结果,从外到内,逐层解析)
+	
+
+	term词条查询:			QueryBuilders.term("column","name");
+	range范围查询:		QueryBuilders.range("price").get(100).lte(150);
+
+	bool组合查询:			BoolQueryBuilder bool=QueryBuilders.boolQuery();		
+						bool.must(QueryBuilders.range("price").get(100).lte(150));
+						bool.filter(QueryBuilders.term("column","name"));
+						....
+			
+
+
+结果处理:
+
+	排序:		request.source().sort("name");
+	分页:		request.source().from(0).size(5);
+	高亮:		request.source().highlighter(
+						new HighlightBuilder().field("name").requireFieldMatch(false));
+						要注意的是高亮文本的结果集要另外处理才能获得
+
+
+
+		处理高亮结果集合
+			//解析响应
+        		SearchHits searchHits = response.getHits();
+        		//总数
+        		long total = searchHits.getTotalHits().value;
+        		System.out.println("-------------------"+total+"-------------------");
+        		//文档数据
+        		SearchHit[] hits = searchHits.getHits();
+        		for (SearchHit hit : hits) {
+        		    //获取文档source
+        		    String sourceAsString = hit.getSourceAsString();
+        		    //反序列化
+        		    Hello hello = JSON.parseObject(sourceAsString, Hello.class);
+        		    //获取高亮结果集合
+        		    Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+        		    if (CollectionUtils.isEmpty(highlightFields)) return;
+        		    //根据字段名获取高亮结果
+        		    HighlightField highlightField = highlightFields.get("name");
+        		    String name = highlightField.getFragments()[0].toString();
+        		    hotelDoc.setName(name);
+        		    System.out.println(hotelDoc);
+        		}
+

@@ -1,0 +1,58 @@
+索引库操作
+
+
+创建索引库
+	
+	ES中通过Restful请求操作索引库,文档.	请求内容用DSL语句来表示.
+	创建索引库和mapping的DSL语法如下:
+
+		PUT /索引库名
+		{
+			"mapping":{
+				"properties"{
+					"字段名1":{
+						"type":"text",
+						"analyzer":"ik_smart"
+					},
+					......
+				}
+			}
+		}
+
+查看索引库语法:	GET /索引库名
+
+删除索引库语法:	DELETE /索引库名
+
+
+修改索引库
+	注意:	ES中不允许修改索引库,
+			因为ES会基于mapping映射创建倒排索引,如果修改索引库,会导致倒排索引失效
+
+	但是允许索引库添加新字段,语法:
+
+		PUT  /索引库名/_mapping
+		{
+			"properties":{
+				"新字段名":{
+					"type":"integer"
+				}
+			}
+		}
+
+
+
+
+
+字段拷贝可以使用copy_to属性将当前字段拷贝到指定字段
+
+
+定义一个mapping映射,主要考虑:		
+		字段名,数据类型type,是否分词,分词器是什么anaylzer,是否参与搜索index
+		ES中支持两种地理左边数据类型:
+				geo_point	:	由纬度和经度确定的点
+				geo_shape	:	有多个geo_point组成的几何图像
+
+	
+	
+
+

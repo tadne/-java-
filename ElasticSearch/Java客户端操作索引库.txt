@@ -1,0 +1,54 @@
+导入依赖  	elasticsearch-rest-high-level-client
+注入对象		
+			private RestHighLevelClient client;
+			@BeforeEach//客户端使用的前置方法,设置好ip端口
+    			void setUp(){
+    		    		this.client=new RestHighLevelClient(RestClient.builder(
+                			HttpHost.create("http://ip:9200")
+        			));
+    			}
+    			@AfterEach//后置方法释放资源
+    			void tearDown() throws IOException {
+    			    this.client.close();
+    			}
+
+
+使用client	
+			//创建
+		    @Test
+		    void testCreateIndex() throws IOException {
+		        // 1.准备Request      PUT /hotel
+		        CreateIndexRequest request = new CreateIndexRequest("hotel");
+		        // 2.准备请求参数
+			////MAPPING_TEMPLATE就是ES中创建索引库的JSON字符串
+		        request.source(MAPPING_TEMPLATE, XContentType.JSON);
+		        // 3.发送请求
+		        client.indices().create(request, RequestOptions.DEFAULT);
+		    }
+		    //删除
+		    @Test
+		    void testDeleteIndex() throws IOException {
+		        // 1.准备Request      PUT /hotel
+		        DeleteIndexRequest request = new DeleteIndexRequest("hotel");
+		        // 3.发送请求
+		        client.indices().delete(request, RequestOptions.DEFAULT);
+		    }
+		    //查询是否存在
+		    @Test
+		    void testExistIndex() throws IOException {
+		        // 1.准备Request      PUT /hotel
+		        GetIndexRequest request = new GetIndexRequest("hotel");
+		        // 3.发送请求
+        		boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
+       			System.out.println(exists);
+    		   }
+
+
+	其实就是	
+			初始化RestHighLevelClient
+			创建XXXIndexRequest.XXX是Create/Get/Delete
+			准备DSL	(CREATE需要对应数据)
+
+			操作ES索引库的方法都被封装到了client.indices()中,
+			每次操作都要有对应的请求参数,请求对象名与请求类型相关
+

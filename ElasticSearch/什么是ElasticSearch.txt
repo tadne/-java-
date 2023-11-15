@@ -1,0 +1,38 @@
+什么是elasticSearch
+
+	ElasticSearch是一个开源搜索引擎,帮助从海量数据中快速找到数据
+
+	可以用来实现搜索，日志统计、分析、系统监控等功能
+
+
+什么是elastic stack(ELK)？
+
+	是以elasticSearch为核心的技术栈，结合kibana、Logstash、Beats、也就是elastic stack （ELK） 。
+	广泛用在日志数据分析、实时监控等领域
+
+	Kibana：				数据可视化
+	ElasticSearch：		储存、计算、搜索数据
+	Logstash、Beats：	数据抓取
+
+
+什么是Lucene？	
+	ElasticSearch底层是采用  Lucene 技术实现
+
+		Lucene是一个java语言的搜索引擎类库，是Apache公司的顶级项目，由DougCutting在1999年开发
+		
+		Lucene	优势：	易扩展		高性能（基于倒排索引）	
+				缺点：	只限于java语言
+						学习路线曲折
+						不支持水平扩展
+
+		
+ElasticSearch的发展：	
+
+		2004年开发的Compass
+		2010年重写了Compass，取名为ElasticSearch	
+
+		相比于Lucene，ElasticSearch优势：	
+				支持分布式、可水平扩展	
+				提供Restful接口、可被任何语言调用
+
+
