@@ -1,0 +1,69 @@
+ES组成分为3部分
+
+	character filters:	在tokenizer之前对文本进行处理.如: 删除字符,替换字符
+	tokenizer:		将文本按照一定规则切割成词条. 如: keyword,就是不分词. 还有 ik_smart
+	tokenizer filter:	将tokenizer输出的字条进一步处理,如大小写转换,同义词处理,拼音处理
+
+
+先用ik进行中文分词,再将分词进行拼音分词器处理
+
+
+
+自定义分词器:		再创建索引库的时候,通过settings来配置自定义的analyzer
+
+
+PUT /test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer":{
+          "tokenizer":"ik_max_word",
+          "filter":"py"
+        }
+      },
+      "filter": {
+        "py":{
+          "type":"pinyin",
+          "keep_full_pinyin":false,
+          "keep_joined_full_pinyin":true,
+          "keep_original":true,
+          "limit_first_letter_length":16,
+          "remove_duplicated_term":true,
+          "none_chinese_pinyin_tokenize":false
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "name":{
+        "type": "text",
+        "analyzer": "my_analyzer"
+      }
+    }
+  }
+}
+
+
+
+字段在创建倒排索引时应该使用自定义分词器,但是字段在搜索时应该使用ik_smart分词器
+
+	因为要输入拼音时才搜索拼音,输入中文时,只搜索中文
+
+	因为拼音一个音有很多字,这样会使用户搜索结果不准确
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
