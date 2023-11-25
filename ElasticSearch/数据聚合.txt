@@ -1,0 +1,87 @@
+聚合		
+		聚合是对文档数据的统计,分析,运算.	
+
+
+	聚合常见的有三类:
+		Bucket桶聚合:			用来对文档做分组
+			TermAhhregation:		按照文档字段值分组
+			Date Histogram:		按照日期阶梯分组,例如一周为一组,或者一月为一组
+
+		Metric度量聚合:		用以计算一些值, 比如: 最大值,最小值,平均值等
+			Avg:	求平均值
+			Max, Min
+			States:	同时求max,min,avg,sum等
+		
+		Pipeline管道聚合:		其他聚合的结果为基础再次聚合
+
+
+	参与集合的字段类型必须是:	keyword, 数值, 日期 , 布尔
+
+
+
+
+DSL实现Bucket聚合
+	
+	aggs 代表聚合, 与query同级, 此时query的作用是限定聚合的文档范围
+
+	聚合的三要素:	聚合名称 ,聚合类型 ,聚合字段
+
+	聚合可配置属性有:	size: 聚合结果的数量
+					order: 指定聚合结果的排序方式
+					field: 指定聚合字段
+
+	GET /hotel/_search
+	{
+	  "size": 0,
+	  "aggs": {
+	    "brandAgg": {
+	      "terms": {
+	        "field": "brand",
+	        "size": 10,
+	        "order": {
+	          "_count": "desc"
+	        }
+	      }
+	    }
+	  }
+	}
+
+
+
+
+DSL实现Metrics聚合
+
+	和Bucket类似,不过是里面再嵌套了一个 aggs 聚合
+
+	GET /hotel/_search
+	{
+	  "size": 0,
+	  "aggs": {
+	    "brandAgg": {
+	      "terms": {
+	        "field": "brand",
+	        "size": 10,
+	        "order": {
+	          "scoreAgg.avg": "desc"
+	        }
+	      },
+	      "aggs": {
+	        "scoreAgg": {
+	          "stats": {
+	            "field": "score"
+	          }
+	        }
+	      }
+	    }
+	  }
+	}
+
+
+
+
+
+
+
+
+
+
