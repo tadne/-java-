@@ -442,7 +442,180 @@ MySQL架构
 				数据分片在扩容时要迁移
 
 
+什么是分区表
+	
+	分区是把一张表的数据分为n个区块. 分区表是一个独立的逻辑表.由多个物理子表组成
+
+	当查询条件的数据分别在某一分区时,查询引擎只会在某个分区查询,而不是遍历整个表
+	
+	分区一般是放在单机中,一般是时间范围分区,方便归档.只不过分库分表需要代码实现,分区是mysql内部实现
+		分库分表和分区不冲突,可以结合使用
+
+分区表类型
+	
+	range分区,
+		按照范围分区,如:按照时间范围分区
+		分区表创建:	
+			CREATE TABLE test_range_partition(
+       				id INT auto_increment,
+       				createdate DATETIME,
+       				primary key (id,createdate)
+   			) 
+   				PARTITION BY RANGE (TO_DAYS(createdate) ) (
+   					PARTITION p201801 VALUES LESS THAN ( TO_DAYS('20180201') ),
+     					PARTITION p201802 VALUES LESS THAN ( TO_DAYS('20180301') ),
+      					PARTITION p201803 VALUES LESS THAN ( TO_DAYS('20180401') ),
+      					PARTITION p201804 VALUES LESS THAN ( TO_DAYS('20180501') )
+			   );
+
+		在/var/lib/mysql/data/可以找到对应的数据文件，每个分区表都有一个使用#分隔命名的表文件
 
 
+	list分区
+		list分区和range分区相似,区别在于list是枚举值列表的集合,range是连续的区间值的集合
+		list分区,分区字段必须已知.如果插入的字段不在分区时的枚举值中,将无法插入
+		分区表创建
+			create table test_list_partiotion
+			   (
+			       id int auto_increment,
+			       data_type tinyint,
+			       primary key(id,data_type)
+			   )partition by list(data_type)
+			   (
+			       partition p0 values in (0,1,2,3,4,5,6),
+			       partition p1 values in (7,8,9,10,11,12),
+			       partition p2 values in (13,14,15,16,17)
+			   );
+
+	hash分区
+		可以将数据均匀分布到预先定义的分区中
+		分区表创建:
+			create table test_hash_partiotion
+			   (
+			       id int auto_increment,
+			       create_date datetime,
+			       primary key(id,create_date)
+			   )partition by hash(year(create_date)) partitions 10;
+
+分区的问题:
+		打开和锁住所有底层表的成本高.查询访问分区表时,MySQL要打开并锁住所有底层表
+			这个操作在分区过滤前发生,导致无法通过分区过滤来降低次开销,影响查询速度
+
+		维护分区成本高,如重组分区,会先创建一个临时分区,再将数据复制到其中,最后删除原分区
+
+		所有分区必须用相同的存储引擎
+
+查询语句执行流程
+	
+		权限校验	查询缓存	分析器	优化器	权限校验	执行器	引擎
+
+更新语句执行流程
+		
+		分析器	权限校验	执行器	引擎	redolog(prepare状态)	binlog	redolog(commit状态)
+
+		binlog要在redolog的prepare状态下进行,
+			因为在redolog后的话,如果写入redolog后机器挂了,binlog就没有被记录.
+			但机器重启后通过redolog成功恢复数据,binlog就少了数据
+
+exist和in的区别
+		exist用于对外表记录筛选
+			exists会遍历外表，将外查询表的每一行代入内查询判断。
+			当exist里的条件语句能返回记录行时，条件就为真，返回外表当前记录。
+			反之不能返回记录行，条件为假，则外表当前记录被丢弃。
+	
+		in是先把后边的语句查出来放到临时表中，然后遍历临时表，将临时表的每一行，代入外查询去查找。
+
+		也就是说exist会遍历外表,in会遍历内表
+
+		所以子查询的表比较大时，用exists可以有效减少总循环次数提升速度；
+		当外查询的表比较大的时候，用in可以有效减少对外查询表循环遍历来提升速度。
+
+MySQL中int(10)和char(10)的区别？
+		
+		int(10)中的10表示的是显示数据的长度，而char(10)表示的是存储数据的长度。
+
+truncate、delete与drop区别？
+	相同：	truncate和不带where子句的delete、以及drop都会删除表内的数据。
+			drop、truncate都是DDL语句（数据定义语言），执行后会自动提交。
+	不同：	truncate 和 delete 只删除数据不删除表的结构；
+			drop 语句将删除表的结构被依赖的约束、触发器、索引；
+			一般来说，执行速度: drop > truncate > delete。
+
+having和where区别？
+	二者作用对象不同，where子句作用于表和视图，having作用于组。
+	where在数据分组前进行过滤，having在数据分组后进行过滤。
+
+为什么要做主从同步？
+	读写分离，使数据库能支撑更大并发
+	在主服务器上生成实时数据，在从服务器上分析这些数据，提高主服务器的性能。
+	数据备份，保证数据的安全。
+
+什么是MySQL主从同步？
+	主从同步使数据从一个数据库服务器复制到其他服务器，复制数据时，一个服务器充当主服务器（master），	其余的服务器充当从服务器（slave）
+
+	复制是异步进行，从服务器不需要一直连接主服务器，从服务器甚至可以通过拨号断断续续地连接主服务器	通过配置文件，可以指定复制所有的数据库，某个数据库，甚至是某个数据库上的某个表。
+
+
+乐观锁和悲观锁是什么？
+	并发控制是确保多个事务同时存取数据库中同一数据时不破坏事务的隔离性和一致性以及数据库的一致性。
+	乐观锁和悲观锁是并发安全主要采用的技术手段。
+
+	悲观锁：
+		假定会发生并发冲突，对操作的数据加锁，直到提交事务才释放锁，其他事务才能修改。
+		实现方式：使用数据库中的锁机制。
+
+	乐观锁：
+		假设不会发生并发冲突，只在提交操作时检查数据是否被修改过。
+		实现方式：给表增加version字段，修改提交前检查version与原来取到的version值是否相等，
+			若相等，表示数据没有被修改，可以更新，
+			否则，数据为脏数据，不能更新。
+		一般使用版本号机制或CAS算法实现。
+
+用过processlist吗？
+	show processlist 或 show full processlist 查看当前 MySQL 是否有压力，有没有慢SQL在执行。
+
+	返回参数如下：
+		id：线程ID，可以用kill id杀死某个线程
+		db：数据库名称
+		user：数据库用户
+		host：数据库实例的IP
+		command：当前执行的命令，比如Sleep，Query，Connect 等
+		time：消耗时间，单位秒
+		state：执行状态，主要有以下状态：
+			Sleep，线程正在等待客户端发送新的请求
+			Locked，线程正在等待锁
+			Sending data，正在处理SELECT查询的记录，同时把结果发送给客户端
+			Kill，正在执行kill语句，杀死指定线程
+			Connect，一个从节点连上了主节点
+			Quit，线程正在退出
+			Sorting for group，正在为GROUP BY做排序
+			Sorting for order，正在为ORDER BY做排序
+		info：正在执行的SQL语句
+
+
+MySQL查询 limit 1000,10 和limit 10 速度一样快吗？
+	
+	两种方式:		limit offset, size	和 limit size		其中limit size 其实就是 limit 0,size
+
+	limit sql的内部执行逻辑:
+		执行器可通过调用存储引擎的接口，将数据取出，当这些数据符合要求会放到结果集中，返回给客户端
+		当执行select * from xxx order by id limit offset size时,会从第offset行开始后的size行
+			也就是说,会将0~offset+size条数据全部遍历一遍
+		所以limit 10速度快
+
+
+高度为3的B+树，可以存放多少数据？
+	
+	InnoDB存储引擎有自己的最小储存单元——页（Page）
+		innodb 默认一页大小为 16384B = 16384/1024 = 16kb。
+		MySQL中，B+树一个节点的大小设为一页或页的倍数最合适。
+			因为如果一个节点的大小<1页，那读取节点的时候读取的还是一页，会造成资源的浪费。
+	
+		B+树中非叶子节点存的是key + 指针,叶子节点存数据行。
+			对于叶子节点，如果一行数据大小为1k，那么一页就能存16条数据。
+			对于非叶子节点，如果key使用的是bigint，则为8字节，指针在MySQL中为6字节，一共是14字节，
+			则16k能存放 16 * 1024 / 14 = 1170 个索引指针。
+		可以算出，一颗高度为2的B+树，每个叶子节点可以存储16条数据，一共 1170 x 16 = 18720 条数据。
+		对于高度为3的B+树，就可以存放 1170 x 1170 x 16 = 21902400 条数据（两千多万条数据）
 
 
