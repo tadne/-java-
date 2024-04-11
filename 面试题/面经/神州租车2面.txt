@@ -1,0 +1,88 @@
+java基本数据类型
+	byte、short、int、long、float、double、char、boolean、
+
+String不可变
+	因为String的底层是char数组实现的，数组底层是private final修饰的，
+	private表示只提供私有访问，final表示不可变常量保证
+
+final修饰的对象是否可变，修饰的方法中的变量是否可变
+	final修饰的对象中，基本数据类型是不可变的，引用数据类型的引用是不可变的，但是里面的属性可变
+	
+hashTable和hashmap
+	hashTable是线程安全，hashmap线程不安全，保证map安全可以采用加锁的形式，也可以使用
+	concurrenthashmap
+
+set和list的区别，是否有序
+	set集合基于hash表，list集合基于链表或者数组，哈希表采用哈希值排序是无序的
+
+线程池参数
+	核心线程数、最大线程数、最大空闲时间、时间单位、阻塞队列、任务拒绝策略、线程工厂
+工作流程
+	任务提交		调用submit提交任务
+	任务接收		创建新核心线程处理任务
+	任务执行		核心线程从队列中获取任务
+	线程池扩展	队列任务超过核心线程数就创建新线程，但是线程数量不超过设置的最大值
+	任务拒绝		如果队列已满要有对应的拒绝策略
+	空闲线程管理	如果空闲线程空闲时间超过设定时间就会关闭
+	线程池关闭	使用线程池的shutdown关闭
+回收线程时如何区分核心线程与非核心线程
+	线程创建有一个参数，allowCoreThreadTimeOut==false，这个参数就是判断当前线程是否是核心线程
+	
+redis的使用
+	分布式锁、热点数据缓存
+redis的数据类型
+	set、list、sortedset、hash、string、bitmaps、geo、hyperloglog
+
+
+
+
+说说基本数据类型
+说说java中的集合，map集合的原理，value能不能重复，map中的相同value对象是一个还是多个（就是有没有对这块优化）？
+
+基本IO流的使用
+
+希望等待多个线程的结果再继续要怎么样设计代码
+你是怎么使用多线程的
+说说线程池的核心线程和最大线程数怎么设置
+
+说说spring的aop和ioc
+说说反射创建类对象的几种方法
+说说mybatis的sql标签
+说说mybatis的xml层面入参校验
+
+说说jvm垃圾回收机制
+说说垃圾回收器
+创建一个String s=new String(“”);创建了一个对象还是多个，也就是串池中有没有
+说说jvm调优常用的属性（完全没有印象）
+
+redis的主要应用
+说说redis主从集群
+说说redis的持久化（RDB、AOF）
+
+说说mysql支持的引擎
+说说InnoDB和MyISAM的区别
+说说InnoDB支持的索引结构
+说说最左前缀法则这块
+说说mysql的事务
+说说事务隔离级别和默认隔离级别
+
+说说mq的最大qps？不会
+说说mq的延迟消息
+如果消息被重复发送，消费者怎么处理，也就是幂等性校验
+
+说说es的索引
+如果创建了一个es索引，要添加一个字段该怎么做
+
+说说springcloud的eureka注册流程
+
+说说常见排序算法
+说说冒泡排序
+说说快速排序
+
+说说git
+如果要合并分支，git命令怎么写
+
+说说实习
+说说DDD领域驱动设计
+
+中间有些问题记不得了，就是按照简历从头到尾问
