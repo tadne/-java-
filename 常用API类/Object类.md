@@ -1,37 +1,46 @@
-# Object类
+# Object 类
 
-## Object
+## 地位
 
-object是java中的顶级父类，所有的类都直接或者间接的继承于object类
-## object类中的方法可以被所有子类访问
+- `Object` 是 Java 根类，所有类直接或间接继承它
+- `Object` 中的实例方法可被所有子类使用
 
-## 构造方法		只有空参构造
-- 原因：没有一个属性可以是所有类的共性，所以没有带参数的构造方法
+## 构造方法
 
-## 成员方法
+- 仅 **无参构造**（没有“所有类共有”的字段，故无带参构造）
 
-## String 	toString()			返回对象的字符串表示形式
-## boolean equals(Object obj)		比较两个对象是否相等
-## Object 	clone()			对象克隆
-## Objects.isNull(obj)（java.util.Objects）		判断空		空就true
-Objects.nonNull(obj)	判断非空		非空就true
+## 常用方法
 
-## 其中toString方法是system.out.println()方法的底层
-如果打印一个对象，想要看到属性值，就要重写 toString；用作 HashMap 键时还需同时重写 equals 与 hashCode
+| 方法 | 说明 |
+|------|------|
+| `String toString()` | 对象的字符串表示；`println` 打印引用类型时底层会调用 |
+| `boolean equals(Object obj)` | 比较是否“相等”；未重写时比较 **引用地址** |
+| `int hashCode()` | 哈希码；与 `equals` 配套使用 |
+| `Object clone()` | 浅克隆（类需实现 `Cloneable`） |
+| `void finalize()` | 已废弃，勿依赖 |
 
-如果没有重写equals和hashCode方法，那么equals方法默认比较的是对象的地址值
-## 重写之后，比较的就是对象内部的属性值
+空值判断请用 **`Objects.isNull` / `Objects.nonNull`**（`java.util.Objects`），不在 `Object` 上。
 
-equals方法在String类中被重写了, 底层先判断比较对象是不是字符串，如果是再比较内部属性
-- 哪个对象调用equals，就会调用哪个对象重写的equals方法
-- **如**：StringBuilder sb=new StringBuilder()；
-- sb.equals(str)和str.equals(sb)是完全不同的
-- 因为String类重写了equals方法，StringBuilder类没有重写equals方法
+## equals 与 hashCode
+
+- **默认**：`equals` 比较地址（同 `==`）
+- **重写后**：通常按业务字段比较内容
+- **契约**：重写 `equals` 必须同时重写 `hashCode`；`equals` 为 true 的两个对象 `hashCode` 必须相同
+- **HashMap 键**：自定义类作 key 时必须遵守上述契约
+
+## 调用方决定重写版本
+
+```java
+StringBuilder sb = new StringBuilder("hi");
+String str = "hi";
+sb.equals(str);  // false，走 StringBuilder 未重写的 Object.equals
+str.equals(sb);  // false，String 先判断类型再比内容
+```
+
+`String` 已重写 `equals`/`hashCode`；`StringBuilder` 未重写 `equals`。
 
 ## 面试要点
 
-- 原因：没有一个属性可以是所有类的共性，所以没有带参数的构造方法
-- 哪个对象调用equals，就会调用哪个对象重写的equals方法
-- **如**：StringBuilder sb=new StringBuilder()；
-- sb.equals(str)和str.equals(sb)是完全不同的
-- 因为String类重写了equals方法，StringBuilder类没有重写equals方法
+- 所有类的祖先；默认 `equals`/`hashCode` 基于地址
+- 重写 `equals` 必重写 `hashCode`；作 Map 键更要遵守
+- `toString` 影响打印表现；空判断用 `Objects` 工具类

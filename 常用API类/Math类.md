@@ -1,22 +1,20 @@
-# Math类
+# Math 类
 
-public final class Math		不能创建子类
+`java.lang.Math` 为 **final** 工具类，不能实例化，方法均为 **static**。
 
-## 以下都是static方法
+## 常用方法
 
-## abs(int a)		获取参数绝对值
-## ceil(double a)		向上取整
-## floor(double a) 	向下取整
-## round(float a)		四舍五入
-## max(int a,int b)	获取两个int值中较大值
-## min(int a,int b)	获取两个int值中较小值
-## pow(double a,double b)	返回a的b次幂的值
-## random()		返回值为double的随机值，范围（0.0，1.0）
+| 方法 | 说明 |
+|------|------|
+| `abs(x)` | 绝对值 |
+| `ceil(double)` | 向上取整 |
+| `floor(double)` | 向下取整 |
+| `round(float/double)` | 四舍五入 |
+| `max(a, b)` / `min(a, b)` | 较大/较小值 |
+| `pow(a, b)` | a 的 b 次幂 |
+| `random()` | `[0.0, 1.0)` 的 double 随机数 |
 
 ## 小结
 
-- 以下都是static方法
-- abs(int a)		获取参数绝对值
-- ceil(double a)		向上取整
-- floor(double a) 	向下取整
-- round(float a)		四舍五入
+- 数学运算工具类，全部静态方法
+- 需要指定范围的随机数：`random() * n` 或 `ThreadLocalRandom`

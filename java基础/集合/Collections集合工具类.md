@@ -1,25 +1,25 @@
-# Collections集合工具类
+# Collections 集合工具类
 
-## Collections		集合工具类
-- **作用**：Collections不是集合,而是集合的工具类
+## 说明
 
-- 常用api
+`java.util.Collections` **不是集合**，而是操作集合的**静态工具类**。
 
-- public static <T> boolean addAll(Collection<T> c,T...elements)	批量添加元素
-- public static void shuffle(List<?> list)			打乱List集合元素的顺序
-- void sort(List<T> list) 							排序
-- void sort(List<T> list,Comparator<T> c) 			指定规则排序
-- int  binarySearch(List<T> dest,T key)				以二分查找查找元素
-- void copy(List<T> dest,List<T> src)				拷贝集合中的元素
-- void fill(List<T> list,T obj)						使用指定的元素填充元素
-- void max/min(Collection<T> coll)				根据默认的自然排序获取最大/小值
-- void swap(List<?> list,int i,int j)					交换集合中指定位置的元素
+## 常用 API
+
+| 方法 | 说明 |
+|------|------|
+| `addAll(Collection<T> c, T... elements)` | 批量添加 |
+| `shuffle(List<?> list)` | 随机打乱顺序 |
+| `sort(List<T> list)` | 自然排序 |
+| `sort(List<T> list, Comparator<? super T> c)` | 指定比较器排序 |
+| `binarySearch(List<? extends Comparable> list, T key)` | 二分查找（列表须已排序） |
+| `copy(List<? super T> dest, List<? extends T> src)` | 复制元素 |
+| `fill(List<? super T> list, T obj)` | 用指定值填充 |
+| `max / min(Collection<T> coll)` | 最大/最小（自然序） |
+| `swap(List<?> list, int i, int j)` | 交换两索引元素 |
 
 ## 面试要点
 
-- **作用**：Collections不是集合,而是集合的工具类
-- 常用api
-- public static <T> boolean addAll(Collection<T> c,T...elements)	批量添加元素
-- public static void shuffle(List<?> list)			打乱List集合元素的顺序
-- void sort(List<T> list) 							排序
-- void sort(List<T> list,Comparator<T> c) 			指定规则排序
+- 工具类，方法均为 `static`
+- `sort` + `binarySearch` 需先保证有序
+- 与 `Collection` 接口、集合实现类区分
