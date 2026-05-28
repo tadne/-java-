@@ -1,0 +1,44 @@
+# xml映射文件
+
+## 规范
+  - xml映射文件名称和mapper接口名称一致,xml映射文件和mapper接口放在同一个包下
+  - xml映射文件的命名空间namespace属性为mapper接口全限定名一致
+  - xml映射文件中sql语句的id与mapper接口中的方法名一致,并保持返回类型一致
+
+  - **mapping标签**：有各种子标签来写不同sql
+    - **resultType属性**：sql查到后的返回值的对象
+
+  - 动态sql
+    - <if><else>
+    - <where>
+    - <set>
+    - **<forEach>	collection**：遍历的集合
+        - item:		遍历出的元素
+        - separator:	分隔符
+        - open:		遍历开启前拼接的sql
+        - close:		遍历结束后拼接的sql
+
+    - **<sql>		id**：为当前标签下的sql语言赋名称
+    - **<include> 	refid**：要被引用的sql片段
+
+    - 动态sql就是通过标签最终拼接字符串
+
+## resultMap标签
+- **作用**：解决实体类属性名与数据库表中字段名不一致的情况：
+        - 遇到实体类属性名与数据库表中字段名不一致的情况，可以使用resultMap解决。
+        - 通过在resultMap中定义映射规则，可以将查询结果映射成实体对象。
+
+## 提高查询效率
+        - 要查询的数据很复杂时，如要同时查询好几个表，或查询的实体类中不仅有基础数据，				还引用了其他类，甚至声明了某个List集合。
+        - 这时就要使用resultMap来提高查询效率。
+
+## 定制类型转化器
+        - 使用resultMap时，可以通过定义类型转化器来将数据库中的数据转化为Java对象。
+
+## 面试要点
+
+- **mapping标签**：有各种子标签来写不同sql
+- **resultType属性**：sql查到后的返回值的对象
+- **<forEach>	collection**：遍历的集合
+- **<sql>		id**：为当前标签下的sql语言赋名称
+- **<include> 	refid**：要被引用的sql片段

@@ -1,7 +1,5 @@
 # HTTP基本概念
 
-
-
 ## HTTP是什么
 HTTP是超文本传输协议，也就是HyperText Transfer Protocol
 
@@ -25,7 +23,6 @@ HTTP是超文本传输协议，也就是HyperText Transfer Protocol
 -  HTML就是最常见超文本，它只是纯文字文件，但内部使用了很多标签定义了图片视频等链接，再由浏览器解释得到最终的网页
 - 由此，**HTTP是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范**
 
-
 ## HTTP常见状态码
 - 1XX: 类状态码，属于是提示信息，很少使用
 - 2XX：服务器成功处理了客户端请求
@@ -45,7 +42,7 @@ HTTP是超文本传输协议，也就是HyperText Transfer Protocol
   - 501：客户端请求功能还不支持
   - 502：服务器作为网关或代理时返回的错误，表示服务器自身正常，访问后端服务器出错
   - 503：服务器很忙，暂时无法响应客户端
-  
+
 ## HTTP常见字段？
 - HOST字段： 客户端发送请求时用来制定服务器的域名
 - Content-Length字段：服务器返回数据时，表面本次回应的数据长度
@@ -61,4 +58,7 @@ HTTP是超文本传输协议，也就是HyperText Transfer Protocol
 - Content-Encoding 字段
   - 说明数据的压缩方法，表面压缩的格式
   - 客户端请求，用 Accept-Encoding 字段声明自己可以接受的压缩方法
-  
+
+## 面试一句话
+
+> HTTP是超文本传输协议，也就是HyperText Transfer Protocol

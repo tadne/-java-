@@ -1,0 +1,17 @@
+# Lock锁
+
+- void lock()	获取锁
+- void unlock()	释放锁
+
+- Lock接口不能直接实例化,采用它的实现类ReentrantLock来实例化
+
+- **ReentrantLock的构造方法**：ReentrantLock()
+
+- **创建一个ReentrantLock的实例**：static Lock lock=new ReentrantLock();
+
+- //static保证所有对象共用同一把锁
+
+## 面试要点
+
+- **ReentrantLock的构造方法**：ReentrantLock()
+- **创建一个ReentrantLock的实例**：static Lock lock=new ReentrantLock();

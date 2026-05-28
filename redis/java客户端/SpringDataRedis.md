@@ -1,0 +1,76 @@
+# SpringDataRedis
+
+SpringData是Spring中数据操作的模块,包含了各种数据库的集成,其中对Redis集成的模块叫SpringDataRedis
+
+  - 提供了不同Redis客户端的整合
+  - 提供了RedisTemplate统一API操作Redis
+  - 支持Redis发布订阅模型
+  - 支持Redis哨兵和Redis集群
+  - 支持基于Lettuce的响应式编程
+  - 支持基于jdk,json,字符串,Spring对象的数据序列以及反序列化
+  - 支持基于Redis的jdkCollection实现
+
+SpringDataRedis提供RedisTemplate工具类,封装了各种对redis的操作,将不同数据类型api封装到不同类中
+  - redisTemplate.opsForValue			ValueOperations			操作String类型
+  - redisTemplate.opsForHash			HashOperations			操作Hash类型
+  - redisTemplate.opsForList			ListOperations			操作List类型
+  - redisTemplate.opsForSet			SetOperations			操作Set类型
+  - redisTemplate.opsForZset			ZsetOperations			操作SortedSet类型
+  - redisTemplate											通用命令
+
+SpringBoot默认整合了SpringDataRedis,可以直接用springBoot项目测试Redis
+
+## SpringDataRedis入门
+    - **导入依赖		spring-boot-starter-data-redis**：redis依赖
+          - commons-pool2					:连接池依赖
+
+    - 在yml中写配置
+          - spring:
+- **redis**
+- **host**：192.168.101.65
+- **port**：6379
+- **password**：redis
+- **lettuce**
+- **pool**
+- **max-active**：8
+- **max-idle**：8
+- **min-idle**：0
+- **max-wait**：1000ms
+
+    - 注入redisTemplate
+        - @Autowired
+        - private RedisTemplate redisTemplate;
+
+## redis存储java对象
+  - java对象自动转json配置
+    - @Bean
+public RedisTemplate<String ,Object> redisTemplate(RedisConnectionFactory
+      - redisConnectionFactory){
+## //创建RedisTemplate对象
+RedisTemplate<String ,Object> template=new RedisTemplate<>();
+## //设置连接工厂
+template.setConnectionFactory(redisConnectionFactory);
+## //设置json序列化工具
+GenericJackson2JsonRedisSerializer jsonRedisSerializer=new GenericJackson2JsonRedisSerializer();
+## //设置key用String序列化
+template.setKeySerializer(RedisSerializer.string());
+template.setHashKeySerializer(RedisSerializer.string());
+## //设置value用json序列化
+template.setValueSerializer(jsonRedisSerializer);
+template.setHashValueSerializer(jsonRedisSerializer);
+## //返回
+return template;
+## }
+
+  - 但是,但是用json序列化java对象会导致redis数据中会保存对象的类名来确保查找到对应对象.
+  - 所以一般不直接使用SpringDataRedis提供的json序列化
+  - 一般是用工具先将对象转为json,在用String序列化到redis中来节约空间
+
+## 面试要点
+
+- 提供了不同Redis客户端的整合
+- 提供了RedisTemplate统一API操作Redis
+- 支持Redis发布订阅模型
+- 支持Redis哨兵和Redis集群
+- 支持基于Lettuce的响应式编程
+- 支持基于jdk,json,字符串,Spring对象的数据序列以及反序列化

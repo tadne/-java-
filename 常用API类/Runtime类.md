@@ -1,0 +1,24 @@
+# Runtime类
+
+## Runtime		当前虚拟机的运行环境
+
+## 类中方法不是静态的
+
+## 不能创建对象，要用一个静态方法，getRuntime()来获取
+
+## Runtime getRuntime() 		获取当前系统的运行环境对象
+
+## void 	    exit(int status)			终止虚拟机
+int  		availableProcessors()	    获取cpu的线程数
+long  	    maxMemory()			        jvm能从系统中获取的总内存大小（byte）
+long 	    totalMemory()			    jvm已经从系统中获取的总内存大小（byte）
+## long 	    freeMemory()				vm剩余内存大小（byte）
+Process 	exec(String command)	    执行cmd命令
+
+## 小结
+
+- Runtime		当前虚拟机的运行环境
+- 类中方法不是静态的
+- 不能创建对象，要用一个静态方法，getRuntime()来获取
+- Runtime getRuntime() 		获取当前系统的运行环境对象
+- void 	    exit(int status)			终止虚拟机

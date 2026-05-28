@@ -1,0 +1,54 @@
+# SpringMVC的响应处理
+
+## 传统同步方式在数据响应时,涉及4种形式
+## 请求资源转发
+    - **return "forward**：/index.html"
+  - **请求资源重定向**
+    - **return "redirect**：/index.html"
+  - **响应模型数据**
+    - @RequestMapping("/rest")
+    - public String rest(ModelAndView modelAndView){
+      - //ModelAndView:封装模型数据和视图模型
+User user=new User();
+user.setAge(18);
+modelAndView.addObject("user",user);
+## //设置视图名称,在页面中展示模型数据
+modelAndView.setViewName("/index.jsp");
+return modelAndView;
+    - }
+- **<h1>转发显示模型数据是**：${user.username}==${user.age}</h1>
+
+    - 这个也就是用java代码操作页面中数据,可以直接将对象返回给页面,同步展现数据
+
+## 直接写回数据给客户端
+    - @RequestBody
+    - @RequestMapping("/rest")
+    - public String rest(){
+      - return "Hello SpringMVC";
+    - }
+    - @RequestBody可以直接将字符串当做响应体返回
+
+## 前后端分离的异步业务数据响应
+  - 和同步的第四种形式"直接回写数据"语法类似
+  - **区别**：同步方式回写数据,将数据响应给浏览器页面展示,
+      - 异步方式是回写数据一般回写给Ajax引擎,谁访问服务器端,服务器端就将数据响应给谁
+
+    - 同步方式回写的数据,是一些无特定格式的字符串,而异步方式回写的数据大多是JSON格式
+
+    - @RequestBody
+    - @RequestMapping("/ajax/rest")
+    - public User rest(){
+      - User user=new User("name","age")
+      - return user;
+    - }
+    - //直接返回实体对象,浏览器页面就会获得对应json数据
+    - //因为会底层会对响应数据处理,来将数据转为json数据,或将json数据转为对象
+
+  - @RestController=@Controller+@RequestBody
+
+## 面试要点
+
+- **return "forward**：/index.html"
+- **return "redirect**：/index.html"
+- **<h1>转发显示模型数据是**：${user.username}==${user.age}</h1>
+- **区别**：同步方式回写数据,将数据响应给浏览器页面展示,

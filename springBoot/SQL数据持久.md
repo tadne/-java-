@@ -1,0 +1,34 @@
+# SQL数据持久
+
+- **数据源**：Druid / Hikari
+  - **默认数据源**：Hikari数据源
+    - **SpringBoot提供了3种内嵌的数据源对象供选择**
+      - HikariCP,	 Tomcat提供的DataSource  	Commons DBCP
+
+- **持久化技术**：MyBatis-Plus / MyBatis   /JdbcTemplate
+  - 内置持久化解决方案---jdbcTemplate
+    - **使用jdbc**：导入包spring-boot-starter-jdbc
+        - 加载数据源,加载jdbcTemplate
+        - 直接其调用对应crud即可
+  - **jdbc配置**
+    - **spring.jdbc.template.max-rows**：500	#举例
+
+- **数据库**：MySQL /	H2
+  - SpringBoot提供了3种内嵌数据库供开发者选择,提高开发测试效率
+    - H2	HSQL	Derby
+    - 以上三种数据库是java语言,可以在内存中启动,速度快
+    - 都比较小巧,几百k
+
+    - **使用**
+    - **依赖**：spring-boot-starter-data-jpa
+    - **h2数据库配置**
+      - spring.console.enabled=true
+      - spring.console.path=h2
+
+## 面试要点
+
+- **数据源**：Druid / Hikari
+- **默认数据源**：Hikari数据源
+- **持久化技术**：MyBatis-Plus / MyBatis   /JdbcTemplate
+- **使用jdbc**：导入包spring-boot-starter-jdbc
+- **spring.jdbc.template.max-rows**：500	#举例

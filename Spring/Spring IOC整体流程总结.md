@@ -1,0 +1,45 @@
+# Spring IOC整体流程总结
+
+  - Bean的创建大体流程
+    - 通过BeanDefinitionReader读取xml文件,解析bean标签,转换成BeanDefinition对象
+    - 有bean的工厂后处理器来对bean注册bean或者动态修改bean
+    - 并将BeanDefinition对象存入BeanDefinitionMap集合中存储
+    - Spring遍历BeanDefinitionMap,取出每一个BeanDefinition,
+    - 通过反射创建对象,
+    - 进行bean的初始化阶段,执行各种初始化方法,属性填充等等
+    - 再有bean的后处理器实现aop等操作
+    - 将创建好的对象存入SingletonObjects单例池中
+
+  - Spring的后处理器
+    - **BeanFactoryPostProcessor**：Bean工厂后处理器和BeanPostProcessor: Bean后处理器
+    - 工厂后处理器是实例化之前执行,后处理器是实例化之后执行
+
+    - BeanDefinitionReader将Bean封装好存入BeanDefinitionMap中
+    - 在取出对象并通过反射创建对象前,先通过工厂后处理器执行对Bean进行一些修改,注册等操作
+      - 注册用 Bean工厂后处理器 的子接口BeanDefinitionRegisterPostProcessor来实现
+
+    - 在Bean对象创建完毕后,填充属性之前,要通过后处理器执行,再次对Bean进行功能增强
+      - 比如属性修改,日志等功能
+      - 实现BeanPostProcessor后处理器要重写两个方法,
+      - 一个是在初始化前执行,一个是在初始化之后执行
+      - 初始化包括init方法和InitializingBean接口初始化
+
+## 最终流程
+  - Bean的实例化阶段
+    - 读取xml封装BeanDefinition,将BeanDefinition存到BeanDefinitionMap,
+    - 执行工厂后处理器,实例化完成
+  - Bean的初始化阶段
+    - 进行Bean的属性填充
+    - 进行Aware接口方法回调
+    - 执行Bean后处理器before
+    - 进行初始化方法 ,即init方法和InitializingBean接口初始化
+    - 执行Bean后处理器after
+  - Bean的存储阶段
+    - **单例情况下**：实例化并初始化结束的Bean存储到单例池SingletonObjects中
+    - **多例情况**：要等到真实调用bean的时候才开始创建
+
+## 面试要点
+
+- **BeanFactoryPostProcessor**：Bean工厂后处理器和BeanPostProcessor: Bean后处理器
+- **单例情况下**：实例化并初始化结束的Bean存储到单例池SingletonObjects中
+- **多例情况**：要等到真实调用bean的时候才开始创建

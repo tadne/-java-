@@ -1,0 +1,41 @@
+# 并发工具类-CyclicBarrier
+
+## CyclicBarrier
+
+- 可循环使用（Cyclic）的屏障（Barrier）
+
+- 让一组线程到达一个屏障(也可以叫同步点)时被阻塞，直到最后一个线程到达屏障时，
+- 屏障才会开门，所有被屏障拦截的线程才会继续运行。
+
+- **作用**：一个屏障,用来  阻塞 设定数量的线程,一旦数量达到目标值就执行要执行的其他逻辑
+
+- CyclicBarrier(int parties, Runnable barrierAction)
+- // 在线程到达屏障时，先执行barrierAction处理更复杂的业务场景
+- int await()	// 每个线程调用await方法通知CyclicBarrier已到达了屏障，然后当前线程被阻塞
+
+- cyclicBarrier.await();
+
+- **//例**
+- CyclicBarrier cyclicBarrier = new CyclicBarrier(5 , new MettingThread());
+- // 创建5个EmployeeThread线程对象，传递创建的CyclicBarrier对象作为构造方法参数
+EmployeeThread thread1 = new EmployeeThread(cyclicBarrier) ;
+EmployeeThread thread2 = new EmployeeThread(cyclicBarrier) ;
+EmployeeThread thread3 = new EmployeeThread(cyclicBarrier) ;
+EmployeeThread thread4 = new EmployeeThread(cyclicBarrier) ;
+EmployeeThread thread5 = new EmployeeThread(cyclicBarrier) ;
+
+// 启动5个员工线程
+thread1.start();
+thread2.start();
+thread3.start();
+thread4.start();
+thread5.start();
+
+- //当所有员工线程执行完就执行MettingThread线程
+
+- **使用场景**：CyclicBarrier可以用于多线程计算数据，最后合并计算结果的场景。
+
+## 面试要点
+
+- **作用**：一个屏障,用来  阻塞 设定数量的线程,一旦数量达到目标值就执行要执行的其他逻辑
+- **使用场景**：CyclicBarrier可以用于多线程计算数据，最后合并计算结果的场景。

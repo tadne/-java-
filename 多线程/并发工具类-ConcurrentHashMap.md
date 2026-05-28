@@ -1,0 +1,102 @@
+# 并发工具类-ConcurrentHashMap
+
+## ConcurrentHashMap	jdk5后
+
+  - 在集合类中HashMap是比较常用的集合对象，但是HashMap是线程不安全的。
+  - 为了保证数据的安全性我们可以使用Hashtable，但是Hashtable的效率低下。
+
+  - 基于以上两个原因我们可以使用JDK5后提供的ConcurrentHashMap。
+
+## jdk7
+  - ConcurrentHashMap中的重要成员变量
+
+  - /**
+## * Segment翻译中文为"段" , 段数组对象
+## */
+final Segment<K,V>[] segments;
+
+- **// Segment**：一种可重入锁，通过它将一个table空间分割成多个小的table进行加锁。
+
+static final class Segment<K,V> extends ReentrantLock implements Serializable {
+
+transient volatile int count;    		// Segment中元素的数量，volatile修饰，支持可见性；
+transient int modCount;			// 对table的大小造成影响的操作的数量（如put,remove）;
+transient int threshold;				// 扩容阈值;
+transient volatile HashEntry<K,V>[] table;
+                  - // 链表数组，数组中的每一个元素代表了一个链表的头部;
+## final float loadFactor;				// 负载因子
+## }
+
+// Segment中元素以HashEntry的形式存在数组中,结构与普通HashMap的HashEntry基本一致
+  - 但Segment的HashEntry的value由volatile修饰，支持可见性，即写操作对其他读线程即时可见。
+
+## static final class HashEntry<K,V> {
+## final int hash;			// 当前节点key对应的哈希码值
+## final K key;			// 存储键
+## volatile V value;		// 存储值
+## volatile HashEntry<K,V> next;	// 下一个节点
+## }
+
+  - 简单来讲，ConcurrentHashMap比HashMap多了一次hash过程，
+  - 第1次hash定位到Segment，第2次hash定位到HashEntry，然后链表搜索找到指定节点。
+  - 在写操作时，只锁住写元素所在的Segment(这种锁被称为分段锁)，其他Segment不加锁，
+  - 故产生锁竞争的概率大大减小，提高了并发读写的效率。
+    - 该种实现方式的缺点是hash过程比普通的HashMap要长
+
+jdk8后		为进一步优化ConcurrentHashMap性能,去掉了分段锁设计。
+    - 在数据结构方面,跟HashMap一样使用哈希表+红黑树。(数组 + 链表 + 红黑树)
+
+    - 结合CAS机制 + 局部锁实现线程安全，减低锁的粒度，提高性能。
+    - 在HashMap上，对哈希表数组和链表节点的value,next指针等用volatile修饰，实现可见性。
+
+  - **jdk8的concurrenthashmap的局部锁机制**
+    - 在进行写操作时，只对链表头节点加锁，而不是对整个链表或数组加锁，减少锁的竞争，提高并发性能。		具体来说，jdk8的concurrenthashmap的内部结构是一个数组，
+      - 要插入或更新键值对时，先根据键的哈希值定位到数组的索引，对该索引处的头节点加锁，
+      - 再遍历链表或红黑树，找到相同键，就更新值，没有就在链表末尾或红黑树合适位置插入新节点。
+      - 最后释放头节点的锁。
+    - 这样，不同的键值对分布在不同的数组索引上，实现并发的写操作，不会造成锁的争用。
+    - 当然，如果哈希冲突很多，导致某个数组索引上的链表或红黑树很长，那局部锁的效果就会降低，
+    - 因为多个线程可能会同时对同一个头节点加锁，这时就要优化哈希函数或者扩容数组来减少冲突。
+
+  - 重要成员变量
+    - // Node数组
+transient volatile Node<K,V>[] table;
+
+## // Node类的定义
+static class Node<K,V> implements Map.Entry<K,V> {
+
+## final int hash;				// 当前key的hashCode值
+## final K key;				// 键
+## volatile V val;				// 值
+## volatile Node<K,V> next;	// 下一个节点
+
+## // TreeNode类定义
+static final class TreeNode<K,V> extends Node<K,V> {
+## TreeNode<K,V> parent;  		// 父节点
+## TreeNode<K,V> left;	   		// 左子节点
+## TreeNode<K,V> right;   		// 右子节点
+TreeNode<K,V> prev;    		// needed to unlink next upon deletion
+## boolean red;		   			// 节点的颜色状态
+
+  - **简单总结**
+
+    - 如果当前要put的key对应链表在数组中不存在，即还没添加该key的hash值对应链表
+  - 则调用casTabAt方法，基于CAS机制来添加该链表头结点到哈希表中，避免线程并发问题；
+  - 如CAS失败,进行自旋.通过则继续第2步的操作；
+
+    - 如要添加的链表已经存在数组中，则通过tabAt方法，基于volatile机制，
+  - 获取当前最新链表头结点f临时变量，由f引用ConcurrentHashMap的数组的某链表的头结点，
+  - 虽然f是临时变量，但由于引用的是共享链表头结点，可以使用synchronized同步线程对链表的访问
+
+    - 在synchronized(f)同步块内, 与HashMap一样遍历该链表，
+  - 如果该key对应的链表节点已经存在，则更新，否则在链表的末尾新增该key对应的链表节点。
+    - 红黑树同理
+
+## 面试要点
+
+- 在集合类中HashMap是比较常用的集合对象，但是HashMap是线程不安全的。
+- 为了保证数据的安全性我们可以使用Hashtable，但是Hashtable的效率低下。
+- 基于以上两个原因我们可以使用JDK5后提供的ConcurrentHashMap。
+- ConcurrentHashMap中的重要成员变量
+- /**
+- **// Segment**：一种可重入锁，通过它将一个table空间分割成多个小的table进行加锁。
